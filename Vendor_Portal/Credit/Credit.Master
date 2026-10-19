@@ -1,0 +1,24 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Credit.master.cs" Inherits="Vendor_Portal.Credit.Credit" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title>Infinity IPS - AP Billing</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="../dist/css/ap-billing-theme.css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+<script src="../Scripts/ap-billing-theme.js"></script>
+</html>
