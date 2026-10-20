@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
+using System.Web.Script.Serialization;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Vendor_Portal.App_Code.BLL;
 using Vendor_Portal.App_Code.DAL;
 
 namespace Vendor_Portal.Vendor
