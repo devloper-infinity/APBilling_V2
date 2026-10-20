@@ -2276,6 +2276,7 @@
     <Content Include="Vendor\AddInvoiceRemoteUW.aspx" />
     <Content Include="Vendor\AddInvoiceRemoteUW_Canopy.aspx" />
     <Content Include="Vendor\ApproveCost.aspx" />
+    <Content Include="Vendor\ApproveVendorAccountDetails.aspx" />
     <Content Include="Vendor\CostMaster.aspx" />
     <Content Include="Vendor\Dashboard.aspx" />
     <Content Include="Vendor\InvoiceApproval.aspx" />
@@ -2528,6 +2529,13 @@
     </Compile>
     <Compile Include="Vendor\ApproveCost.aspx.designer.cs">
       <DependentUpon>ApproveCost.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vendor\ApproveVendorAccountDetails.aspx.cs">
+      <DependentUpon>ApproveVendorAccountDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vendor\ApproveVendorAccountDetails.aspx.designer.cs">
+      <DependentUpon>ApproveVendorAccountDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="Vendor\CostMaster.aspx.cs">
       <DependentUpon>CostMaster.aspx</DependentUpon>

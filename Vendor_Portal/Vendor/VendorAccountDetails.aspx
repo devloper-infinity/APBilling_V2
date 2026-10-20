@@ -53,10 +53,11 @@
 
     <script>
         $(document).ready(function () {
-           
+            GetAllVendorAccountDetails_Canopy();
+            GetAllVendorAccountDetails_IPS();
         });
     </script>
-        <script src="../Scripts/Functions/VendorAccountDetails.js" type="text/javascript"></script>
+    <script src="../Scripts/Functions/VendorAccountDetails.js" type="text/javascript"></script>
 
 </asp:Content>
 
@@ -100,32 +101,32 @@
                         </td>
                     </tr>
                     <tr>
-                       
+
 
                         <td><i class="fa fa-star" style="font-size: 5px; color: red"></i>&nbsp;<b>Payment Type :</b></td>
                         <td>
                             <select id="VendorAccount_PaymentType" name="VendorAccount_PaymentType" class="form-control" style="width: 300px;">
                                 <option value="0">Select</option>
                                 <option value="ECH">ECH</option>
-                                <option value="BillType">Bill Type</option>
+                                <option value="BillPay">Bill Pay</option>
                             </select>
                         </td>
 
-                           <td><i class="fa fa-star" style="font-size: 5px; color: red;"></i>&nbsp;<b>Pay To :</b></td>
-   <td>
-       <input type="number" id="VendorAccount_PayTo" name="VendorAccount_PayTo" style="width: 300px; height: 30px;" />
-   </td>
+                        <td><i class="fa fa-star" style="font-size: 5px; color: red;"></i>&nbsp;<b>Pay To :</b></td>
+                        <td>
+                            <input type="text" id="VendorAccount_PayTo" name="VendorAccount_PayTo" style="width: 300px; height: 30px;" />
+                        </td>
                     </tr>
                     <tr>
                         <td><i class="fa fa-star" style="font-size: 5px; color: red;"></i>&nbsp;<b>Ac No :</b></td>
                         <td>
-                            <input type="number" id="VendorAccount_AcNo" name="VendorAccount_AcNo" style="width: 300px; height: 30px;" />
+                            <input type="text" id="VendorAccount_AcNo" name="VendorAccount_AcNo" style="width: 300px; height: 30px;" disabled />
                         </td>
 
-                           <td><i class="fa fa-star" style="font-size: 5px; color: red;"></i>&nbsp;<b>Email Id :</b></td>
-   <td>
-       <input type="number" id="VendorAccount_EmailId" name="VendorAccount_EmailId" style="width: 300px; height: 30px;" />
-   </td>
+                        <td><i class="fa fa-star" style="font-size: 5px; color: red;"></i>&nbsp;<b>Email Id :</b></td>
+                        <td>
+                            <input type="text" id="VendorAccount_EmailId" name="VendorAccount_EmailId" style="width: 300px; height: 30px;" />
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -160,13 +161,11 @@
                                         <thead>
                                             <tr>
                                                 <th class="sort border-top ps-3" style="text-wrap: nowrap; text-align: center;">Sr. #</th>
-                                                <th class="sort border-top">Caompany</th>
+                                                <th class="sort border-top">Pay To</th>
+                                                <th class="sort border-top">Company</th>
                                                 <th class="sort border-top">Vendor</th>
-                                                <th class="sort border-top">Type</th>
-                                                <th class="sort border-top">Slab</th>
-                                                <th class="sort border-top" style="text-align: center;">Base Rate</th>
-                                                <th class="sort border-top" style="text-align: center;">TRID Rate</th>
-                                                <th class="sort border-top" style="text-align: center;">Added Date Time</th>
+                                                <th class="sort border-top">Acc No</th>
+                                                <th class="sort border-top">Email ID</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -180,13 +179,11 @@
                                         <thead>
                                             <tr>
                                                 <th class="sort border-top ps-3" style="text-wrap: nowrap; text-align: center;">Sr. #</th>
-                                                <th class="sort border-top">Caompany</th>
+                                                <th class="sort border-top">Pay To</th>
+                                                <th class="sort border-top">Company</th>
                                                 <th class="sort border-top">Vendor</th>
-                                                <th class="sort border-top">Type</th>
-                                                <th class="sort border-top">Slab</th>
-                                                <th class="sort border-top" style="text-align: center;">Base Rate</th>
-                                                <th class="sort border-top" style="text-align: center;">TRID Date</th>
-                                                <th class="sort border-top" style="text-align: center;">Added Date Time</th>
+                                                <th class="sort border-top">Acc No</th>
+                                                <th class="sort border-top">Email ID</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

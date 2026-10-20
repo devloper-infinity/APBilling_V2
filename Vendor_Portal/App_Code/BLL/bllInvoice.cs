@@ -535,7 +535,22 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.GetInvoiceFilePath(invoiceId, Company);
         }
-
+        public int InsertVendorAccountDetails(Hashtable htParam)
+        {
+            return dalInvoice.InsertVendorAccountDetails(htParam);
+        }
+        public DataTable GetAllVendorAccountDetails_Canopy(string Company)
+        {
+            return dalInvoice.GetAllVendorAccountDetails_Canopy(Company);
+        }
+        public DataTable GetAllVendorAccountDetails_IPS(string Company)
+        {
+            return dalInvoice.GetAllVendorAccountDetails_IPS(Company);
+        }
+        public int ApproveVendorAllAccountDetails(Hashtable htParam)
+        {
+            return dalInvoice.ApproveVendorAllAccountDetails(htParam);
+        }
     }
 
 
