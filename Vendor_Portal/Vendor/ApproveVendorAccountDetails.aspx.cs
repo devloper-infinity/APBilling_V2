@@ -18,7 +18,6 @@ namespace Vendor_Portal.Vendor
         {
             int returnvalue = 0;
 
-
             Hashtable htParam = new Hashtable();
             htParam.Add("VendorPayToID", VendorPayToID);
             htParam.Add("VerifyRemark", Remark);
