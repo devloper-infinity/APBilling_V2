@@ -135,6 +135,8 @@ namespace Vendor_Portal.Vendor
             htParam.Add("EffectiveDate", EffectiveDate);
             htParam.Add("RType", RType);
             htParam.Add("Rate", BaseRate);
+            htParam.Add("TRate", 0);
+
             htParam.Add("AddedBy", int.Parse(HttpContext.Current.User.Identity.Name.ToString()));
 
             returnvalue = new bllInvoice().InsertVendorRateConfigurationForbilling(htParam);
