@@ -139,7 +139,7 @@ function RemoreUWKEB_OnSuccess(result) {
 
             }
 
-            if (invoicetype == 'KEB' || invoicetype == 'LynnHott' || invoicetype == 'LucyBeltran' || invoicetype == 'CoreyDaise')
+            if (invoicetype == 'KEB' || invoicetype == 'LynnHott' || invoicetype == 'LucyBeltran' || invoicetype == 'CoreyDaise' || invoicetype == 'RobinOstrom')
         {
             PageMethods.InsertRemoteUWKEBExcel(result, month, year, uploadIPSexcel_OnSuccess, uploadexcel_OnError);
             
