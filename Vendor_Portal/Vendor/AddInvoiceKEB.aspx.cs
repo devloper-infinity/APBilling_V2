@@ -1002,8 +1002,8 @@ namespace Vendor_Portal.Vendor
             string ToAddress = string.Empty;
             string ToCC = string.Empty;
 
-            ToAddress = "k.aarti@infinity-data.com";
-            ToCC = "k.aarti@infinity-data.com";
+            ToAddress = "s.chandrakant@infinity-data.com";
+            ToCC = "Robert.Williams@infinity-data.com";
 
             string BillingDatePeriod = "";
 
@@ -1062,7 +1062,7 @@ namespace Vendor_Portal.Vendor
                 htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
                 // sendMailForOnlineTracking_New(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us", Subject, Path, htmlBody);
-                mc_KEB.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+                mc_KEB.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us,b.shubhangi@infinityinternationals.us", Subject, Path, htmlBody);
             }
 
 

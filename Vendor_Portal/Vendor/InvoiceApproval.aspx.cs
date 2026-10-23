@@ -298,19 +298,20 @@ namespace Vendor_Portal.Vendor
 
             if (InvType == "Attorney")
             {
-                ToAddress = "k.aarti@infinity-data.com";
-                ToCC = "k.aarti@infinity-data.com";
+                ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
+                ToCC = "s.chandrakant@infinity-data.com";
             }
 
             else if (InvType == "Abstractor")
             {
-                ToAddress = "k.aarti@infinity-data.com";
-                ToCC = "k.aarti@infinity-data.com";
+                ToAddress = "jim@infinity-data.com,anita@infinity-data.com";
+                ToCC = "s.chandrakant@infinity-data.com";
             }
             else
             {
-                ToAddress = "k.aarti@infinity-data.com";
-                ToCC = "k.aarti@infinity-data.com";
+
+                ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
+                ToCC = "s.chandrakant@infinity-data.com,k.manoj@infinity-data.com";
             }
 
             //ToAddress = "b.shubhangi@infinityinternationals.us";ToCC = "p.kedar@infinityinternationals.us";
@@ -367,12 +368,12 @@ namespace Vendor_Portal.Vendor
                 htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
 
-                mc.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path,"", htmlBody);
+                mc.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us,b.shubhangi@infinityinternationals.us", Subject, Path,"", htmlBody);
             }
             else
             {
                 Subject = "Blank Email - Approved  Invoice : " + strCompany + " " + InvType + " " + InvoiceId;
-                sendMailForOnlineTracking_Canopy("k.aarti@infinity-data.com", ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+                sendMailForOnlineTracking_Canopy("n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us,b.shubhangi@infinityinternationals.us", ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us", Subject, Path, htmlBody);
             }
         }
 
@@ -469,10 +470,10 @@ namespace Vendor_Portal.Vendor
             string ToAddress = "";
             string ToCC = "";
 
-            ToAddress = "k.aarti@infinity-data.com";
-            ToCC = "k.aarti@infinity-data.com";
+            ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
+            ToCC = "s.chandrakant@infinity-data.com";
 
-           // ToAddress = "p.kedar@infinityinternationals.us"; ToCC = "";
+            // ToAddress = "p.kedar@infinityinternationals.us"; ToCC = "";
 
             string BillingDatePeriod = "";
             string strInvoiceType = "";
@@ -527,12 +528,12 @@ namespace Vendor_Portal.Vendor
                 htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
 
-                sendMailForOnlineTracking_Canopy(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+                sendMailForOnlineTracking_Canopy(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us", Subject, Path, htmlBody);
             }
             else
             {
                 Subject = "Blank Email - Approved  Invoice : " + strcompany + " " + InvoiceId;
-                sendMailForOnlineTracking_Canopy("k.aarti@infinity-data.com", ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+                sendMailForOnlineTracking_Canopy("n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us,b.shubhangi@infinityinternationals.us", ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us", Subject, Path, htmlBody);
             }
         }
 
