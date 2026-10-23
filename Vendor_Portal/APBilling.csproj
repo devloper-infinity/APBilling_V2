@@ -2297,6 +2297,7 @@
   <ItemGroup>
     <Compile Include="App_Code\BLL\bllInvoice.cs" />
     <Compile Include="App_Code\BLL\bllLogin.cs" />
+    <Compile Include="App_Code\BLL\CostMasterOtpSecurity.cs" />
     <Compile Include="App_Code\DAL\DALInvoice.cs" />
     <Compile Include="App_Code\DAL\DALLogin.cs" />
     <Compile Include="App_Code\DAL\SQLHelper.cs" />

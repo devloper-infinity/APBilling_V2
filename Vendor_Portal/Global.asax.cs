@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using Vendor_Portal.App_Code.BLL;
 
 namespace Vendor_Portal
 {
@@ -51,7 +52,13 @@ namespace Vendor_Portal
 
         protected void Session_End(object sender, EventArgs e)
         {
-
+            try
+            {
+                int employeeId;
+                if (int.TryParse(Convert.ToString(Session["CostMasterAuthorizedEmployeeID"]), out employeeId))
+                    CostMasterOtpSecurity.RevokeSession(employeeId, Session.SessionID);
+            }
+            catch { }
         }
 
         protected void Application_End(object sender, EventArgs e)

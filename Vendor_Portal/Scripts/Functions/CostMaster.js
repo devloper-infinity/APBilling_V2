@@ -214,7 +214,16 @@ function cm_Submit() {
         return false;
     }
 
-    PageMethods.InsertVendorRateConfigurationForbilling(company, Vendor, EffectiveDate, Type, BaseRate, cm_OnSuccessSubmit, cm_OnErrorSubmit);
+    $.ajax({
+        type: "POST",
+        url: "CostMaster.aspx/InsertVendorRateConfigurationForbilling",
+        data: JSON.stringify({ strCompany: company, VendorName: Vendor, EffectiveDate: EffectiveDate, RType: Type, BaseRate: BaseRate }),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        headers: { "X-CostMaster-CSRF": cmCsrfToken },
+        success: function (res) { cm_OnSuccessSubmit(res.d); },
+        error: cm_OnErrorSubmit
+    });
     return false;
 }
 
@@ -404,7 +413,10 @@ function ac_ApprvoveCost() {
             return false;
         }
 
-        PageMethods.ApproveVendorRateConfigurastion(ac_ConfID, Remark, ac_OnSuccessSubmit, ac_OnErrorSubmit);
+        $.ajax({type:"POST",url:"ApproveCost.aspx/ApproveVendorRateConfigurastion",
+            data:JSON.stringify({RConfigurationID:ac_ConfID,Remark:Remark}),dataType:"json",
+            contentType:"application/json; charset=utf-8",headers:{"X-CostMaster-CSRF":acCsrf},
+            success:function(res){ac_OnSuccessSubmit(res.d);},error:ac_OnErrorSubmit});
         return false;
     }
     else {

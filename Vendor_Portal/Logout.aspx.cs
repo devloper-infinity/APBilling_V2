@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Vendor_Portal.App_Code.BLL;
 
 namespace Vendor_Portal
 {
@@ -12,6 +13,7 @@ namespace Vendor_Portal
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            try { CostMasterOtpSecurity.RevokeCurrentSession(); } catch { }
             FormsAuthentication.SignOut();
             Response.Cookies[FormsAuthentication.FormsCookieName].Expires = DateTime.Now.AddYears(-1);
         }

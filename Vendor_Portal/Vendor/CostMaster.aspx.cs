@@ -14,14 +14,50 @@ namespace Vendor_Portal.Vendor
 {
     public partial class CostMaster : System.Web.UI.Page
     {
+        protected string CostMasterCsrfToken { get; private set; }
+        protected string CostMasterExpiryUtc { get; private set; }
+        protected bool CostMasterAuthorized { get; private set; }
+        protected bool CostMasterAccessAllowed { get; private set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            CostMasterCsrfToken = CostMasterOtpSecurity.EnsureCsrfToken();
+            CostMasterAccessAllowed = CostMasterOtpSecurity.HasPageAccess();
+            if (!CostMasterAccessAllowed) return;
+            DateTime? expiry = CostMasterOtpSecurity.GetAuthorizationExpiryUtc();
+            CostMasterAuthorized = expiry.HasValue;
+            CostMasterExpiryUtc = expiry.HasValue ? expiry.Value.ToString("o") : "";
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
+        public static string RequestCostMasterOtp(string employeeCode) { return CostMasterOtpSecurity.SendOtp(employeeCode); }
+
+        [WebMethod(EnableSession = true)]
+        public static object VerifyCostMasterOtp(string otp)
+        {
+            DateTime expiry = CostMasterOtpSecurity.VerifyOtp(otp);
+            return new { message = "Verification successful. You can access Costing Master for the next 15 minutes.", expiryUtc = expiry.ToString("o") };
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static object GetCostMasterAuthorizationStatus()
+        {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequirePageAccess();
+            DateTime? expiry = CostMasterOtpSecurity.GetAuthorizationExpiryUtc();
+            return new { authorized = expiry.HasValue, expiryUtc = expiry.HasValue ? expiry.Value.ToString("o") : "", message = expiry.HasValue ? "" : CostMasterOtpSecurity.ExpiredMessage };
+        }
+
+        [WebMethod(EnableSession = true)]
+        public static string RestartCostMasterVerification()
+        {
+            CostMasterOtpSecurity.RestartVerification();
+            return "Enter your Employee Code to request a new OTP.";
+        }
+
+        [WebMethod(EnableSession = true)]
         public static string GetAllVendorRateConfiguration_Canopy()
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization();
             DataTable dt1 = new bllInvoice().GetAllVendorRateConfiguration("Canopy");
 
             List<Dictionary<string, object>> columns = new List<Dictionary<string, object>>();
@@ -54,9 +90,10 @@ namespace Vendor_Portal.Vendor
             return ser.Serialize(rows);
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static string GetAllVendorRateConfiguration_IPS()
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization();
             DataTable dt1 = new bllInvoice().GetAllVendorRateConfiguration("IPS");
 
             List<Dictionary<string, object>> columns = new List<Dictionary<string, object>>();
@@ -89,9 +126,10 @@ namespace Vendor_Portal.Vendor
             return ser.Serialize(rows);
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static string GetAllVendorAsPerCompany(string Company)
         {
+            CostMasterOtpSecurity.RequireAuthorization();
             DataTable dt1 = new bllInvoice().GetAllVendorAsPerCompany(Company);
 
             List<Dictionary<string, object>> columns = new List<Dictionary<string, object>>();
@@ -125,9 +163,10 @@ namespace Vendor_Portal.Vendor
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static int InsertVendorRateConfigurationForbilling(string strCompany,string VendorName, string EffectiveDate, string RType, string BaseRate)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization();
             int returnvalue = 0;
             Hashtable htParam = new Hashtable();
             htParam.Add("Company", strCompany);

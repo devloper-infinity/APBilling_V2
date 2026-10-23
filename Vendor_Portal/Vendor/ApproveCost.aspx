@@ -52,14 +52,25 @@
     </style>
 
     <script>
+        var acCsrf='<%= HttpUtility.JavaScriptStringEncode(ApproveCostCsrfToken) %>', acAllowed=<%= ApproveCostAccessAllowed?"true":"false" %>, acAuthorized=<%= ApproveCostAuthorized?"true":"false" %>, acExpiry='<%= HttpUtility.JavaScriptStringEncode(ApproveCostExpiryUtc) %>', acTimer;
+        $.ajaxPrefilter(function(o,x,h){if(o.url&&o.url.indexOf('ApproveCost.aspx/')>=0)h.setRequestHeader('X-CostMaster-CSRF',acCsrf);});
+        function acSecurePost(m,d,ok,msg){$('#acBusyText').text(msg||'Please wait...');$('#acBusy').show();$.ajax({type:'POST',url:'ApproveCost.aspx/'+m,data:JSON.stringify(d||{}),dataType:'json',contentType:'application/json; charset=utf-8',headers:{'X-CostMaster-CSRF':acCsrf},success:function(r){ok(r.d);},error:function(x){$('#acSecurityMessage').text((x.responseJSON&&x.responseJSON.Message)||'Unable to complete verification.').addClass('text-danger');},complete:function(){$('#acBusy').hide();}});}
+        function acRequestOtp(){acSecurePost('RequestApproveCostOtp',{employeeCode:$('#acEmployeeCode').val()},function(m){$('#acSecurityMessage').text(m).removeClass('text-danger');$('#acOtpRow').show();},'Sending verification code...');}
+        function acVerifyOtp(){acSecurePost('VerifyApproveCostOtp',{otp:$('#acOtp').val()},function(r){acUnlock(r.expiryUtc);},'Verifying OTP...');}
+        function acUnlock(e){acExpiry=e;$('#acSecurityPanel,#acUnauthorized').hide();$('#acProtected').show();clearInterval(acTimer);acTick();acTimer=setInterval(acTick,1000);approvalCostCanopy_BindGrid();approvalCostIPS_BindGrid();}
+        function acTick(){var s=Math.max(0,Math.ceil((Date.parse(acExpiry)-Date.now())/1000));$('#acCountdown').text(String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'));if(!s){clearInterval(acTimer);$('#acProtected').hide();$('#acSecurityPanel').show();$('#acSecurityMessage').text('Your Approve Cost access has expired. Please verify again.').addClass('text-danger');}}
         $(document).ready(function () {
-            approvalCostCanopy_BindGrid();
-            approvalCostIPS_BindGrid();
+            if(!acAllowed){$('#acUnauthorized').show();return;} if(acAuthorized)acUnlock(acExpiry);else $('#acSecurityPanel').show();
         });
     </script>
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+
+    <div id="acBusy" style="display:none;position:fixed;inset:0;background:rgba(255,255,255,.72);z-index:99999"><div style="position:absolute;top:40%;left:50%;transform:translate(-50%,-50%);background:white;padding:24px;box-shadow:0 4px 18px #888"><i class="fas fa-spinner fa-spin fa-2x"></i><div id="acBusyText">Please wait...</div></div></div>
+    <div id="acUnauthorized" class="alert alert-danger" style="display:none">You are not authorized to access Approve Cost data.</div>
+    <div id="acSecurityPanel" class="card" style="display:none;max-width:520px;margin:25px auto"><div class="card-body"><h5>Approve Cost verification</h5><input id="acEmployeeCode" class="form-control" placeholder="Employee Code" maxlength="50"/><button type="button" class="btn btn-primary mt-2" onclick="acRequestOtp()">Send OTP</button><div id="acOtpRow" style="display:none" class="mt-3"><input id="acOtp" class="form-control" placeholder="6-digit OTP" maxlength="6"/><button type="button" class="btn btn-success mt-2" onclick="acVerifyOtp()">Verify OTP</button></div><div id="acSecurityMessage" class="mt-3"></div></div></div>
+    <div id="acProtected" style="display:none"><div class="alert alert-info">Access remaining: <b id="acCountdown">15:00</b></div>
 
     <div class="loading" id="load1">
         <img src="../images/Load_1.gif" />
@@ -189,5 +200,6 @@
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
+    </div>
     </div>
 </asp:Content>

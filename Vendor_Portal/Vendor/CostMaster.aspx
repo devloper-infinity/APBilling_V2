@@ -15,6 +15,8 @@
             height: 192px;
             z-index: 99999;
         }
+        .cm-loading-backdrop { display:none; position:fixed; inset:0; background:rgba(255,255,255,.72); z-index:99998; }
+        .cm-loading-box { position:absolute; top:40%; left:50%; transform:translate(-50%,-50%); padding:22px 30px; background:#fff; border-radius:8px; box-shadow:0 4px 18px rgba(0,0,0,.25); text-align:center; font-weight:bold; }
 
         .dataTables_length, .dataTables_info {
             float: left !important;
@@ -49,13 +51,45 @@
             background: none !important;
             background-color: #fff !important;
         }
+        .cm-security-card { max-width: 520px; margin: 25px auto; }
+        .cm-countdown { font-weight: bold; color: #c82333; }
     </style>
 
     <script>
-        $(document).ready(function () {
-            CostMasterCanopy_BindGrid();
-            CostMasterIPS_BindGrid();
+        var cmCsrfToken = '<%= HttpUtility.JavaScriptStringEncode(CostMasterCsrfToken) %>';
+        var cmAuthorized = <%= CostMasterAuthorized ? "true" : "false" %>;
+        var cmAccessAllowed = <%= CostMasterAccessAllowed ? "true" : "false" %>;
+        var cmExpiryUtc = '<%= HttpUtility.JavaScriptStringEncode(CostMasterExpiryUtc) %>';
+        $.ajaxPrefilter(function (options, originalOptions, xhr) {
+            if (options.url && options.url.indexOf('CostMaster.aspx/') >= 0) xhr.setRequestHeader('X-CostMaster-CSRF', cmCsrfToken);
         });
+        $(document).ready(function () {
+            if (!cmAccessAllowed) { $('#cmUnauthorized').show(); $('#cmSecurityPanel,#cmProtected').hide(); return; }
+            if (cmAuthorized) { cmUnlock(cmExpiryUtc, false); CostMasterCanopy_BindGrid(); CostMasterIPS_BindGrid(); }
+            else cmLock(false);
+            document.addEventListener('visibilitychange', function () { if (!document.hidden) cmCheckStatus(); });
+        });
+        var cmTimer;
+        function cmSetBusy(busy, message) {
+            $('#cmLoadingText').text(message || 'Please wait...');
+            $('#cmLoadingBackdrop').toggle(busy);
+            $('#cmSecurityPanel button').prop('disabled', busy);
+        }
+        function cmPost(method, data, ok, loadingText, onError) {
+            if (loadingText) cmSetBusy(true, loadingText);
+            $.ajax({ type:'POST', url:'CostMaster.aspx/'+method, data:JSON.stringify(data||{}), dataType:'json', contentType:'application/json; charset=utf-8',
+                headers:{'X-CostMaster-CSRF':cmCsrfToken}, success:function(r){ok(r.d);},
+                error:function(x){cmShowMessage((x.responseJSON&&x.responseJSON.Message)||'Unable to complete verification.',true);if(onError)onError();},
+                complete:function(){if(loadingText)cmSetBusy(false);} });
+        }
+        function cmRequestOtp(){ cmPost('RequestCostMasterOtp',{employeeCode:$('#cmEmployeeCode').val()},function(m){cmShowMessage(m,false);$('#cmOtpRow').show();},'Sending verification code...'); }
+        function cmVerifyOtp(){ cmPost('VerifyCostMasterOtp',{otp:$('#cmOtp').val()},function(r){cmShowMessage(r.message,false);cmUnlock(r.expiryUtc,true);CostMasterCanopy_BindGrid();CostMasterIPS_BindGrid();},'Verifying OTP...'); }
+        function cmVerifyAgain(){ cmPost('RestartCostMasterVerification',{},function(m){clearInterval(cmTimer);cmExpiryUtc='';$('#cmEmployeeCode,#cmOtp').val('');$('#cmOtpRow').hide();$('#cmSecurityPanel').show();$('#cmProtected').hide();cmShowMessage(m,false);},'Resetting verification...'); }
+        function cmUnlock(expiry,showSuccess){cmExpiryUtc=expiry;$('#cmSecurityPanel').hide();$('#cmProtected').show().find(':input,button,a').prop('disabled',false);if(showSuccess)$('#cmSuccess').text('Verification successful. You can access Costing Master for the next 15 minutes.').show();clearInterval(cmTimer);cmTick();cmTimer=setInterval(cmTick,1000);}
+        function cmTick(){var seconds=Math.max(0,Math.ceil((Date.parse(cmExpiryUtc)-Date.now())/1000));$('#cmCountdown').text(String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0'));if(seconds<=0)cmLock(true);}
+        function cmLock(expired){clearInterval(cmTimer);$('#cmProtected').hide().find(':input,button,a').prop('disabled',true);$('#cmSecurityPanel').show();$('#cmSuccess').hide();if(expired)cmShowMessage('Your Costing Master access has expired. Please verify again.',true);}
+        function cmCheckStatus(){cmPost('GetCostMasterAuthorizationStatus',{},function(r){if(!r.authorized)cmLock(true);else if(r.expiryUtc!==cmExpiryUtc)cmUnlock(r.expiryUtc,false);});}
+        function cmShowMessage(m,isError){$('#cmSecurityMessage').text(m).toggleClass('text-danger',isError).toggleClass('text-success',!isError);}
     </script>
 </asp:Content>
 
@@ -65,6 +99,27 @@
         <img src="../images/Load_1.gif" />
         <div style="font-size: 12px; font-weight: bold;">One moment, please . . . .</div>
     </div>
+    <div id="cmLoadingBackdrop" class="cm-loading-backdrop" role="status" aria-live="polite">
+        <div class="cm-loading-box"><i class="fas fa-spinner fa-spin fa-2x"></i><div id="cmLoadingText" class="mt-2">Please wait...</div></div>
+    </div>
+    <div id="cmUnauthorized" class="alert alert-danger" style="display:none">You are not authorized to access Costing Master data.</div>
+
+    <div id="cmSecurityPanel" class="card cm-security-card">
+        <div class="card-body">
+            <h5>Costing Master verification</h5>
+            <p>Enter your Employee Code. A one-time code will be sent to your registered official email.</p>
+            <div class="form-group"><label for="cmEmployeeCode">Employee Code</label><input id="cmEmployeeCode" class="form-control" maxlength="50" autocomplete="off" /></div>
+            <button type="button" class="btn btn-primary" onclick="cmRequestOtp();">Send OTP</button>
+            <div id="cmOtpRow" style="display:none" class="form-group mt-3"><label for="cmOtp">6-digit OTP</label><input id="cmOtp" class="form-control" maxlength="6" inputmode="numeric" autocomplete="one-time-code" />
+                <button type="button" class="btn btn-success mt-2" onclick="cmVerifyOtp();">Verify OTP</button></div>
+            <div id="cmSecurityMessage" class="mt-3" role="alert"></div>
+        </div>
+    </div>
+
+    <div id="cmProtected" style="display:none">
+    <div class="alert alert-success" id="cmSuccess" style="display:none"></div>
+    <div class="alert alert-info">Access remaining: <span id="cmCountdown" class="cm-countdown">15:00</span>
+        <button type="button" class="btn btn-sm btn-outline-primary float-right" onclick="cmVerifyAgain();">Verify Again</button></div>
 
     <div class="content-header">
         <div class="container">
@@ -190,5 +245,6 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </asp:Content>

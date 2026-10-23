@@ -16,14 +16,28 @@ namespace Vendor_Portal.Vendor
 {
     public partial class ApproveCost : System.Web.UI.Page
     {
+        protected string ApproveCostCsrfToken { get; private set; }
+        protected string ApproveCostExpiryUtc { get; private set; }
+        protected bool ApproveCostAuthorized { get; private set; }
+        protected bool ApproveCostAccessAllowed { get; private set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            ApproveCostCsrfToken = CostMasterOtpSecurity.EnsureCsrfToken();
+            ApproveCostAccessAllowed = CostMasterOtpSecurity.HasPageAccess("APPROVE_COST");
+            if (!ApproveCostAccessAllowed) return;
+            DateTime? expiry = CostMasterOtpSecurity.GetAuthorizationExpiryUtc("APPROVE_COST");
+            ApproveCostAuthorized = expiry.HasValue;
+            ApproveCostExpiryUtc = expiry.HasValue ? expiry.Value.ToString("o") : "";
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession=true)] public static string RequestApproveCostOtp(string employeeCode) { return CostMasterOtpSecurity.SendOtp(employeeCode,"APPROVE_COST"); }
+        [WebMethod(EnableSession=true)] public static object VerifyApproveCostOtp(string otp) { DateTime e=CostMasterOtpSecurity.VerifyOtp(otp,"APPROVE_COST"); return new { message="Verification successful. You can access Approve Cost for the next 15 minutes.", expiryUtc=e.ToString("o") }; }
+        [WebMethod(EnableSession=true)] public static string RestartApproveCostVerification() { CostMasterOtpSecurity.RestartVerification("APPROVE_COST"); return "Enter your Employee Code to request a new OTP."; }
+
+        [WebMethod(EnableSession=true)]
         public static string GetAllVendorRateConfiguration_ForApproval_Canopy()
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("APPROVE_COST");
             DataTable dt1 = new bllInvoice().GetAllVendorRateConfiguration_ForApproval("Canopy");
 
             List<Dictionary<string, object>> columns = new List<Dictionary<string, object>>();
@@ -56,9 +70,10 @@ namespace Vendor_Portal.Vendor
             return ser.Serialize(rows);
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession=true)]
         public static string GetAllVendorRateConfiguration_ForApproval_IPS()
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("APPROVE_COST");
             DataTable dt1 = new bllInvoice().GetAllVendorRateConfiguration_ForApproval("IPS");
 
             List<Dictionary<string, object>> columns = new List<Dictionary<string, object>>();
@@ -91,9 +106,10 @@ namespace Vendor_Portal.Vendor
             return ser.Serialize(rows);
         }
 
-        [WebMethod]
+        [WebMethod(EnableSession=true)]
         public static int ApproveVendorRateConfigurastion(int RConfigurationID, string Remark)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("APPROVE_COST");
             int returnvalue = 0;
 
             Hashtable htParam = new Hashtable();
