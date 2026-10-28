@@ -94,7 +94,7 @@ namespace Vendor_Portal.Vendor
         }
 
         [WebMethod]
-        public static int ApprovalInvoice(int InvoiceId, string Remark, string strCompany, string InvType,string status,int Approval_LoansDeducted,int Approval_AmountDeducted, string Approval_PaybleToVendor)
+        public static int ApprovalInvoice(int InvoiceId, string Remark, string strCompany, string InvType,string status, string Approval_LoansDeducted, string Approval_AmountDeducted, string Approval_PaybleToVendor)
         {
             int ReturnValue = 0;
             var mc = new InvoiceApproval();
