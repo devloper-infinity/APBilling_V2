@@ -116,10 +116,18 @@ namespace Vendor_Portal.Vendor
             if (strCompany == "Canopy")
             {
                 ReturnValue = new bllInvoice().UpdateInvoiceReconciliation_Canopy(htParam);
+
+                if (ReturnValue == 0)
+                {
+
+                    return 0;
+                }
+
                 ReturnValue = InvoiceId;
                 if (ReturnValue > 0)
                 {
-                    sendEmailApproval_Canopy(InvoiceId, strCompany, status);
+                    sendEmailApproval_Canopy(10647, "Canopy", "Approve");
+                    //sendEmailApproval_Canopy(InvoiceId, strCompany, status);
                     try
                     {
                       //  SendEmailToCMSir(InvoiceId, "Canopy", "", "");
@@ -132,6 +140,12 @@ namespace Vendor_Portal.Vendor
             else
             {
                 ReturnValue = new bllInvoice().UpdateInvoiceReconciliation_IPS(htParam);
+
+                if (ReturnValue == 0)
+                {
+                    return 0;
+                }
+
                 ReturnValue = InvoiceId;
                 if (ReturnValue > 0)
                 {
@@ -470,10 +484,10 @@ namespace Vendor_Portal.Vendor
             string ToAddress = "";
             string ToCC = "";
 
-            ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
-            ToCC = "s.chandrakant@infinity-data.com";
+            //ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
+            //ToCC = "s.chandrakant@infinity-data.com";
 
-            // ToAddress = "p.kedar@infinityinternationals.us"; ToCC = "";
+             ToAddress = "p.kedar@infinityinternationals.us"; ToCC = "";
 
             string BillingDatePeriod = "";
             string strInvoiceType = "";
@@ -513,7 +527,8 @@ namespace Vendor_Portal.Vendor
                 {
                     if (strStatus == "Approve")
                     {
-                        htmlBody.Append("<tr style='background-color:White; color:black;'><td><center><b>" + Convert.ToString(dt.Rows[i]["VendorInvoiceNumber"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NewInvoiceType"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["BillingPeriod"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["StatementDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["DueDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NoOfLoans"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceAmount"]) + Convert.ToString(dt.Rows[i]["loandeductcount"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["loandeductamount"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["PayToLM"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b><td><center><b>" + Convert.ToString(dt.Rows[i]["AddedDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedRemark"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedBy"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedDate"]) + "</b></center></td></tr>");
+                        // htmlBody.Append("<tr style='background-color:White; color:black;'><td><center><b>" + Convert.ToString(dt.Rows[i]["VendorInvoiceNumber"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NewInvoiceType"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["BillingPeriod"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["StatementDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["DueDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NoOfLoans"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceAmount"]) + Convert.ToString(dt.Rows[i]["loandeductcount"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["loandeductamount"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["PayToLM"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b><td><center><b>" + Convert.ToString(dt.Rows[i]["AddedDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedRemark"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedBy"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["ApprovedDate"]) + "</b></center></td></tr>");
+                         htmlBody.Append("<tr style='background-color:White; color:black;'><td><center><b>" + Convert.ToString(dt.Rows[i]["VendorInvoiceNumber"]) + "</b></center></td>< td >< center >< b > " + Convert.ToString(dt.Rows[i]["NewInvoiceType"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["BillingPeriod"]) + " </ b ></ center ></td>< td >< center >< b > " + Convert.ToString(dt.Rows[i]["StatementDate"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["DueDate"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["NoOfLoans"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["InvoiceAmount"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["loandeductcount"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["loandeductamount"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["PayToLM"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["Remark"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["AddedDate"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["ApprovedRemark"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["ApprovedBy"]) + " </ b ></ center ></ td >< td >< center >< b > " + Convert.ToString(dt.Rows[i]["ApprovedDate"]) + " </ b ></ center ></ td ></ tr > ");
                     }
                     else
                     {

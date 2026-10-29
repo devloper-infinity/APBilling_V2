@@ -29,8 +29,8 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Remark"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ApprovedBy", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["ApprovedBy"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Status", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Status"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@LoansDeducted", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["LoansDeducted"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@AmountDeducted", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["AmountDeducted"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@LoansDeducted", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["LoansDeducted"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AmountDeducted", System.Data.SqlDbType.NVarChar,4000, System.Data.ParameterDirection.Input, htParam["AmountDeducted"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@PaybleToVendor", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["PaybleToVendor"]);
 
             SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
