@@ -182,7 +182,7 @@ namespace Vendor_Portal.Vendor
             returnvalue = new bllInvoice().Insert_Infinity_InvoiceDetails_Canopy(htParam);
             if (returnvalue > 0)
             {
-               mc_Laminr.sendEmailAddNewInvoice_Laminr(returnvalue,"Laminr");
+               mc_Laminr.sendEmailAddNewInvoice_Laminr(returnvalue,"Laminr"); // Intimation Email 
             }
             return returnvalue;
         }

@@ -101,6 +101,7 @@ textarea.form-control { min-height: 84px; }
 .ap-loading-overlay {
   position: fixed !important;
   inset: 0 !important;
+  transform: none !important;
   width: 100vw !important;
   height: 100vh !important;
   padding: 0 !important;

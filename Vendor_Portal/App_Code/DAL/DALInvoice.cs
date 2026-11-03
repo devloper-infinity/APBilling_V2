@@ -1,10 +1,13 @@
-﻿using DocumentFormat.OpenXml.VariantTypes;
+﻿//using DocumentFormat.OpenXml.VariantTypes;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
+//using System.IdentityModel.Protocols.WSTrust;
+
+//using System.Linq;
 using System.Web;
 
 namespace Vendor_Portal.App_Code.DAL
@@ -622,7 +625,7 @@ namespace Vendor_Portal.App_Code.DAL
             return dt;
         }
 
-        public DataTable GetAllInvoiceForUpdatePaidDateOtherPayee(int PayeeID,int InvoiceId)
+        public DataTable GetAllInvoiceForUpdatePaidDateOtherPayee(int PayeeID, int InvoiceId)
         {
             SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetAllInvoiceForUpdatePaidDateOtherPayee_New");
             SQLHelper.AddParamToSQLCmd(cmd, "@PayeeID", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, PayeeID);
@@ -746,7 +749,24 @@ namespace Vendor_Portal.App_Code.DAL
             return dt;
         }
 
-        //
+        public DataTable GetDiscripancyInvoice()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetDiscripancyInvoices");
+               DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+
+        public DataTable GetLoansForReconcillation(int InvoiceID, string Status, string InvType, string TableName)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetLoansForReconcillation");
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceID", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.Input, InvoiceID);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Status", System.Data.SqlDbType.NVarChar, 300, System.Data.ParameterDirection.Input, Status);
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvType", System.Data.SqlDbType.NVarChar, 300, System.Data.ParameterDirection.Input, InvType);
+            SQLHelper.AddParamToSQLCmd(cmd, "@TableName", System.Data.SqlDbType.NVarChar, 300, System.Data.ParameterDirection.Input, TableName);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
 
         public DataTable GetIPSRemoteUWAttorneyForVerify(int InvoiceID, string Month, string Year)
         {
@@ -757,6 +777,24 @@ namespace Vendor_Portal.App_Code.DAL
             DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
             return dt;
         }
+
+
+        public int UpdateReconcileRemark(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_UpdateReconcileRemark");
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceID", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.Input, htParam["InvoiceID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@UniqueID", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.Input, htParam["UniqueID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceType", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["InvoiceType"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@TableName", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["TableName"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@UserRemark", System.Data.SqlDbType.NVarChar, -1, System.Data.ParameterDirection.Input, htParam["UserRemark"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
+            cmd.Dispose();
+            return ReturnValue;
+        }
+
 
         public int VerifyLoanNo(Hashtable htParam)
         {
@@ -993,7 +1031,7 @@ namespace Vendor_Portal.App_Code.DAL
             System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
             return dt;
         }
-        public System.Data.DataTable GetDashbordSummary(string Month, string Year,int EmployeeId)
+        public System.Data.DataTable GetDashbordSummary(string Month, string Year, int EmployeeId)
         {
             SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetPendingAP_IPS_Dashboard");
             SQLHelper.AddParamToSQLCmd(cmd, "@Month", System.Data.SqlDbType.NVarChar, 30, System.Data.ParameterDirection.Input, Month);
@@ -1053,7 +1091,7 @@ namespace Vendor_Portal.App_Code.DAL
             System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
             return dt;
         }
-       
+
         public System.Data.DataTable GetInvoiceDetails()
         {
             SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "USP_GetInvoiceDetails");

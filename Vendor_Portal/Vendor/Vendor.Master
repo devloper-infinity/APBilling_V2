@@ -55,6 +55,7 @@
                 <asp:ScriptReference Path="~/Scripts/Functions/Attorney.js" />
                 <asp:ScriptReference Path="~/Scripts/Functions/AP1099.js" />
                 <asp:ScriptReference Path="~/Scripts/Functions/VendorReportCanopy.js" />
+                <asp:ScriptReference Path="~/Scripts/Functions/Discripancy.js" />
 
 
             </Scripts>

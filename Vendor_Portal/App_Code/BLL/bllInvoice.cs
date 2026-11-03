@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Bibliography;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -347,7 +348,7 @@ namespace Vendor_Portal.App_Code.BLL
         public DataTable GetAllInvoiceDetails(int InvoiceId)
         {
             return dalInvoice.GetAllInvoiceDetails(InvoiceId);
-            
+
         }
 
         public DataTable GetStewartDataForReconcile(string Month, string Year)
@@ -419,12 +420,26 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.GetIPSRemoteUWLaminrForVerify(InvoiceID, Month, Year);
         }
-        
+
+        public DataTable GetDiscripancyInvoice()
+        {
+            return dalInvoice.GetDiscripancyInvoice();
+        }
+
+        public DataTable GetLoansForReconcillation(int InvoiceID, string Status, string InvType, string TableName)
+        {
+            return dalInvoice.GetLoansForReconcillation(InvoiceID, Status, InvType, TableName);
+        }
+
         public DataTable GetIPSRemoteUWAttorneyForVerify(int InvoiceID, string Month, string Year)
         {
             return dalInvoice.GetIPSRemoteUWLaminrForVerify(InvoiceID, Month, Year);
         }
 
+        public int UpdateReconcileRemark(Hashtable htParam)
+        {
+            return dalInvoice.UpdateReconcileRemark(htParam);
+        }
 
         #endregion Canopy
 
@@ -477,7 +492,7 @@ namespace Vendor_Portal.App_Code.BLL
             return dalInvoice.GetPassword(Username);
         }
 
-        public DataTable GetDashborddata(string Month, string Year,int EmployeeId)
+        public DataTable GetDashborddata(string Month, string Year, int EmployeeId)
         {
             return dalInvoice.GetDashbordSummary(Month, Year, EmployeeId);
         }
@@ -523,7 +538,7 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.GetInvoiceDetails();
         }
-   
+
         public DataTable GetCompanySummary()
         {
             return dalInvoice.GetCompanySummary();
