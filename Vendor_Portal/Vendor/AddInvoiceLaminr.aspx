@@ -293,7 +293,7 @@
 
             if (selectedValue === "Box" || selectedValue === "BOX" || selectedValue === "Magna") {
                 excelInputcanopy.disabled = true;
-                exceexcelInputcanopylInput.value = "";
+                excelInputcanopy.value = "";
             } else {
                 excelInputcanopy.disabled = false;
             }
