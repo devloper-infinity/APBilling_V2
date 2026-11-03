@@ -165,7 +165,7 @@ function RemoreUWKEB_OnSuccess(result) {
             PageMethods.InsertPacerExcel(result, month, year, uploadIPSexcel_OnSuccess, uploadexcel_OnError);
 
         }
-        else if (invoicetype == 'Magna') {
+        else if (invoicetype == 'Magna 5') {
             PageMethods.InsertRemoteUWComplianceExcel(result, month, year, uploadIPSexcel_OnSuccess, uploadexcel_OnError);
 
         }

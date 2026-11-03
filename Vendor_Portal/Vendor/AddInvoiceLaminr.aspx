@@ -291,9 +291,9 @@
 
             var excelInputcanopy = document.getElementById("RemoteUWLaminrInvoiceExcel");
 
-            if (selectedValue === "Box" || selectedValue === "BOX" || selectedValue === "Magna") {
+            if (selectedValue === "Box" || selectedValue === "BOX" || selectedValue === "Magna 5") {
                 excelInputcanopy.disabled = true;
-                exceexcelInputcanopylInput.value = "";
+                excelInputcanopy.value = "";
             } else {
                 excelInputcanopy.disabled = false;
             }
@@ -445,7 +445,7 @@
                                     <option value="LoanLogics">Loan Logics</option>
                                     <option value="Stewart_CD">Stewart_CD BPO</option>
                                     <option value="Stewart_AVM">Stewart_AVM</option>
-                                    <option value="Magna">Magna 5</option>
+                                    <option value="Magna 5">Magna 5</option>
                                     <option value="BOX">BOX</option>
                                     
                                 </select>

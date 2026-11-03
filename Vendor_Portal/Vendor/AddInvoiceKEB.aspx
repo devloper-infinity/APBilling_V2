@@ -284,7 +284,7 @@
                 var selectedValue = selectObj.value;
                 var downloadLink = document.getElementById('keberpDownloadLink');
                 var excelInput = document.getElementById("RemoteUWKEBInvoiceExcel");
-                if (selectedValue === "Magno" || selectedValue === "Magna") {
+                if (selectedValue === "Magno" || selectedValue === "Magna 5") {
                     excelInput.disabled = true;
                     excelInput.value = "";
                 } else {
@@ -456,7 +456,7 @@
                                     <option value="KCB">KCB</option>
                                     <option value="KEB">KEB</option>
                                     <option value="Pacer">Pacer</option>
-                                    <option value="Magna">Magna 5</option>
+                                    <option value="Magna 5">Magna 5</option>
                                     <option value="Attorney">Attorney</option>
 
 

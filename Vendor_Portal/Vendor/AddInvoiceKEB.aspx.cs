@@ -163,7 +163,7 @@ namespace Vendor_Portal.Vendor
             {
                 htParam.Add("InvoiceType", "Pacer");
             }
-            else if (InvoiceType == "Magna")
+            else if (InvoiceType == "Magna 5")
             {
                 htParam.Add("InvoiceType", "Magna 5");
             }
@@ -245,7 +245,7 @@ namespace Vendor_Portal.Vendor
             {
                 htParam.Add("Remark", "Pacer" + '~' + Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
             }
-            else if (InvoiceType == "Magna")
+            else if (InvoiceType == "Magna 5")
             {
                 htParam.Add("Remark", "Magna5" + '~' + Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
             }
