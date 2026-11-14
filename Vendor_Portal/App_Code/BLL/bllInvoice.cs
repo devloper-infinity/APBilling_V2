@@ -566,9 +566,64 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.ApproveVendorAllAccountDetails(htParam);
         }
+
+        public DataTable GetAllRegisteredVendors()
+        {
+            return dalInvoice.GetAllRegisteredVendors();
+        }
+
+
+        public int InsertVendorRegistration(Hashtable htParam)
+        {
+            return dalInvoice.InsertVendorRegistration(htParam);
+        }
+
+        public int AddVendorOtherInfo(Hashtable htParam)
+        {
+            return dalInvoice.AddVendorOtherInfo(htParam);
+        }
+
+        public int InsertVendorRate(Hashtable htParam)
+        {
+            return dalInvoice.InsertVendorRate(htParam);
+        }
+
+        public DataTable GetVendors()
+        {
+            return dalInvoice.GetVendors();
+        }
+
+        public DataTable GetVendorDetailsByID(int vendorRegistrationID)
+        {
+            return dalInvoice.GetVendorDetailsByID(vendorRegistrationID);
+        }
+
+        public DataTable GetRateConfiguration(int VendorId)
+        {
+            return dalInvoice.GetRateConfiguration(VendorId);
+        }
+
+        public int ApproveVendorRate(Hashtable htParam)
+        {
+            return dalInvoice.ApproveVendorRate(htParam);
+        }
+
+        public DataTable GetVendorInfoForPopUp()
+        {
+            return dalInvoice.GetVendorInfoForPopUp();
+        }
+        public DataTable GetVendorRateRevisionDateInfoForPopup()
+        {
+            return dalInvoice.GetVendorRateRevisionDateInfoForPopup();
+        }
+        public DataTable GetVendorRateStatusInfoForPopUp()
+        {
+            return dalInvoice.GetVendorRateStatusInfoForPopUp();
+        }
+
+        public int InsertVendorNotificationLog(Hashtable htParam)
+        {
+            return dalInvoice.InsertVendorNotificationLog(htParam);
+        }
     }
-
-
-
-
 }

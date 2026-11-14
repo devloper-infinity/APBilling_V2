@@ -26,6 +26,239 @@
 
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            loadPendingNotifications();
+            $(document).on('click', 'a[href*="Logout.aspx"]', function () {
+                sessionStorage.removeItem('popupsShown');
+            });
+        });
+
+        var pendingAgreementVendorIds = [];
+        var pendingRateRevisionVendorIds = [];
+        var pendingVendorIds = [];
+
+        // Flag to check if popups were triggered automatically on login vs manually clicked from sidebar
+        var isAutoPopupRunning = false;
+
+        function loadPendingNotifications() {
+            var totalCount = 0;
+            var sidebarHtml = '';
+
+            // 1. Check Agreement Renewal
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/GetVendorInfoForPopUp",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var result = response.d;
+                    var data = typeof result === 'string' ? JSON.parse(result) : result;
+
+                    if (data && data.length > 0 && data[0].VendorsName) {
+                        var vendorsString = data[0].VendorsName;
+                        var vendorsArray = vendorsString.split(',');
+                        var listHtml = '';
+                        vendorsArray.forEach(function (name) {
+                            listHtml += `<li>${name.trim()}</li>`;
+                        });
+                        if (data[0].VendorIds) {
+                            var idsArray = data[0].VendorIds.split(',');
+                            idsArray.forEach(function (id) {
+                                if (id.trim() !== '') {
+                                    pendingAgreementVendorIds.push(parseInt(id.trim()));
+                                }
+                            });
+                        }
+                        $('#vendorList').html(listHtml);
+                        totalCount += 1;
+                        // Sidebar click sathi manual function call karu
+                        sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#successModal');"><i class="fas fa-file-contract text-warning"></i> <strong>Agreement Renewal Notice</strong><br/><small class="text-light">Expired agreements require attention.</small></div>`;
+                    }
+                    checkRateRevisionNotification(totalCount, sidebarHtml);
+                },
+                error: function (error) {
+                    console.log("Error: " + error.responseText);
+                    checkRateRevisionNotification(totalCount, sidebarHtml);
+                }
+            });
+        }
+
+        function checkRateRevisionNotification(totalCount, sidebarHtml) {
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/GetVendorRateRevisionDateInfoForPopup",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var result = response.d;
+                    var data = typeof result === 'string' ? JSON.parse(result) : result;
+
+                    if (data && data.length > 0 && data[0].VendorsRateRevisionDateName) {
+                        var vendorsString = data[0].VendorsRateRevisionDateName;
+                        var vendorsArray = vendorsString.split(',');
+                        var listHtml = '';
+                        vendorsArray.forEach(function (name) {
+                            listHtml += `<li>${name.trim()}</li>`;
+                        });
+
+                        if (data[0].VendorIds) {
+                            var idsArray = data[0].VendorIds.split(',');
+                            idsArray.forEach(function (id) {
+                                if (id.trim() !== '') {
+                                    pendingRateRevisionVendorIds.push(parseInt(id.trim()));
+                                }
+                            });
+                        }
+
+                        $('#RateRevisionDateList').html(listHtml);
+                        totalCount += 1;
+                        sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateRevisionDateModal');"><i class="fas fa-calendar-alt text-warning"></i> <strong>Rate Revision Date Notice</strong><br/><small class="text-light">Rate revision dates have expired.</small></div>`;
+                    }
+                    checkRateStatusNotification(totalCount, sidebarHtml);
+                },
+                error: function (error) {
+                    console.log("Error: " + error.responseText);
+                    checkRateStatusNotification(totalCount, sidebarHtml);
+                }
+            });
+        }
+
+        function checkRateStatusNotification(totalCount, sidebarHtml) {
+            pendingVendorIds = [];
+            $.ajax({
+                type: "POST",
+                url: "Dashboard.aspx/GetVendorRateStatusInfoForPopUp",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var result = response.d;
+                    var data = typeof result === 'string' ? JSON.parse(result) : result;
+
+                    if (data && data.length > 0) {
+                        var listHtml = '';
+                        data.forEach(function (row) {
+                            var vendorName = row.VendorName;
+                            var status = row.IsApprovedStatus;
+                            var vendorId = row.VendorId;
+                            if (vendorName) {
+                                listHtml += `<li><strong>${vendorName.trim()}</strong> - <span style="color: red;">Status: ${status}</span></li>`;
+                                pendingVendorIds.push(parseInt(vendorId));
+                            }
+                        });
+
+                        if (listHtml !== '') {
+                            $('#RateStatusList').html(listHtml);
+                            totalCount += 1;
+                            sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateStatusModal');"><i class="fas fa-check-circle text-danger"></i> <strong>Rate Approved Status Notice</strong><br/><small class="text-light">Rate approval pending.</small></div>`;
+                        }
+                    }
+                    finalizeNotifications(totalCount, sidebarHtml);
+                },
+                error: function (error) {
+                    console.log("Error: " + error.responseText);
+                    finalizeNotifications(totalCount, sidebarHtml);
+                }
+            });
+        }
+
+        function finalizeNotifications(totalCount, sidebarHtml) {
+            if (totalCount > 0) {
+                $('#admin_pendingtask').text(totalCount).show();
+                $('#dvsidebar').html(sidebarHtml);
+
+                // Login zalyavar jar adhi popup dakhvala nasel, tarach auto-flow start karu
+                if (!sessionStorage.getItem('popupsShown')) {
+                    isAutoPopupRunning = true; // Auto-flow flag TRUE kela
+                    showNextPendingModal();
+                    sessionStorage.setItem('popupsShown', 'true');
+                }
+
+            } else {
+                $('#admin_pendingtask').hide();
+                $('#dvsidebar').html('<p class="text-muted" style="padding: 10px;">No pending tasks.</p>');
+            }
+        }
+
+        // Sidebar madhun manually click kelay tevha ha function call hoil
+        function openManualModal(modalId) {
+            isAutoPopupRunning = false; // Manual click mule auto-flow FALSE kela
+            $(modalId).modal('show');
+        }
+
+        // Helper function to check which modal to open next
+        function showNextPendingModal() {
+            if (pendingAgreementVendorIds.length > 0) {
+                $('#successModal').modal('show');
+            }
+            else if (pendingRateRevisionVendorIds.length > 0) {
+                $('#RateRevisionDateModal').modal('show');
+            }
+            else if (pendingVendorIds.length > 0) {
+                $('#RateStatusModal').modal('show');
+            }
+        }
+
+        $(document).on('click', '#successModal [data-dismiss="modal"], #successModal .close', function () {
+            if (pendingAgreementVendorIds.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "Dashboard.aspx/MarkNotificationAsRead",
+                    data: JSON.stringify({ VendorId: pendingAgreementVendorIds, notificationType: "AgreementDate" }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) { }
+                });
+            }
+            $('#successModal').modal('hide');
+            pendingAgreementVendorIds = [];
+
+            setTimeout(function () {
+                if (isAutoPopupRunning) {
+                    showNextPendingModal();
+                }
+            }, 300);
+        });
+
+        $(document).on('click', '#RateRevisionDateModal [data-dismiss="modal"], #RateRevisionDateModal .close', function () {
+            if (pendingRateRevisionVendorIds.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "Dashboard.aspx/MarkNotificationAsRead",
+                    data: JSON.stringify({ VendorId: pendingRateRevisionVendorIds, notificationType: "RateRevisionDate" }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) { }
+                });
+            }
+            $('#RateRevisionDateModal').modal('hide');
+            pendingRateRevisionVendorIds = [];
+
+            setTimeout(function () {
+                if (isAutoPopupRunning) {
+                    showNextPendingModal();
+                }
+            }, 300);
+        });
+
+        $(document).on('click', '#RateStatusModal [data-dismiss="modal"], #RateStatusModal .close, #RateStatusModal .btn-primary', function () {
+            if (pendingVendorIds.length > 0) {
+                $.ajax({
+                    type: "POST",
+                    url: "Dashboard.aspx/MarkNotificationAsRead",
+                    data: JSON.stringify({ VendorId: pendingVendorIds, notificationType: "RateStatus" }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) { }
+                });
+            }
+            $('#RateStatusModal').modal('hide');
+            pendingVendorIds = [];
+        });
+    </script>
 </head>
 <body class="hold-transition sidebar-collapse layout-top-nav">
     <form id="form1" runat="server">
@@ -90,6 +323,8 @@
                                     <li><a href="UpdateClientInvoice.aspx" id="li_UpdateClientInvoice" runat="server" class="dropdown-item">Update Client Invoice</a></li>
                                     <li><a href="UpdatePaidDate.aspx" id="li_UpdatePaidDate" runat="server" class="dropdown-item">Update Paid Date</a></li>
                                     <li><a href="UpdatePaidDateOther.aspx" id="li_UpdatePaidDateOther" runat="server" class="dropdown-item">Update Paid Date Other</a></li>
+                                                                        <li><a href="VendorRegistrationMaster.aspx" class="dropdown-item">Vendor Registration</a></li>
+
                                     <li class="dropdown-divider"></li>
                                 </ul>
                             </li>
@@ -317,3 +552,174 @@
     </form>
 </body>
 </html>
+
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="agreementModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
+
+                <!-- Modal Header -->
+                <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
+                    <h5 class="modal-title font-weight-bold text-dark" id="agreementModalLabel" style="font-size: 1.25rem;">Important Notification
+                </h5>
+                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                    <!-- Subject Row -->
+                    <div class="row mb-3">
+                        <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
+                        <div class="col-sm-10 font-weight-bold text-dark">Agreement Renewal Notice</div>
+                    </div>
+
+                    <!-- Message Row -->
+                    <div class="row">
+                        <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
+                        <div class="col-sm-10">
+                            <ul class="list-unstyled pl-0 mb-0">
+                                <li class="mb-2">
+                                    <span class="font-weight-bold">Attention!</span> Agreement has expired.
+                            </li>
+                                <li class="mb-2">
+                                    <span class="font-weight-bold">Vendor Name:</span>
+                                    <ul id="vendorList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+                                </li>
+                                <li class="mb-0 text-danger">
+                                    <span class="font-weight-bold">Important Message:</span> Agreement has expired. Please renew agreement as soon as possible!
+                            </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
+
+                    <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
+                         Mark as read
+               
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="RateRevisionDateModal" tabindex="-1" role="dialog" aria-labelledby="RateRevisionDateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
+            
+            <!-- Modal Header -->
+            <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
+                <h5 class="modal-title font-weight-bold text-dark" id="RateRevisionDateModalLabel" style="font-size: 1.25rem;">
+                    Important Notification
+                </h5>
+                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                <!-- Subject Row -->
+                <div class="row mb-3">
+                    <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
+                    <div class="col-sm-10 font-weight-bold text-dark">Rate Revision Date Renewal Notice</div>
+                </div>
+                
+                <!-- Message Row -->
+                <div class="row">
+                    <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
+                    <div class="col-sm-10">
+                        <ul class="list-unstyled pl-0 mb-0">
+                            <li class="mb-2">
+                                <span class="font-weight-bold">Attention!</span> Rate Revision Date has expired.
+                            </li>
+                           <li class="mb-2">
+    <span class="font-weight-bold">Vendor Name:</span>
+    <ul id="RateRevisionDateList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+</li>
+                            <li class="mb-0 text-danger">
+                                <span class="font-weight-bold">Important Message:</span> Rate Revision Date has expired. Please renew Rate Revision Date as soon as possible!
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
+               
+                <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
+                     Mark as read
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for Vendor Rate Status -->
+    <div class="modal fade" id="RateStatusModal" tabindex="-1" role="dialog" aria-labelledby="RateStatusModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
+                
+                <!-- Modal Header -->
+                <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
+                    <h5 class="modal-title font-weight-bold text-dark" id="RateStatusModalLabel" style="font-size: 1.25rem;">
+                        Important Notification
+                    </h5>
+                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                <!-- Modal Body -->
+                <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                    <!-- Subject Row -->
+                    <div class="row mb-3">
+                        <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
+                        <div class="col-sm-10 font-weight-bold text-dark">Rate Approved Status Notice</div>
+                    </div>
+                    
+                    <!-- Message Row -->
+                    <div class="row">
+                        <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
+                        <div class="col-sm-10">
+                            <ul class="list-unstyled pl-0 mb-0">
+                                <li class="mb-2">
+                                    <span class="font-weight-bold">Attention!</span> Rate Approved Status requires attention.
+                                </li>
+                                <li class="mb-2">
+                                    <span class="font-weight-bold">Pending Vendors:</span>
+                                    <ul id="RateStatusList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+                                </li>
+
+                                <li class="mb-3 p-2 bg-light border rounded" style="font-size: 0.9rem;">
+                                <span class="font-weight-bold text-primary"><i class="fas fa-directions"></i> How to Approve Status:</span><br />
+                                <span style="color: #555;">
+                                    Go to <b>Vendor Registration Master</b> &gt; <b>Rate Configuration Section</b> &gt; Select Pending Vendor &gt; Click <b>Edit</b> &gt; <b>Approve Rate</b>
+                                </span>
+                            </li>
+
+                                <li class="mb-0 text-danger mt-2" style="font-weight: bold;">
+                                    <span>Important Message: Rate Approved is Pending. Please approve rate as soon as possible!</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal Footer -->
+                <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
+                    <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
+                        Mark as read
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>

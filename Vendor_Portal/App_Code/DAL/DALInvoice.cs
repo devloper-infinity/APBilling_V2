@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 
 //using System.Linq;
 using System.Web;
+using Vendor_Portal.Vendor;
 
 namespace Vendor_Portal.App_Code.DAL
 {
@@ -1180,9 +1181,155 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@ApprovedBy", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.Input, htParam["VerifyBy"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
             SQLHelper.ExecuteNonQueryCmd(cmd);
-
             int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
             return ReturnValue;
+        }
+
+        public System.Data.DataTable GetAllRegisteredVendors()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "GetAllRegisteredVendors_YTU");
+            System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+
+
+        public int InsertVendorRegistration(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_InsertVendorRegistration_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorName", System.Data.SqlDbType.VarChar, 150, System.Data.ParameterDirection.Input, htParam["VendorName"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@CompanyName", System.Data.SqlDbType.VarChar, 150, System.Data.ParameterDirection.Input, htParam["CompanyName"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ContactPerson", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["ContactPerson"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ContactNo", System.Data.SqlDbType.VarChar, 20, System.Data.ParameterDirection.Input, htParam["ContactNo"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmailID", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["EmailID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@WebsiteURL", System.Data.SqlDbType.VarChar, 255, System.Data.ParameterDirection.Input, htParam["WebsiteURL"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Address", System.Data.SqlDbType.VarChar, -1, System.Data.ParameterDirection.Input, htParam["Address"]); 
+            SQLHelper.AddParamToSQLCmd(cmd, "@PayToVendorName", System.Data.SqlDbType.VarChar, 150, System.Data.ParameterDirection.Input, htParam["PayToVendorName"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AccountNumber", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, htParam["AccountNumber"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.VarChar, -1, System.Data.ParameterDirection.Input, htParam["Remark"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorID", System.Data.SqlDbType.VarChar, 150, System.Data.ParameterDirection.Input, htParam["vendorId"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorType", System.Data.SqlDbType.VarChar, 150, System.Data.ParameterDirection.Input, htParam["VendorType"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@NewVendorID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int returnValue = Convert.ToInt32(cmd.Parameters["@NewVendorID"].Value);
+            return returnValue;
+        }
+
+
+        public int AddVendorOtherInfo(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_UpdateVendorOtherInfo_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorRegistrationID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["vendorRegistrationID"]); 
+            SQLHelper.AddParamToSQLCmd(cmd, "@StartDate", System.Data.SqlDbType.Date, 0, System.Data.ParameterDirection.Input, htParam["StartDate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@RateRevisionDate", System.Data.SqlDbType.Date, 0, System.Data.ParameterDirection.Input, htParam["RateRevisionDate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@WorkDocument", System.Data.SqlDbType.VarChar, -1, System.Data.ParameterDirection.Input, htParam["WorkDocument"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ScopeOfWork", System.Data.SqlDbType.NVarChar, -1, System.Data.ParameterDirection.Input, htParam["ScopeOfWork"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@OtherInfoRemark", System.Data.SqlDbType.NVarChar, -1, System.Data.ParameterDirection.Input, htParam["OtherInfoRemark"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@IsNDASigned", System.Data.SqlDbType.VarChar, 10, System.Data.ParameterDirection.Input, htParam["IsNDASigned"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AgreementDate", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["AgreementDate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ExpiryDate", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["ExpiryDate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@SignedByClient", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["SignedByClient"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@SignedByInfinity", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["SignedByInfinity"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AgreementCopy", System.Data.SqlDbType.VarChar, 255, System.Data.ParameterDirection.Input, htParam["AgreementCopy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@UpdatedID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int returnValue = Convert.ToInt32(cmd.Parameters["@UpdatedID"].Value);
+            return returnValue;
+        }
+
+        public int InsertVendorRate(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_InsertVendorRate_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorRegistrationID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["VendorRegistrationID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@FromDate", System.Data.SqlDbType.Date, 0, System.Data.ParameterDirection.Input, htParam["FromDate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@RateType", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, htParam["RateType"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Rate", System.Data.SqlDbType.Decimal, 18, System.Data.ParameterDirection.Input, htParam["Rate"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Process", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, htParam["Process"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@BillingCycle", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["BillingCycle"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@rateID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["rateID"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@newRateId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int returnValue = Convert.ToInt32(cmd.Parameters["@newRateId"].Value);
+            return returnValue;
+        }
+
+
+        public static DataTable GetVendors()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendor_YTU");
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public DataTable GetVendorDetailsByID(int vendorRegistrationID)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorDetailsByID_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@vendorRegistrationID", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, vendorRegistrationID);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public static DataTable GetRateConfiguration(int VendorId)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetRateConfiguration_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorId", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, VendorId);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public int ApproveVendorRate(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_ApprovedVendorRate_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorRegistrationID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["VendorRegistrationID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@rateID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["rateID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.Int,4, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@newRateId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int returnValue = Convert.ToInt32(cmd.Parameters["@newRateId"].Value);
+            return returnValue;
+        }
+
+        public System.Data.DataTable GetVendorInfoForPopUp()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorInfoForPopUp_YTU");
+            System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public System.Data.DataTable GetVendorRateRevisionDateInfoForPopup()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorRateRevisionDateInfoForPopup_YTU");
+            System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public System.Data.DataTable GetVendorRateStatusInfoForPopUp()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorRateStatusInfoForPopUp_YTU");
+            System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public int InsertVendorNotificationLog(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_InsertVendorNotificationLog_YTU");
+            // ActionByUserID la NVarChar kela karan table madhe varchar(100) ahe
+            SQLHelper.AddParamToSQLCmd(cmd, "@ActionByUserID", System.Data.SqlDbType.NVarChar, 100, System.Data.ParameterDirection.Input, htParam["ActionByUserID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["VendorId"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@NotificationType", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["notificationType"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@IsRead", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["IsRead"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@newReadId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
+
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+
+            object outVal = cmd.Parameters["@newReadId"].Value;
+            int returnValue = (outVal != null && outVal != DBNull.Value) ? Convert.ToInt32(outVal) : 0;
+            return returnValue;
         }
     }
 }

@@ -64,7 +64,7 @@ function showInvoice() {
         });
     } catch (error) {
         finishRequest();
-        alert("Unable to start the invoice request. Please refresh the page and try again.");
+       // alert("Unable to start the invoice request. Please refresh the page and try again.");
     }
     return false;
 }
@@ -312,3 +312,5 @@ $(document).ready(function () {
         }
     });
 });
+
+

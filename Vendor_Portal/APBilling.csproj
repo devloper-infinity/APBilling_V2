@@ -2262,6 +2262,7 @@
     <Content Include="Scripts\Functions\UpdatePaidDateOther.js" />
     <Content Include="Scripts\Functions\Scienna.js" />
     <Content Include="Scripts\Functions\VendorAccountDetails.js" />
+    <Content Include="Scripts\Functions\VendorRegistrationMaster.js" />
     <Content Include="Scripts\Functions\VendorReportCanopy.js" />
     <Content Include="Vendor\AddInvoice.aspx" />
     <Content Include="Vendor\AddInvoice670.aspx" />
@@ -2293,6 +2294,8 @@
     <Content Include="Vendor\UpdatePaidDate.aspx" />
     <Content Include="Vendor\UpdatePaidDateOther.aspx" />
     <Content Include="Vendor\VendorAccountDetails.aspx" />
+    <Content Include="Vendor\VendorRegistration.aspx" />
+    <Content Include="Vendor\VendorRegistrationMaster.aspx" />
     <Content Include="Vendor\ViewLoanDetails.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2652,6 +2655,20 @@
     <Compile Include="Vendor\VendorAccountDetails.aspx.designer.cs">
       <DependentUpon>VendorAccountDetails.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Vendor\VendorRegistration.aspx.cs">
+      <DependentUpon>VendorRegistration.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vendor\VendorRegistration.aspx.designer.cs">
+      <DependentUpon>VendorRegistration.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vendor\VendorRegistrationMaster.aspx.cs">
+      <DependentUpon>VendorRegistrationMaster.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vendor\VendorRegistrationMaster.aspx.designer.cs">
+      <DependentUpon>VendorRegistrationMaster.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Vendor\ViewLoanDetails.aspx.cs">
       <DependentUpon>ViewLoanDetails.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -2806,6 +2823,8 @@
     <Folder Include="OCR\" />
     <Folder Include="TempFiles\" />
     <Folder Include="Temp\" />
+    <Folder Include="VendorDocument\AgreementCopy\" />
+    <Folder Include="VendorDocument\WorkDocument\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
