@@ -126,8 +126,8 @@ namespace Vendor_Portal.Vendor
                 ReturnValue = InvoiceId;
                 if (ReturnValue > 0)
                 {
-                    sendEmailApproval_Canopy(10647, "Canopy", "Approve");
-                    //sendEmailApproval_Canopy(InvoiceId, strCompany, status);
+                    //sendEmailApproval_Canopy(10647, "Canopy", "Approve");
+                    sendEmailApproval_Canopy(InvoiceId, strCompany, status);
                     try
                     {
                       //  SendEmailToCMSir(InvoiceId, "Canopy", "", "");
@@ -484,10 +484,10 @@ namespace Vendor_Portal.Vendor
             string ToAddress = "";
             string ToCC = "";
 
-            //ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
-            //ToCC = "s.chandrakant@infinity-data.com";
+            ToAddress = "jim@infinity-data.com,anita@infinity-data.com,k.adam@infinity-data.com";
+            ToCC = "s.chandrakant@infinity-data.com";
 
-             ToAddress = "p.kedar@infinity-data.com"; ToCC = "";
+             //ToAddress = "p.kedar@infinity-data.com"; ToCC = "";
 
             string BillingDatePeriod = "";
             string strInvoiceType = "";
