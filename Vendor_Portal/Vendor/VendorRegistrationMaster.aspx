@@ -226,7 +226,7 @@ div[class*="container"] {
     background-color: #f8fafc;
 }
 
-#vendorregistration_table th:nth-child(7),
+/*#vendorregistration_table th:nth-child(7),
 #vendorregistration_table td:nth-child(7),
 #vendorregistration_table th:nth-child(6),
 #vendorregistration_table td:nth-child(6),
@@ -255,7 +255,7 @@ div[class*="container"] {
     max-width: 280px !important;
     width: 220px !important;
     white-space: normal !important;
-}
+}*/
 
 .dataTables_wrapper .dataTables_length {
     float: left;
@@ -330,16 +330,19 @@ div[class*="container"] {
                                             <th style="display:none;">ID</th>
                                             <th>Action</th>
                                             <th>Sr.No.</th>
+                                             <th>Company Name</th>
+                                                                                        <th>Vendor Type</th>
+
                                             <th>Vendor Name</th>
-                                            <th>Company Name</th>
+                                           
                                             <th >Contact Person</th>
                                             <th>Contact No</th>
                                             <th>Email ID</th>
-                                            <th>Website URL</th>
-                                            <th>Address</th>
-                                            <th>Pay To Vendor</th>
+                                           
                                             <th>Account Number</th>
-                                            <th>Remark</th>
+                                               <th>Billing Cycle</th>
+  
+   <th>Process</th>
 
                                         </tr>
                                     </thead>

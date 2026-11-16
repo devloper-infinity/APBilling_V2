@@ -433,7 +433,8 @@ div[class*="container"] {
      $(document).ready(function () {
 
          loadVendors();
-
+         GetEmployeeForRateConfig();
+         GetRateConfigProcess();
          const urlParams = new URLSearchParams(window.location.search);
          const vendorIdFromURL = urlParams.get('VendorID');
          var vendorId = vendorIdFromURL ? parseInt(vendorIdFromURL) : 0;
@@ -495,10 +496,10 @@ div[class*="container"] {
                                             <div class="tab-pane fade show active" id="custom-tabs-one-home_company" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab_company">
                                                 <table class="table">
                                                     <tr>
-                                                        <td><b>Domain:</b></td>
+                                                        <td><b>Domain: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" class="form-control" style="width: 250px;" disabled="disabled" value="Underwriting" /></td>
-                                                         <td><b>Individual/Company</b></td>
+                                                         <td><b>Individual/Company <span style="color: red;">*</span></b></td>
  <td>
      <select id="vendorreg_individualcomp" name="vendorreg_individualcomp" class="form-control" style="width: 250px;">
          <option value="">Select</option>
@@ -508,13 +509,13 @@ div[class*="container"] {
      </select>
  </td>
 
-                                                        <td><b>Vendor Name:</b></td>
+                                                        <td><b>Vendor Name: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" id="vendorreg_vendorname" name="vendorreg_vendorname" class="form-control" style="width: 250px;" /></td>
                                                       
                                                     </tr>
                                                     <tr>
-                                                          <td><b>Company Name:</b></td>
+                                                          <td><b>Company Name: <span style="color: red;">*</span></b></td>
   <td>
       <select id="vendorreg_companyname" name="vendorreg_companyname" class="form-control" style="width: 250px;">
           <option value="">Select</option>
@@ -523,32 +524,32 @@ div[class*="container"] {
 
       </select>
   </td>
-                                                        <td><b>Contact Person:</b></td>
+                                                        <td><b>Contact Person: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" id="vendorreg_contactperson" name="vendorreg_contactperson" class="form-control" style="width: 250px;" /></td>
-                                                        <td><b>Contact #:</b></td>
+                                                        <td><b>Contact #: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" id="vendorreg_contactno" name="vendorreg_contactno" class="form-control" style="width: 250px;" /></td>
                                                       
                                                     </tr>
                                                     <tr>
-                                                          <td><b>Email ID:</b></td>
+                                                          <td><b>Email ID: <span style="color: red;">*</span></b></td>
   <td>
       <input type="email" id="vendorreg_email" name="vendorreg_email" class="form-control" style="width: 250px;" /></td>
-                                                        <td><b>Website URL:</b></td>
+                                                        <td><b>Website URL: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" id="vendorreg_weburl" name="vendorreg_weburl" class="form-control" style="width: 250px;" /></td>
-                                                        <td><b>Pay To Vendor Name:</b></td>
+                                                        <td><b>Pay To Vendor Name<span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="text" id="vendorreg_payvendorname" name="vendorreg_payvendorname" class="form-control" style="width: 250px;" /></td>
                                                        
                                                     </tr>
 
                                                     <tr>
-                                                         <td><b>Account No.:</b></td>
+                                                         <td><b>Account No.: <span style="color: red;">*</span></b></td>
  <td>
      <input type="text" id="vendorreg_acno" name="vendorreg_acno" class="form-control" style="width: 250px;" /></td>
-                                                        <td><b>Address:</b></td>
+                                                        <td><b>Address: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <textarea id="vendorreg_address" name="vendorreg_address" class="form-control" style="width: 250px; resize: none;"></textarea></td>
                                                         <td><b>Remark:</b></td>
@@ -567,22 +568,22 @@ div[class*="container"] {
                                                 <table class="table" style="width: 100%">
                                                     <tr>
 
-                                                        <td><b>Vendor:</b></td>
+                                                        <td><b>Vendor: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <select class="form-control" id="vendorregother_vendor" name="vendor">
                                                                 <option value="">Select Vendor</option>
                                                             </select></td>
-                                                        <td><b>Start Date:</b></td>
+                                                        <td><b>Start Date:<span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="date" id="vendorreg_expectedstartdate" name="vendorreg_expectedstartdate" class="form-control" style="width: 250px;" /></td>
-                                                        <td><b>Rate Revision Date:</b></td>
+                                                        <td><b>Rate Revision Date: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="date" id="vendorreg_raterevisiondate" name="vendorreg_raterevisiondate" class="form-control" style="width: 250px;" /></td>
                                                        
                                                     </tr>
 
                                                     <tr>
-                                                        <td><b>Work Document:</b></td>
+                                                        <td><b>Work Document: <span style="color: red;">*</span></b></td>
                                                     <td>
     <div class="d-flex align-items-center gap-3">
         <input type="file" id="vendorreg_workdocument" name="vendorreg_workdocument" class="form-control" style="width: 250px;" />
@@ -591,7 +592,7 @@ div[class*="container"] {
         </a>
     </div>
 </td>                                  
-                                                        <td><b>Scope of Work:</b></td>
+                                                        <td><b>Scope of Work: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <textarea id="vendorreg_workscope" name="vendorreg_workscope" class="form-control" style="width: 250px; resize: none;"></textarea></td>
                                                         <td><b>Remark:</b></td>
@@ -601,7 +602,7 @@ div[class*="container"] {
 
 
                                                     <tr>
-                                                        <td><b>Is NDA Signed?</b></td>
+                                                        <td><b>Is NDA Signed? <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <select id="vendorreg_isndasigned" name="vendorreg_isndasigned" class="form-control" style="width: 250px;" onchange="return getnda(this);">
                                                                 <option value="">Select</option>
@@ -612,13 +613,13 @@ div[class*="container"] {
                                                         </td>
                                                     </tr>
                                                     <tr id="nda1" style="display: none;">
-                                                        <td><b>Agreement Date:</b></td>
+                                                        <td><b>Agreement Date: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="date" id="vendorreg_agreementdate" name="vendorreg_agreementdate" class="form-control" style="width: 250px;"></td>
-                                                        <td><b>Expiry Date:</b></td>
+                                                        <td><b>Expiry Date: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <input type="date" id="vendorreg_agreementexpirydate" name="vendorreg_agreementexpirydate" class="form-control" style="width: 250px;"></td>
-                                                        <td><b>Signed by Client:</b></td>
+                                                        <td><b>Signed by Client: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <select id="vendorreg_agreementclientsigned" name="vendorreg_agreementclientsigned" class="form-control" style="width: 250px;">
                                                                 <option value="">Select</option>
@@ -628,7 +629,7 @@ div[class*="container"] {
                                                         </td>
                                                     </tr>
                                                     <tr id="nda2" style="display: none;">
-                                                        <td><b>Signed by Infinity:</b></td>
+                                                        <td><b>Signed by Infinity: <span style="color: red;">*</span></b></td>
                                                         <td>
                                                             <select id="vendorreg_agreementinfinitysigned" name="vendorreg_agreementinfinitysigned" class="form-control" style="width: 250px;">
                                                                 <option value="">Select</option>
@@ -636,7 +637,7 @@ div[class*="container"] {
                                                                 <option value="0">No</option>
                                                             </select>
                                                         </td>
-                                                        <td><b>Agreement Copy:</b></td>
+                                                        <td><b>Agreement Copy: <span style="color: red;">*</span></b></td>
                                                                                                             <td>
     <div class="d-flex align-items-center gap-3">
         <input type="file" id="vendorreg_agreementattachment" name="vendorreg_agreementattachment" class="form-control" style="width: 250px;" />
@@ -694,21 +695,23 @@ div[class*="container"] {
                 <div class="modal-body">
                     <input type="hidden" id="vendorreg_rateid" value="0" />
                     <input type="hidden" id="hdfCurrentUserId" value='<%= HttpContext.Current.User.Identity.Name %>' />
+                    <input type="hidden" id="vendorreg_EmployeeId" value="0" />
+
                     <div class="row">
                         <div class="col-md-6 form-group">
-                            <label for="vendorreg_vendor">Vendor</label>
+                            <label for="vendorreg_vendor">Vendor <span style="color: red;">*</span></label>
                             <select class="form-control" id="vendorreg_vendor" name="vendor">
                                 <option value="">Select Vendor</option>
                             </select>
                         </div>
 
                         <div class="col-md-6 form-group">
-                            <label for="vendorreg_formdate">From Date</label>
+                            <label for="vendorreg_formdate">From Date <span style="color: red;">*</span></label>
                             <input type="date" class="form-control" id="vendorreg_formdate" name="FormDate">
                         </div>
 
                        <div class="col-md-6 form-group">
-    <label for="vendorreg_rtype">Rate Type</label>
+    <label for="vendorreg_rtype">Rate Type <span style="color: red;">*</span></label>
     <select class="form-control" id="vendorreg_rtype" name="RType">
         <option value="">Select</option>
         <option value="Fix">Fix</option>
@@ -718,20 +721,20 @@ div[class*="container"] {
 </div>
 
 <div class="col-md-6 form-group">
-    <label for="vendorreg_Process">Process</label>
+    <label for="vendorreg_Process">Process <span style="color: red;">*</span></label>
     <select class="form-control" id="vendorreg_Process" name="Process" disabled>
         <option value="">Select</option>
-        <option value="Default">Default</option>
+<%--        <option value="Default">Default</option>--%>
     </select>
 </div>
 
                         <div class="col-md-6 form-group">
-                            <label for="vendorreg_rate">Rate</label>
+                            <label for="vendorreg_rate">Rate <span style="color: red;">*</span></label>
                             <input type="number" step="0.01" class="form-control" id="vendorreg_rate" name="Rate" placeholder="Enter rate">
                         </div>
 
                                                <div class="col-md-6 form-group">
-    <label for="vendorreg_rtype">Billing Cycle </label>
+    <label for="vendorreg_rtype">Billing Cycle <span style="color: red;">*</span></label>
     <select class="form-control" id="vendorreg_BillingCycle" name="vendorreg_BillingCycle">
         <option value="">Select</option>
         <option value="Monthly">Monthly</option>
@@ -739,6 +742,12 @@ div[class*="container"] {
         <option value="Weekly">Weekly</option>
     </select>
 </div>
+                         <div class="col-md-6 form-group">
+     <label for="vendorreg_EmployeeList">Employee <span style="color: red;">*</span></label>
+     <select class="form-control" id="vendorreg_EmployeeList" name="vendorreg_EmployeeList">
+         <option value="">Select Employee</option>
+     </select>
+ </div>
                     </div>
 
                 </div>

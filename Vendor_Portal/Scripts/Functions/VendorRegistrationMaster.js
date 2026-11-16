@@ -18,16 +18,16 @@ function GetVendors_bindgrid() {
                 vendorreg_html += '<td style="text-wrap: nowrap; text-align:center; display:none">' + blankForNull(vendorId) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;"><a class="dropdown-item" href="VendorRegistration.aspx?VendorID=' + vendorId + '" id="ActionsEx"><span style="color: dodgerblue;"><i class="uil fs-0 me-2 uil-pen"></i></span></a></td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull((index + 1)) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorName) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.CompanyName) + '</td>';
+                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorType) + '</td>';
+
+                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorName) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.ContactPerson) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.ContactNo) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.EmailID) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.WebsiteURL) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.Address) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.PayToVendorName) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.AccountNumber) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.Remark) + '</td>';
+                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.BillingCycle) + '</td>';
+                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.Process) + '</td>';
 
                 vendorreg_html += '</tr>';
             });
@@ -110,13 +110,11 @@ function EditConfiguration(vendorId) {
                 if (row.AgreementCopy && row.AgreementCopy !== "") {
                     var dbPath = row.AgreementCopy.replace(/\\/g, '/');
 
-                    // VendorDocument nantarcha path kaadne (jar absolute path asel tr)
                     var virtualIndex = dbPath.indexOf('VendorDocument');
                     var fileUrl = '';
 
                     if (virtualIndex !== -1) {
                         var baseUrl = window.location.origin;
-                        // Fakht VendorDocument pasun pudhcha part ghene
                         fileUrl = baseUrl + '/' + dbPath.substring(virtualIndex);
                     } else {
                         fileUrl = dbPath.replace('~', '');
@@ -177,7 +175,7 @@ function addnewvendor() {
     return false; 
 }
 
-//**************** VendorRegistration ********************/
+//**************** Vendor Registration ********************/
 
 //back to list function
 function Backtolist() {
@@ -461,9 +459,20 @@ function btnsubmitInsertVendorOtherInfo() {
         return false;
     }
     if (isNdaSigned === "1" && $('#vendorreg_agreementexpirydate').val() === "") {
-        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please select Agreement Expiry Date.' }).then(() => { $('#vendorreg_agreementdate').focus(); });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please select Agreement Expiry Date.' }).then(() => { $('#vendorreg_agreementexpirydate').focus(); });
         return false;
     }
+    if (isNdaSigned === "1" && $('#vendorreg_agreementclientsigned').val() === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please select Client Signed.' }).then(() => { $('#vendorreg_agreementclientsigned').focus(); });
+        return false;
+    }
+    if (isNdaSigned === "1" && $('#vendorreg_agreementinfinitysigned').val() === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please select Infinity Signed.' }).then(() => { $('#vendorreg_agreementinfinitysigned').focus(); });
+        return false;
+    }
+
+
+
     var agreementDateVal = $('#vendorreg_agreementdate').val();
     var expiryDateVal = $('#vendorreg_agreementexpirydate').val();
 
@@ -486,6 +495,22 @@ function btnsubmitInsertVendorOtherInfo() {
     var agreementFile = $('#vendorreg_agreementattachment')[0] ? $('#vendorreg_agreementattachment')[0].files[0] : null;
     var existingWorkDocPath = $('#lnk_workdoc_download').attr('data-original-path') || "";
     var existingAgreementPath = $('#lnk_agreementattachment_download').attr('data-original-path') || "";
+
+    if (!workDocFile && !existingWorkDocPath) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Required Field',
+            text: 'Please upload Work Document.'
+        }).then(() => {
+            $('#vendorreg_workdocument').focus();
+        });
+        return false;
+    }
+
+    if (isNdaSigned === "1" && !agreementFile && !existingAgreementPath) {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please upload Agreement Copy.' }).then(() => { $('#vendorreg_agreementattachment').focus(); });
+        return false;
+    }
     function sendData(workDocBase64, agreementBase64) {
         var requestData = {
             vendorRegistrationID: parseInt(vendorRegistrationID),
@@ -662,6 +687,8 @@ function loadRateConfiguration(vendorId) {
             thead.append('<th>Rate</th>');
             thead.append('<th>Process</th>');
             thead.append('<th>Billing Cycle</th>');
+            thead.append('<th>Employee Name</th>');
+
             thead.append('<th>Approve Status</th>');
 
 
@@ -680,8 +707,10 @@ function loadRateConfiguration(vendorId) {
                     tr.append("<td>" + (row.FormDate !== null ? row.FormDate : '') + "</td>");
                     tr.append("<td>" + (row.RateType !== null ? row.RateType : '') + "</td>");
                     tr.append("<td>" + (row.Rate !== null ? row.Rate : '') + "</td>");
-                    tr.append("<td>" + (row.Process !== null ? row.Process : '') + "</td>");
+                    tr.append("<td>" + (row.ProcessName !== null ? row.ProcessName : '') + "</td>");
                     tr.append("<td>" + (row.BillingCycle !== null ? row.BillingCycle : '') + "</td>");
+                    tr.append("<td>" + (row.PsuedoName !== null ? row.PsuedoName : '') + "</td>");
+
                     var status = row.IsApprovedStatus !== null ? row.IsApprovedStatus : '';
                     var badgeClass = '';
                     if (status.toLowerCase() === 'pending') {
@@ -718,11 +747,15 @@ function editRateRecord(row) {
         $('#vendorreg_formdate').val(formattedDate);
     }
     $('#vendorreg_rateid').val(row.RateID);
+    $('#vendorreg_EmployeeId').val(row.EmployeeId);
 
     $('#vendorreg_rtype').val(row.RateType);
-    $('#vendorreg_Process').val(row.Process);
+    var processId = row.ProcessId || row.Process ;
+    $('#vendorreg_Process').val(processId).trigger('change');
     $('#vendorreg_rate').val(row.Rate);
     $('#vendorreg_BillingCycle').val(row.BillingCycle);
+    $('#vendorreg_EmployeeList').val(row.EmployeeId);
+
     $('#vendorreg_btnsubmitrate').text('Update');
 
     var currentStatus = row.IsApprovedStatus ? row.IsApprovedStatus.toLowerCase() : '';
@@ -747,15 +780,17 @@ $(document).on('click', '#vendorreg_btnaddnewrate', function () {
 //Add Rate
 $(document).on('click', '#vendorreg_btnsubmitrate', function () {
     var rateID = $('#vendorreg_rateid').val() || 0;
+    var savedEmployeeId = $('#vendorreg_EmployeeId').val() || 0;
+
     var vendorRegistrationID = $('#vendorreg_vendor').val();
-    console.log("Selected Vendor ID: " + vendorRegistrationID);
     var fromDate = $('#vendorreg_formdate').val();
     var rateType = $('#vendorreg_rtype').val();
     var rate = $('#vendorreg_rate').val();
     var Process = $('#vendorreg_Process').val();
     var BillingCycle = $('#vendorreg_BillingCycle').val();
+    var EmployeeID = $('#vendorreg_EmployeeList').val();
 
-    if (!vendorRegistrationID || !fromDate || !rateType || !rate) {
+    if (!vendorRegistrationID || !fromDate || !rateType || !rate || !BillingCycle || !EmployeeID) {
         Swal.fire({
             icon: 'warning',
             title: 'Required Field',
@@ -773,7 +808,11 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
         rate: rate,
         Process: Process,
         rateID: rateID,
-        BillingCycle: BillingCycle
+        BillingCycle: BillingCycle,
+        EmployeeID: EmployeeID,
+        savedEmployeeId: savedEmployeeId
+
+
     };
 
     $.ajax({
@@ -812,7 +851,7 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
             console.log(err.responseText);
             Swal.fire({
                 title: 'Technical Error!',
-                text: 'Kahi tari technical chukla! Console check kar.',
+                text: 'Something went wrong',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
@@ -891,3 +930,68 @@ $(document).on('click', '#vendorreg_btnIsaaprove', function () {
         }
     });
 });
+
+
+//Load EmployeeForRate 
+function GetEmployeeForRateConfig() {
+    $.ajax({
+        type: "POST",
+        url: "VendorRegistration.aspx/GetEmployeeForRateConfig",
+        data: '{}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var vendors = response.d;
+            var dropdowns = ['#vendorreg_EmployeeList'];
+            $.each(dropdowns, function (i, selector) {
+                var dropdown = $(selector);
+
+                dropdown.empty();
+                dropdown.append('<option value="">Select</option>');
+
+                $.each(vendors, function (index, item) {
+                    dropdown.append($('<option></option>')
+                        .val(item.EmployeeID)
+                        .text(item.PsuedoName));
+                });
+            });
+           
+        },
+        error: function (xhr, status, error) {
+            console.log("Error fetching vendors: " + error);
+        }
+    });
+}
+
+
+
+//Load Process 
+function GetRateConfigProcess() {
+    $.ajax({
+        type: "POST",
+        url: "VendorRegistration.aspx/GetRateConfigProcess",
+        data: '{}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var Process = response.d;
+            var dropdowns = ['#vendorreg_Process'];
+            $.each(dropdowns, function (i, selector) {
+                var dropdown = $(selector);
+
+                dropdown.empty();
+                dropdown.append('<option value="">Select</option>');
+
+                $.each(Process, function (index, item) {
+                    dropdown.append($('<option></option>')
+                        .val(item.ProcessId)
+                        .text(item.Process));
+                });
+            });
+
+        },
+        error: function (xhr, status, error) {
+            console.log("Error fetching vendors: " + error);
+        }
+    });
+}

@@ -625,5 +625,42 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.InsertVendorNotificationLog(htParam);
         }
+
+        public DataTable GetEmployeeForRateConfig()
+        {
+            return dalInvoice.GetEmployeeForRateConfig();
+        }
+
+        public DataTable GetRateConfigProcess()
+        {
+            return dalInvoice.GetRateConfigProcess();
+        }
+
+
+        public DataTable GetAllLogInOutDataForInvoice()
+        {
+            return dalInvoice.GetAllLogInOutDataForInvoice();
+        }
+
+
+        public DataTable GetUserWiseLogInOutDataForInvoice(string Code, string StartDate, string EndDate)
+        {
+            return dalInvoice.GetUserWiseLogInOutDataForInvoice(Code, StartDate, EndDate);
+        }
+
+        public DataTable GetAllUSLoanProductionTrack(string EmpName, string StartDate, string EndDate)
+        {
+            return dalInvoice.GetAllUSLoanProductionTrack(EmpName, StartDate, EndDate);
+        }
+
+        public DataTable GetAllNonProductiveHoursForInvoice(string Code, string StartDate, string EndDate)
+        {
+            return dalInvoice.GetAllNonProductiveHoursForInvoice(Code, StartDate, EndDate);
+        }
+
+        public DataTable GetVendorsInformation(string EmpName)
+        {
+            return dalInvoice.GetVendorsInformation(EmpName);
+        }
     }
 }

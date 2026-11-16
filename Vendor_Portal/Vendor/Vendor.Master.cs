@@ -26,6 +26,7 @@ namespace Vendor_Portal.Vendor
                 li2.Visible = true;
                 li3.Visible = true;
                 li1.Visible = true;
+                Menu_Billing.Visible = true;
             }
 
             else if (LoginID == 9858 || LoginID == 9852)  //IT
@@ -39,6 +40,7 @@ namespace Vendor_Portal.Vendor
                 li1.Visible = true;
                 li2.Visible = true;
                 li3.Visible = false;
+                Menu_Billing.Visible = false;
             }
 
             else
@@ -52,6 +54,7 @@ namespace Vendor_Portal.Vendor
                 li1.Visible = true;
                 li2.Visible = false;
                 li3.Visible = false;
+                Menu_Billing.Visible = false;
             }
                         
             }

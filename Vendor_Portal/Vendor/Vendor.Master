@@ -28,24 +28,26 @@
     </script>
     <script>
         $(document).ready(function () {
-            loadPendingNotifications();
-            $(document).on('click', 'a[href*="Logout.aspx"]', function () {
-                sessionStorage.removeItem('popupsShown');
-            });
+            var currentUserId = parseInt($('#hdfCurrentUserId').val()) || 0;
+            if (currentUserId === 235) {
+                loadPendingNotifications();
+                $(document).on('click', 'a[href*="Logout.aspx"]', function () {
+                    sessionStorage.removeItem('popupsShown');
+                });
+            } 
+          
         });
 
         var pendingAgreementVendorIds = [];
         var pendingRateRevisionVendorIds = [];
         var pendingVendorIds = [];
 
-        // Flag to check if popups were triggered automatically on login vs manually clicked from sidebar
         var isAutoPopupRunning = false;
 
         function loadPendingNotifications() {
             var totalCount = 0;
             var sidebarHtml = '';
 
-            // 1. Check Agreement Renewal
             $.ajax({
                 type: "POST",
                 url: "Dashboard.aspx/GetVendorInfoForPopUp",
@@ -73,7 +75,6 @@
                         }
                         $('#vendorList').html(listHtml);
                         totalCount += 1;
-                        // Sidebar click sathi manual function call karu
                         sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#successModal');"><i class="fas fa-file-contract text-warning"></i> <strong>Agreement Renewal Notice</strong><br/><small class="text-light">Expired agreements require attention.</small></div>`;
                     }
                     checkRateRevisionNotification(totalCount, sidebarHtml);
@@ -170,9 +171,8 @@
                 $('#admin_pendingtask').text(totalCount).show();
                 $('#dvsidebar').html(sidebarHtml);
 
-                // Login zalyavar jar adhi popup dakhvala nasel, tarach auto-flow start karu
                 if (!sessionStorage.getItem('popupsShown')) {
-                    isAutoPopupRunning = true; // Auto-flow flag TRUE kela
+                    isAutoPopupRunning = true; 
                     showNextPendingModal();
                     sessionStorage.setItem('popupsShown', 'true');
                 }
@@ -183,13 +183,11 @@
             }
         }
 
-        // Sidebar madhun manually click kelay tevha ha function call hoil
         function openManualModal(modalId) {
-            isAutoPopupRunning = false; // Manual click mule auto-flow FALSE kela
+            isAutoPopupRunning = false;
             $(modalId).modal('show');
         }
 
-        // Helper function to check which modal to open next
         function showNextPendingModal() {
             if (pendingAgreementVendorIds.length > 0) {
                 $('#successModal').modal('show');
@@ -260,6 +258,7 @@
         });
     </script>
 </head>
+
 <body class="hold-transition sidebar-collapse layout-top-nav">
     <form id="form1" runat="server">
         <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" EnablePageMethods="true">
@@ -294,6 +293,7 @@
             </Scripts>
         </asp:ToolkitScriptManager>
         <div class="wrapper">
+                                <input type="hidden" id="hdfCurrentUserId" value='<%= HttpContext.Current.User.Identity.Name %>' />
 
             <!-- Navbar -->
             <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
@@ -323,7 +323,7 @@
                                     <li><a href="UpdateClientInvoice.aspx" id="li_UpdateClientInvoice" runat="server" class="dropdown-item">Update Client Invoice</a></li>
                                     <li><a href="UpdatePaidDate.aspx" id="li_UpdatePaidDate" runat="server" class="dropdown-item">Update Paid Date</a></li>
                                     <li><a href="UpdatePaidDateOther.aspx" id="li_UpdatePaidDateOther" runat="server" class="dropdown-item">Update Paid Date Other</a></li>
-                                                                        <li><a href="VendorRegistrationMaster.aspx" class="dropdown-item">Vendor Registration</a></li>
+                                    <li><a href="VendorRegistrationMaster.aspx" id="li_VendorRegistration" runat="server" class="dropdown-item">Vendor Registration</a></li>
 
                                     <li class="dropdown-divider"></li>
                                 </ul>
@@ -384,6 +384,12 @@
                                 </ul>
                             </li>
 
+                            <li class="nav-item dropdown" id="Menu_Billing" runat="server" >
+                                <a id="Billing" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Billing</a>
+                                <ul aria-labelledby="pmutilities" class="dropdown-menu border-0 shadow">
+                                    <li><a href="DownloadInvoice.aspx" id="BillingInvoice" runat="server" class="dropdown-item">Download Invoice</a></li>
+                                </ul>
+                            </li>
 
 
 

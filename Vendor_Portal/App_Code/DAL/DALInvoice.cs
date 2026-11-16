@@ -1248,9 +1248,10 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@Rate", System.Data.SqlDbType.Decimal, 18, System.Data.ParameterDirection.Input, htParam["Rate"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Process", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, htParam["Process"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@BillingCycle", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["BillingCycle"]);
-
             SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.VarChar, 100, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@rateID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["rateID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmployeeID", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["EmployeeID"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@RateConfigEmpId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["RateConfigEmpId"]);
 
             SQLHelper.AddParamToSQLCmd(cmd, "@newRateId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
             SQLHelper.ExecuteNonQueryCmd(cmd);
@@ -1318,18 +1319,74 @@ namespace Vendor_Portal.App_Code.DAL
         public int InsertVendorNotificationLog(Hashtable htParam)
         {
             SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_InsertVendorNotificationLog_YTU");
-            // ActionByUserID la NVarChar kela karan table madhe varchar(100) ahe
             SQLHelper.AddParamToSQLCmd(cmd, "@ActionByUserID", System.Data.SqlDbType.NVarChar, 100, System.Data.ParameterDirection.Input, htParam["ActionByUserID"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@VendorId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["VendorId"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@NotificationType", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["notificationType"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@IsRead", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Input, htParam["IsRead"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@newReadId", System.Data.SqlDbType.Int, 4, System.Data.ParameterDirection.Output, null);
-
             SQLHelper.ExecuteNonQueryCmd(cmd);
-
             object outVal = cmd.Parameters["@newReadId"].Value;
             int returnValue = (outVal != null && outVal != DBNull.Value) ? Convert.ToInt32(outVal) : 0;
             return returnValue;
+        }
+
+        public static DataTable GetEmployeeForRateConfig()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetEmployeeForRateConfig_YTU");
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public static DataTable GetRateConfigProcess()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetRateConfigProcess_YTU");
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public DataTable GetAllLogInOutDataForInvoice()
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetAllLogInOutDataForInvoice_YTU");
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
+        }
+
+        public DataTable GetUserWiseLogInOutDataForInvoice(string Code, string StartDate, string EndDate)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetUserWiseLogInOutDataForInvoice_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@Code", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, Code);
+            SQLHelper.AddParamToSQLCmd(cmd, "@StartDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, StartDate);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EndDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EndDate);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
+        }
+
+        public DataTable GetAllUSLoanProductionTrack(string EmpName, string StartDate, string EndDate)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetAllUSLoanProductionTrack_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmpName", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EmpName);
+            SQLHelper.AddParamToSQLCmd(cmd, "@StartDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, StartDate);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EndDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EndDate);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
+        }
+
+        public DataTable GetAllNonProductiveHoursForInvoice(string Code, string StartDate, string EndDate)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetAllNonProductiveHoursForInvoice_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@Code", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, Code);
+            SQLHelper.AddParamToSQLCmd(cmd, "@StartDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, StartDate);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EndDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EndDate);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
+        }
+
+        public DataTable GetVendorsInformation(string EmpName)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorsInformation_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmpName", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EmpName);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
         }
     }
 }

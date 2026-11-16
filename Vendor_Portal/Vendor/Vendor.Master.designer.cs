@@ -78,6 +78,15 @@ namespace Vendor_Portal.Vendor
         protected global::System.Web.UI.HtmlControls.HtmlAnchor li_UpdatePaidDateOther;
 
         /// <summary>
+        /// li_VendorRegistration control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor li_VendorRegistration;
+
+        /// <summary>
         /// li_RemoteUW control.
         /// </summary>
         /// <remarks>
@@ -175,6 +184,24 @@ namespace Vendor_Portal.Vendor
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl li4;
+
+        /// <summary>
+        /// Menu_Billing control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Menu_Billing;
+
+        /// <summary>
+        /// BillingInvoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor BillingInvoice;
 
         /// <summary>
         /// li_IPSReport control.

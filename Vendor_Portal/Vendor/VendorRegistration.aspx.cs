@@ -155,7 +155,7 @@ namespace Vendor_Portal.Vendor
 
 
         [System.Web.Services.WebMethod]
-        public static int InsertVendorRate(int vendorRegistrationID, string fromDate, string rateType, string rate,string Process,int rateID,string BillingCycle)
+        public static int InsertVendorRate(int vendorRegistrationID, string fromDate, string rateType, string rate,string Process,int rateID,string BillingCycle,int EmployeeID,int savedEmployeeId)
         {
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
@@ -168,6 +168,9 @@ namespace Vendor_Portal.Vendor
                 htParam.Add("Process", Process);
                 htParam.Add("rateID", rateID);
                 htParam.Add("BillingCycle", BillingCycle);
+                htParam.Add("EmployeeID", EmployeeID);
+                htParam.Add("RateConfigEmpId", savedEmployeeId);
+
 
                 htParam.Add("AddedBy", int.Parse(HttpContext.Current.User.Identity.Name.ToString()));
 
@@ -274,6 +277,57 @@ namespace Vendor_Portal.Vendor
                 returnValue = 0;
             }
             return returnValue;
+        }
+
+
+
+
+        [System.Web.Services.WebMethod]
+        public static List<object> GetEmployeeForRateConfig()
+        {
+            List<object> EmployeeList = new List<object>();
+
+            bllInvoice inv = new bllInvoice();
+            DataTable dt = inv.GetEmployeeForRateConfig();
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    EmployeeList.Add(new
+                    {
+                        EmployeeID = dr["EmployeeID"],
+                        PsuedoName = dr["PsuedoName"]
+                    });
+                }
+            }
+
+            return EmployeeList;
+        }
+
+
+
+        [System.Web.Services.WebMethod]
+        public static List<object> GetRateConfigProcess()
+        {
+            List<object> ProcessList = new List<object>();
+
+            bllInvoice inv = new bllInvoice();
+            DataTable dt = inv.GetRateConfigProcess();
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    ProcessList.Add(new
+                    {
+                        ProcessId = dr["ProcessId"],
+                        Process = dr["Process"]
+                    });
+                }
+            }
+
+            return ProcessList;
         }
 
     }

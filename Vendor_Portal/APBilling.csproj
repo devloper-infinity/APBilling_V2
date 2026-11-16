@@ -2232,6 +2232,7 @@
     <Content Include="Scripts\Functions\CreditSoftPull.js" />
     <Content Include="Scripts\Functions\Dashboard.js" />
     <Content Include="Scripts\Functions\Discripancy.js" />
+    <Content Include="Scripts\Functions\DownloadInvoice.js" />
     <Content Include="Scripts\Functions\Invoice.js" />
     <Content Include="Scripts\Functions\InvoiceApproval.js" />
     <Content Include="Scripts\Functions\InvoiceReconciliation.js" />
@@ -2282,6 +2283,7 @@
     <Content Include="Vendor\CostMaster.aspx" />
     <Content Include="Vendor\Dashboard.aspx" />
     <Content Include="Vendor\Discripancy.aspx" />
+    <Content Include="Vendor\DownloadInvoice.aspx" />
     <Content Include="Vendor\InvoiceApproval.aspx" />
     <Content Include="Vendor\InvoiceReconciliation.aspx" />
     <Content Include="Vendor\InvoiceReconciliationDetails.aspx" />
@@ -2563,6 +2565,13 @@
     </Compile>
     <Compile Include="Vendor\Discripancy.aspx.designer.cs">
       <DependentUpon>Discripancy.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Vendor\DownloadInvoice.aspx.cs">
+      <DependentUpon>DownloadInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Vendor\DownloadInvoice.aspx.designer.cs">
+      <DependentUpon>DownloadInvoice.aspx</DependentUpon>
     </Compile>
     <Compile Include="Vendor\InvoiceApproval.aspx.cs">
       <DependentUpon>InvoiceApproval.aspx</DependentUpon>
