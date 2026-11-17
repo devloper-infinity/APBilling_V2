@@ -724,7 +724,6 @@ div[class*="container"] {
     <label for="vendorreg_Process">Process <span style="color: red;">*</span></label>
     <select class="form-control" id="vendorreg_Process" name="Process" disabled>
         <option value="">Select</option>
-<%--        <option value="Default">Default</option>--%>
     </select>
 </div>
 

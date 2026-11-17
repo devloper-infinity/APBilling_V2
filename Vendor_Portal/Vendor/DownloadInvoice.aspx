@@ -187,7 +187,7 @@
           <div class="col-6 text-end d-flex flex-column align-items-end justify-content-between">
             <h1 style="font-size: 36px; font-weight: bold; color: #5b73a7; letter-spacing: 1px; margin-bottom: 20px;">INVOICE</h1>
             
-            <table class="table table-bordered text-center mb-0" style="width: 250px; font-size: 13px;">
+            <table class="table table-bordered text-center mb-0" style="width: 380px; font-size: 13px;">
               <thead style="background-color: #d9e1f2; color: #000; font-weight: bold;">
                 <tr>
                   <th class="py-1" style="border-color: #b4c6e7;">INVOICE #</th>
@@ -196,7 +196,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td class="py-1" style="border-color: #b4c6e7;" id="modalInvoiceNo">1</td>
+                  <td class="py-2" style="border-color: #b4c6e7;" id="modalInvoiceNo">1</td>
                   <td class="py-1" style="border-color: #b4c6e7;" id="modalInvoiceDate"></td>
                 </tr>
               </tbody>
@@ -236,8 +236,11 @@
           <tbody>
             <tr>
               <td class="p-3" style="height: 120px; vertical-align: top; border-color: #b4c6e7; line-height: 1.6;">
-                Hours: <strong id="modalHours"></strong> <span style="background-color: #ffff00; padding: 2px 4px;">Hours worked</span> hours at $<span id="modalRate">35.00</span> hr.<br>
-                Period: <strong id="modalPeriod">10/01/2026 To 10/15/2026</strong><br><br><br><br><br>
+                Hours: <strong id="modalHours"></strong> <span style="background-color: #ffff00; padding: 2px 4px;">Hours worked</span> hours at $<span id="modalRate">00</span> hr.<br>
+                Period: <strong id="modalPeriod"></strong><br>
+                <span id="modalTotalloan">Total loan <span id="modalTotalloanCount" style="color: #000; font-weight: bold;"></span> per Loan cost is $ <span id="modalTotalloanCountCost" style="color: #000; font-weight: bold;"></span></span>
+
+                  <br><br><br><br><br>
                 <strong>Please provide payment within our agreed upon contract period, thank you!</strong><br>
                 See 1099 Tracker and Feedback Worksheets for productivity details
               </td>
@@ -247,9 +250,9 @@
             </tr>
             <tr class="total-row">
                 <td class="text-center">Thank you for your business!</td>
-<td class="text-left" style="vertical-align: top; font-weight: bold; border-color: #b4c6e7; font-size: 16px;" id="modalTotalAmount">$0.00</td>            </tr>
+            <td class="text-left" style="vertical-align: top; font-weight: bold; border-color: #b4c6e7; font-size: 16px;" id="modalTotalAmount">$0.00</td>            </tr>
             <tr class="total-row">
-                <td colspan="2"><small>If you have any questions about this invoice, please contact me.</small></td>
+                <td colspan="2"><small>If you have any questions about this invoice, please contact <span id="modalContactVendorName" style="color: #000; font-weight: bold;"></span>.</small></td>
             </tr>
           </tbody>
         </table>
@@ -278,8 +281,8 @@
                 </table>
             </div>
         </div>
-<hr class="my-5" id="nonProductiveDivider" style="border-top: 2px dashed #b4c6e7; display: none;">
-                <!-- ==================== PART 2.5: NON-PRODUCTIVE HOURS TABLE ==================== -->
+        <hr class="my-5" id="nonProductiveDivider" style="border-top: 2px dashed #b4c6e7; display: none;">
+        <!-- ==================== PART 2.5: NON-PRODUCTIVE HOURS TABLE ==================== -->
         <div id="tabNonProductiveContent" style="display: none;">
            <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background-color: #143961">
               <h6 class="mb-0 text-white"><i class="fas fa-clock text-info"></i> Non-Productive Hours</h6>
@@ -302,8 +305,30 @@
         </div>
 
 
-
-                  <!-- Divider line -->
+                <!-- Divider line -->
+        <hr class="my-5" id="productionCountDivider" style="border-top: 2px dashed #b4c6e7; display: none;">
+        
+        <!-- ==================== PART 2.75: PRODUCTION COUNT SUMMARY TABLE ==================== -->
+        <div id="tabProductionCountContent" style="display: none;">
+           <div class="d-flex justify-content-between align-items-center mb-3 p-3 rounded" style="background-color: #143961">
+              <h6 class="mb-0 text-white"><i class="fas fa-list-ol text-info"></i> Production Summary</h6>
+           </div>
+           <div class="table-responsive">
+               <table class="table table-striped table-bordered text-center" id="LoanProductionCountSummaryTable" style="font-size: 13px;">
+                   <thead style="background-color: #143961; color: white;">
+                       <tr>
+                           <th>Review</th>
+                           <th>Project Number</th>
+                           <th>Process</th>
+                           <th>Loan Count</th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                   </tbody>
+               </table>
+           </div>
+        </div>
+        <!-- Divider line -->
         <hr class="my-5" style="border-top: 2px dashed #b4c6e7;">
 
         <!-- ==================== PART 3: Production Track DETAILS TABLE ==================== -->

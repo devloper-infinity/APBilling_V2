@@ -21,7 +21,15 @@ namespace Vendor_Portal
                 li_UpdatePaidDateOther.Visible = true;
                 li_CanopyMGTReport.Visible = true;
                 li_IPSMGTReport.Visible = true;
+                Menu_Billing.Visible = true;
             }
+
+            else if(LoginID == 1502)
+            {
+                Menu_Billing.Visible = true;
+
+            }
+
 
             else if (LoginID == 291) //PPL
             {

@@ -72,7 +72,6 @@ $(document).on('click', '.view-btn', function () {
     var $row = $(this).closest('tr');
     var pseudoName = $row.attr('data-pseudoname');
 
-
     var formatDate = (text) => { var d = new Date(text); return String(d.getMonth() + 1).padStart(2, '0') + '/' + String(d.getDate()).padStart(2, '0') + '/' + d.getFullYear(); };
 
     var StartDate = formatDate($row.attr('data-StartDate'));
@@ -80,25 +79,18 @@ $(document).on('click', '.view-btn', function () {
 
     var employeeCode = $row.attr('data-code');
     var employeeName = $row.find('td').eq(0).text();
-    var period = $row.find('td').eq(1).text();
+    var period = $row.find('td').eq(1).text().replace(/\bto\b/gi, '~');
     var hours = $row.find('td').eq(2).text();
 
-    var numericHours = parseFloat(hours) || 0;
-    var hourlyRate = 35.00;
-    var calculatedTotal = numericHours * hourlyRate;
-    var formattedAmount = "$" + calculatedTotal.toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    });
     $("#modalPeriod").text(period);
     $("#modalHours").text(hours);
     $("#modalClientName").text("Infinity IPS");
     $("#modalEmpNameSpan").text(employeeName);
-    $("#modalAmount").text(formattedAmount);
-    $("#modalTotalAmount").text(formattedAmount);
+    
 
-    var currentDate = new Date().toLocaleDateString('en-GB');
-    $("#modalInvoiceDate").text(currentDate);
+    var periodParts = period.split(/~|to/i);
+    var endDate = periodParts.length > 1 ? periodParts[1].trim() : period;
+    $("#modalInvoiceDate").text(endDate);
 
     var modalEl = document.getElementById('invoiceModal');
     var invoiceViewModal = new bootstrap.Modal(modalEl);
@@ -169,6 +161,10 @@ $(document).on('click', '.view-btn', function () {
     $("#modalVendorPhone").text('');
     $("#modalVendorEmail").text('');
     $("#modalVendorEmailLink").attr("href", "#").text('');
+    $("#modalInvoiceNo").text('');
+    $("#modalContactVendorName").text('');
+    $("#modalRate").text('');
+
     $.ajax({
         type: "POST",
         url: "DownloadInvoice.aspx/GetVendorsInformation",
@@ -186,9 +182,27 @@ $(document).on('click', '.view-btn', function () {
                 $("#modalVendorPhone").text(vendor.ContactNo || '');
                 $("#modalVendorEmail").text(vendor.EmailID || '');
                 $("#modalVendorEmailLink").attr("href", "mailto:" + vendor.EmailID).text(vendor.EmailID);
-            } else {
-                console.warn("No vendor information found for: " + pseudoName);
-            }
+                $("#modalContactVendorName").text(vendor.VendorName);
+                $("#modalRate").text('');
+                $("#modalAmount").text('$0.00');
+                $("#modalTotalAmount").text('$0.00');
+                var hourlyRate = parseFloat(vendor.Rate) || 0;
+                $("#modalRate").text(hourlyRate.toFixed(2));
+
+                var numericHours = parseFloat(hours) || 0;
+                var calculatedTotal = numericHours * hourlyRate;
+                var formattedAmount = "$" + calculatedTotal.toLocaleString('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                $("#modalAmount").text(formattedAmount);
+                $("#modalTotalAmount").text(formattedAmount);
+
+                var vendorNameForLabel = $("#modalVendorName").text();      
+                var dynamicInvoiceLabel = "Inv" + "_" + vendorNameForLabel + "_" + period;
+                $("#modalInvoiceNo").text(dynamicInvoiceLabel);
+            } 
         },
         error: function (xhr, status, error) {
             console.error("Error fetching vendor information: ", error);
@@ -198,7 +212,51 @@ $(document).on('click', '.view-btn', function () {
 
 
 
+    var $prodCountContainer = $("#tabProductionCountContent");
+    var $prodCountDivider = $("#productionCountDivider");
+    var $prodCountTbody = $("#LoanProductionCountSummaryTable tbody");
 
+
+    $.ajax({
+        type: "POST",
+        url: "DownloadInvoice.aspx/GetUSLoanProductionLoanCountSummary",
+        data: JSON.stringify({ EmpName: pseudoName, StartDate: StartDate, EndDate: EndDate }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var countData = typeof response.d === 'string' ? JSON.parse(response.d) : response.d;
+
+            if (countData && countData.length > 0) {
+                countData.forEach(function (item) {
+                    var review = item.Review !== null && item.Review !== undefined ? item.Review : '';
+                    var projectNumber = item.ProjectNumber !== null && item.ProjectNumber !== undefined ? item.ProjectNumber : '';
+                    var process = item.Process !== null && item.Process !== undefined ? item.Process : '';
+                    var loanCount = item.LoanCount !== null && item.LoanCount !== undefined ? item.LoanCount : 0;
+
+                    if (review) {
+                        var parsedRevDate = new Date(review);
+                        if (!isNaN(parsedRevDate.getTime())) {
+                            review = (parsedRevDate.getMonth() + 1) + '/' + parsedRevDate.getDate() + '/' + parsedRevDate.getFullYear();
+                        }
+                    }
+
+                    var countTr = `<tr>
+                        <td>${review}</td>
+                        <td>${projectNumber}</td>
+                        <td>${process}</td>
+                        <td>${loanCount}</td>
+                    </tr>`;
+                    $prodCountTbody.append(countTr);
+                });
+
+                // $prodCountContainer.show();
+                // $prodCountDivider.show();
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error("Error fetching production count summary: ", error);
+        }
+    });
     // ==========================================
     // 2. NAVIN AJAX CALL: Loan Production Track
     // ==========================================
@@ -219,6 +277,15 @@ $(document).on('click', '.view-btn', function () {
             $loanTbody.empty();
 
             if (trackData && trackData.length > 0) {
+                $("#modalTotalloanCount").text(trackData.length);
+                var amountText = $("#modalAmount").text().replace('$', '').replace(/,/g, '').trim();
+                var totalAmountVal = parseFloat(amountText) || 0;
+                if (totalAmountVal > 0 && rowCount > 0) {
+                    var perLoanCost = totalAmountVal / rowCount;
+                    $("#modalTotalloanCountCost").text(perLoanCost.toFixed(2));
+                } else {
+                    $("#modalTotalloanCountCost").text("0.00");
+                }
                 var headers = Object.keys(trackData[0]);
                 headers.unshift("Sr.No");
 
@@ -269,6 +336,8 @@ $(document).on('click', '.view-btn', function () {
                     $loanTbody.append(tr);
                 });
             } else {
+                $("#modalTotalloanCount").text("00");
+                $("#modalTotalloanCountCost").text("0.00");
                 $loanThead.append(`<tr><th>Sr.No</th><th>Production Track</th></tr>`);
                 $loanTbody.append(`<tr><td colspan="2" class="text-center text-muted">No production track data found</td></tr>`);
             }
@@ -334,9 +403,6 @@ $(document).on('click', '.view-btn', function () {
     });
 });
 
-
-
-
 //Close Popup
 $(document).on('click', '[data-bs-dismiss="modal"]', function () {
     var modalEl = document.getElementById('invoiceModal');
@@ -356,7 +422,6 @@ $(document).on('click', '[data-bs-dismiss="modal"]', function () {
 });
 
 //Pdf Download
-//Pdf Download
 $(document).ready(function () {
     $(document).on('click', '.download-btn', function () {
         $('#load1').show();
@@ -368,19 +433,14 @@ $(document).ready(function () {
         var StartDate = formatDate($row.attr('data-StartDate'));
         var EndDate = formatDate($row.attr('data-EndDate'));
         var employeeName = $row.find('td').eq(0).text();
-        var period = $row.find('td').eq(1).text();
+        var period = $row.find('td').eq(1).text().replace(/\bto\b/gi, '~');
+        var periodParts = period.split(/~|to/i);
+        var invoiceDateVal = periodParts.length > 1 ? periodParts[1].trim() : period;
+
         var hours = $row.find('td').eq(2).text();
         var invoiceNo = "1";
         var clientName = "Infinity IPS";
-        var rate = "35.00";
-        var numericHours = parseFloat(hours) || 0;
-        var calculatedTotal = numericHours * rate;
-
-        var totalAmountDecimal = "$" + calculatedTotal.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-
+       
         // 1. Fetch User Log-In/Out Data
         $.ajax({
             type: "POST",
@@ -493,6 +553,70 @@ $(document).ready(function () {
                             `;
                         }
 
+                        $.ajax({
+                            type: "POST",
+                            url: "DownloadInvoice.aspx/GetUSLoanProductionLoanCountSummary",
+                            data: JSON.stringify({ EmpName: pseudoName, StartDate: StartDate, EndDate: EndDate }),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (countResponse) {
+                                var countData = typeof countResponse.d === 'string' ? JSON.parse(countResponse.d) : countResponse.d;
+                                var prodCountSectionHTML = '';
+
+                                if (countData && countData.length > 0) {
+                                    var countRowsHTML = '';
+                                    var countSrNo = 0;
+
+                                    countData.forEach(function (cItem) {
+                                        countSrNo++;
+                                        var review = cItem.Review !== null && cItem.Review !== undefined ? cItem.Review : '';
+                                        var projectNumber = cItem.ProjectNumber !== null && cItem.ProjectNumber !== undefined ? cItem.ProjectNumber : '';
+                                        var process = cItem.Process !== null && cItem.Process !== undefined ? cItem.Process : '';
+                                        var loanCount = cItem.LoanCount !== null && cItem.LoanCount !== undefined ? cItem.LoanCount : 0;
+
+                                        if (review) {
+                                            var parsedRevDate = new Date(review);
+                                            if (!isNaN(parsedRevDate.getTime())) {
+                                                review = (parsedRevDate.getMonth() + 1) + '/' + parsedRevDate.getDate() + '/' + parsedRevDate.getFullYear();
+                                            }
+                                        }
+
+                                        countRowsHTML += `
+                                            <tr>
+                                                <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 8%;">${countSrNo}</td>
+                                                <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 30%;">${review}</td>
+                                                <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 32%;">${projectNumber}</td>
+                                                <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 15%;">${process}</td>
+                                                <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 15%;">${loanCount}</td>
+                                            </tr>`;
+                                    });
+
+                                    prodCountSectionHTML = `
+                                        <div style="page-break-before: always;"></div>
+                                        <div style="margin-top: 20px; width: 100%;">
+                                            <div style="background-color: #143961; color: white; padding: 10px; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
+                                                Production Count Summary
+                                            </div>
+                                            <table style="width: 100%; font-size: 9px; border-collapse: collapse; table-layout: fixed;" border="1" bordercolor="#b4c6e7">
+                                                <thead style="background-color: #143961; color: white;">
+                                                    <tr>
+                                                        <th style="padding: 3px 2px; text-align: center; border: 0.5px solid #b4c6e7; font-size: 9px; width: 8%;">Sr.</th>
+                                                        <th style="padding: 3px 2px; text-align: center; border: 0.5px solid #b4c6e7; font-size: 9px; width: 30%;">Review</th>
+                                                        <th style="padding: 3px 2px; text-align: center; border: 0.5px solid #b4c6e7; font-size: 9px; width: 32%;">Project Number</th>
+                                                        <th style="padding: 3px 2px; text-align: center; border: 0.5px solid #b4c6e7; font-size: 9px; width: 15%;">Process</th>
+                                                        <th style="padding: 3px 2px; text-align: center; border: 0.5px solid #b4c6e7; font-size: 9px; width: 15%;">Loan Count</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    ${countRowsHTML}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    `;
+                                }
+
+
+
                         // 3. Fetch Loan Production Track Data
                         $.ajax({
                             type: "POST",
@@ -504,8 +628,9 @@ $(document).ready(function () {
                                 var trackData = typeof prodResponse.d === 'string' ? JSON.parse(prodResponse.d) : prodResponse.d;
                                 var loanProductionPagesHTML = '';
                                 var serialNumber = 0;
-
+                                var loanCountForPdf = 0;
                                 if (trackData && trackData.length > 0) {
+                                    loanCountForPdf = trackData.length;
                                     var headers = Object.keys(trackData[0]);
                                     var totalCols = headers.length + 1;
 
@@ -632,9 +757,24 @@ $(document).ready(function () {
                                             vAddress = (vendor.Address || '').replace(/\n/g, '<br>');
                                             vPhone = vendor.ContactNo || '';
                                             vEmail = vendor.EmailID || '';
+                                            rate = vendor.Rate || 0;
+                                        }
+                                        var numericRate = parseFloat(rate) || 0;
+                                        var formattedRate = numericRate.toFixed(2);
+                                        var numericHours = parseFloat(hours) || 0;
+                                        var calculatedTotal = numericHours * rate;
+
+                                        var perLoanCostVal = 0;
+                                        if (loanCountForPdf > 0) {
+                                            perLoanCostVal = calculatedTotal / loanCountForPdf;
                                         }
 
-                                        // 5. Construct Full HTML Template with Vendor Info Added
+                                        var totalAmountDecimal = "$" + calculatedTotal.toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2
+                                        });
+                                        var dynamicInvoiceNo = "Inv" + "_" + vName + "_" + period;
+                                        var contactVendorName = vName;
                                         var elementHTML = `
                                         <div style="padding: 10px; font-family: Arial, sans-serif; color: #333; background: #fff; font-size: 14px; box-sizing: border-box;">
                                             <!-- Page 1: Invoice Main -->
@@ -649,12 +789,12 @@ $(document).ready(function () {
                                                 </div>
                                                 <div style="text-align: right;">
                                                     <h1 style="font-size: 32px; font-weight: bold; color: #5b73a7; margin: 0 0 15px 0; letter-spacing: 1px;">INVOICE</h1>
-                                                    <table style="width: 220px; font-size: 12px; border-collapse: collapse; margin-left: auto;" border="1" bordercolor="#b4c6e7">
+                                                    <table style="width: 380px; font-size: 12px; border-collapse: collapse; margin-left: auto;" border="1" bordercolor="#b4c6e7">
                                                         <thead style="background-color: #d9e1f2; font-weight: bold;">
                                                             <tr><th style="padding: 4px;">INVOICE #</th><th style="padding: 4px;">DATE</th></tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr><td style="padding: 4px; text-align:center;">${invoiceNo}</td><td style="padding: 4px; text-align:center;">10/16/2026</td></tr>
+                                                            <tr><td style="padding: 4px; text-align:center;">${dynamicInvoiceNo}</td><td style="padding: 4px; text-align:center;">${invoiceDateVal}</td></tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -684,7 +824,8 @@ $(document).ready(function () {
                                                     <tr>
                                                         <td style="padding: 12px; height: 110px; vertical-align: top; line-height: 1.6;">
                                                             Hours: <strong>${hours}</strong> <span style="background-color: #ffff00; padding: 2px 4px;">Hours worked</span> hours at $${rate} hr.<br>
-                                                            Period: <strong>${period}</strong><br><br>
+                                                            Period: <strong>${period}</strong><br>
+                                                             Total loan <span style="font-weight: bold;">${loanCountForPdf}</span> per Loan cost is $ <span style="font-weight: bold;">${perLoanCostVal.toFixed(2)}</span><br><br>
                                                             <strong>Please provide payment within our agreed upon contract period, thank you!</strong><br>
                                                             See 1099 Tracker and Feedback Worksheets for productivity details
                                                         </td>
@@ -695,7 +836,7 @@ $(document).ready(function () {
                                                     <tr>
                                                         <td style="padding: 8px; text-align: left; vertical-align: middle;">
                                                             Thank you for your business!<br>
-                                                            <small style="color: #555;">If you have any questions about this invoice, please contact me.</small>
+                                                            <small style="color: #555;">If you have any questions about this invoice, please contact <span id="pdfContactVendorName" style="color: #000; font-weight: bold;">${contactVendorName}</span>.</small>
                                                         </td>
                                                         <td style="padding: 8px; text-align: right; vertical-align: middle; font-weight: bold; font-size: 15px;">
                                                             ${totalAmountDecimal}.00
@@ -762,17 +903,24 @@ $(document).ready(function () {
                                 $('#load1').hide();
                             }
                         });
+
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error fetching production count summary for PDF: ", error);
+                                $('#load1').hide();
+                            }
+                        });
+
                     },
                     error: function (xhr, status, error) {
                         console.error("Error fetching non-productive hours for PDF: ", error);
-                        alert("Error generating PDF with non-productive hours data.");
                         $('#load1').hide();
                     }
                 });
+
             },
             error: function (xhr, status, error) {
                 console.error("Error fetching user details for PDF: ", error);
-                alert("Error generating PDF with log details.");
                 $('#load1').hide();
             }
         });

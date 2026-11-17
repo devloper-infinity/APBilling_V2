@@ -683,7 +683,7 @@ function loadRateConfiguration(vendorId) {
 
             thead.append('<th style="width: 80px; text-align: center;">Action</th>');
             thead.append('<th style="width: 60px; text-align: center;">Sr. No.</th>');
-            thead.append('<th>Vendor Name</th>');
+            thead.append('<th>Vendor</th>');
             thead.append('<th>Form Date</th>');
             thead.append('<th>Rate Type</th>');
             thead.append('<th>Rate</th>');
@@ -709,7 +709,7 @@ function loadRateConfiguration(vendorId) {
                     tr.append("<td>" + (row.FormDate !== null ? row.FormDate : '') + "</td>");
                     tr.append("<td>" + (row.RateType !== null ? row.RateType : '') + "</td>");
                     tr.append("<td>" + (row.Rate !== null ? row.Rate : '') + "</td>");
-                    tr.append("<td>" + (row.ProcessName !== null ? row.ProcessName : '') + "</td>");
+                    tr.append("<td>" + (row.Process !== null ? row.Process : '') + "</td>");
                     tr.append("<td>" + (row.BillingCycle !== null ? row.BillingCycle : '') + "</td>");
                     tr.append("<td>" + (row.PsuedoName !== null ? row.PsuedoName : '') + "</td>");
 
@@ -749,11 +749,20 @@ function editRateRecord(row) {
         $('#vendorreg_formdate').val(formattedDate);
     }
     $('#vendorreg_rateid').val(row.RateID);
-    $('#vendorreg_EmployeeId').val(row.EmployeeId);
+    $('#vendorreg_EmployeeId').val(row.RateConfigEmpId);
 
     $('#vendorreg_rtype').val(row.RateType);
-    var processId = row.ProcessId || row.Process ;
-    $('#vendorreg_Process').val(processId).trigger('change');
+    var processName = row.Process; 
+
+    if (processName) {
+        $('#vendorreg_Process option').filter(function () {
+            return $(this).text().trim() === processName.trim();
+        }).prop('selected', true);
+    } else {
+        $('#vendorreg_Process').val('');
+    }
+
+    $('#vendorreg_Process').trigger('change');
     $('#vendorreg_rate').val(row.Rate);
     $('#vendorreg_BillingCycle').val(row.BillingCycle);
     $('#vendorreg_EmployeeList').val(row.EmployeeId);
@@ -788,7 +797,9 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
     var fromDate = $('#vendorreg_formdate').val();
     var rateType = $('#vendorreg_rtype').val();
     var rate = $('#vendorreg_rate').val();
-    var Process = $('#vendorreg_Process').val();
+
+    var processDropdown = $('#vendorreg_Process');
+    var Process = (processDropdown.val() === "") ? null : processDropdown.find('option:selected').text();
     var BillingCycle = $('#vendorreg_BillingCycle').val();
     var EmployeeID = $('#vendorreg_EmployeeList').val();
 

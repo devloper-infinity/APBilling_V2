@@ -71,6 +71,8 @@
                                     <li><a href="../Vendor/UpdateClientInvoice.aspx" id="li_UpdateClientInvoice" runat="server" class="dropdown-item">Update Client Invoice</a></li>
                                     <li><a href="../Vendor/UpdatePaidDate.aspx" id="li_UpdatePaidDate" runat="server"  class="dropdown-item">Update Paid Date</a></li>
                                     <li><a href="../Vendor/UpdatePaidDateOther.aspx" id="li_UpdatePaidDateOther" runat="server" class="dropdown-item">Update Paid Date Other</a></li>
+                                    <li><a href="../Vendor/VendorRegistrationMaster.aspx" id="li_VendorRegistration" runat="server" class="dropdown-item">Vendor Registration</a></li>
+
                                     <li class="dropdown-divider"></li>
                                 </ul>
                             </li>
@@ -194,7 +196,12 @@
                                 </ul>
                             </li>
 
-
+                               <li class="nav-item dropdown" id="Menu_Billing" runat="server" >
+       <a id="Billing" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Billing</a>
+       <ul aria-labelledby="pmutilities" class="dropdown-menu border-0 shadow">
+           <li><a href="DownloadInvoice.aspx" id="BillingInvoice" runat="server" class="dropdown-item">Download Invoice</a></li>
+       </ul>
+   </li>
                           
                         </ul>
                     </div>

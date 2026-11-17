@@ -1388,5 +1388,15 @@ namespace Vendor_Portal.App_Code.DAL
             DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
             return dt;
         }
+
+        public DataTable GetUSLoanProductionLoanCountSummary(string EmpName, string StartDate, string EndDate)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetUSLoanProductionLoanCount_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmpName", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EmpName);
+            SQLHelper.AddParamToSQLCmd(cmd, "@StartDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, StartDate);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EndDate", System.Data.SqlDbType.VarChar, 50, System.Data.ParameterDirection.Input, EndDate);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd_ERP(cmd);
+            return dt;
+        }
     }
 }
