@@ -330,10 +330,10 @@ div[class*="container"] {
                                             <th style="display:none;">ID</th>
                                             <th>Action</th>
                                             <th>Sr.No.</th>
-                                             <th>Company Name</th>
+                                             <th>Company</th>
                                                                                         <th>Vendor Type</th>
 
-                                            <th>Vendor Name</th>
+                                            <th>Vendor</th>
                                            
                                             <th >Contact Person</th>
                                             <th>Contact No</th>

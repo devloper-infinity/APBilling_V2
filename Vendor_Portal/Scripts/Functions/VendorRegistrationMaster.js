@@ -368,6 +368,7 @@ function btnsubmitInsertVendorRegistration() {
                     confirmButtonText: 'OK'
                 }).then((res) => {
                     if (res.isConfirmed) {
+                        window.location.href = 'VendorRegistrationMaster.aspx';
                         $('#vendorreg_vendorname').val('');
                         $('#vendorreg_companyname').val('');
                         $('#vendorreg_contactperson').val('');
@@ -542,6 +543,7 @@ function btnsubmitInsertVendorOtherInfo() {
                         confirmButtonText: 'OK'
                     }).then((res) => {
                         if (res.isConfirmed) {
+                            window.location.href = 'VendorRegistrationMaster.aspx';
                             $('#vendorregother_vendor').val('').trigger('change');
                             $('#vendorreg_expectedstartdate').val('');
                             $('#vendorreg_raterevisiondate').val('');

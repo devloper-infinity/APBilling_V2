@@ -17,18 +17,13 @@
                 padding: 22px 28px;
                 border-radius: 22px;
                 color: #fff;
-                background: linear-gradient(120deg, #1d4ed8 0%, #2563eb 65%, #22c1dc 100%);
+                   background: linear-gradient(110deg, var(--ap-navy-2), var(--ap-blue)) !important;
+
                 box-shadow: var(--ud-shadow);
                 margin-bottom: 20px;
             }
 
-            .ud-hero:before,
-            .ud-hero:after {
-                content: "";
-                position: absolute;
-                border-radius: 999px;
-                background: rgba(255, 255, 255, .12);
-            }
+            
 
             .ud-hero:before {
                 width: 220px;
@@ -53,7 +48,7 @@
             place-items: center;
             flex-shrink: 0;
             border-radius: 18px;
-            background: rgba(255, 255, 255, .16);
+            background: rgba(0, 0, 0, 0.2);
             border: 1px solid rgba(255, 255, 255, .22);
             font-size: 24px;
         }
@@ -113,6 +108,12 @@
     color: white;
     font-weight: 800 !important;
     letter-spacing: .1px;
+}
+
+        .card-title,h1 {
+    color: #fbfbfb;
+    font-weight: 600;
+    letter-spacing: -.01em;
 }
     </style>
     <script>
@@ -196,7 +197,7 @@
               <tbody>
                 <tr>
                   <td class="py-1" style="border-color: #b4c6e7;" id="modalInvoiceNo">1</td>
-                  <td class="py-1" style="border-color: #b4c6e7;" id="modalInvoiceDate">10/16/2026</td>
+                  <td class="py-1" style="border-color: #b4c6e7;" id="modalInvoiceDate"></td>
                 </tr>
               </tbody>
             </table>

@@ -96,6 +96,10 @@ $(document).on('click', '.view-btn', function () {
     $("#modalEmpNameSpan").text(employeeName);
     $("#modalAmount").text(formattedAmount);
     $("#modalTotalAmount").text(formattedAmount);
+
+    var currentDate = new Date().toLocaleDateString('en-GB');
+    $("#modalInvoiceDate").text(currentDate);
+
     var modalEl = document.getElementById('invoiceModal');
     var invoiceViewModal = new bootstrap.Modal(modalEl);
     invoiceViewModal.show();

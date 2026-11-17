@@ -146,7 +146,7 @@
                             var status = row.IsApprovedStatus;
                             var vendorId = row.VendorId;
                             if (vendorName) {
-                                listHtml += `<li><strong>${vendorName.trim()}</strong> - <span style="color: red;">Status: ${status}</span></li>`;
+                                listHtml += `<li><strong>${vendorName.trim()}</strong> - <span style="color: red;">Rate Approval Status: ${status}</span></li>`;
                                 pendingVendorIds.push(parseInt(vendorId));
                             }
                         });
@@ -559,107 +559,107 @@
 </body>
 </html>
 
-    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="agreementModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
-
-                <!-- Modal Header -->
-                <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
-                    <h5 class="modal-title font-weight-bold text-dark" id="agreementModalLabel" style="font-size: 1.25rem;">Important Notification
-                </h5>
-                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
-                    <!-- Subject Row -->
-                    <div class="row mb-3">
-                        <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
-                        <div class="col-sm-10 font-weight-bold text-dark">Agreement Renewal Notice</div>
-                    </div>
-
-                    <!-- Message Row -->
-                    <div class="row">
-                        <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
-                        <div class="col-sm-10">
-                            <ul class="list-unstyled pl-0 mb-0">
-                                <li class="mb-2">
-                                    <span class="font-weight-bold">Attention!</span> Agreement has expired.
-                            </li>
-                                <li class="mb-2">
-                                    <span class="font-weight-bold">Vendor Name:</span>
-                                    <ul id="vendorList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
-                                </li>
-                                <li class="mb-0 text-danger">
-                                    <span class="font-weight-bold">Important Message:</span> Agreement has expired. Please renew agreement as soon as possible!
-                            </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
-
-                    <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
-                         Mark as read
-               
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="RateRevisionDateModal" tabindex="-1" role="dialog" aria-labelledby="RateRevisionDateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="agreementModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
         <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
-            
             <!-- Modal Header -->
-            <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
-                <h5 class="modal-title font-weight-bold text-dark" id="RateRevisionDateModalLabel" style="font-size: 1.25rem;">
-                    Important Notification
-                </h5>
-                <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
-                    <span aria-hidden="true">&times;</span>
+            <div class="modal-header bg-white px-4 py-3 align-items-center" style="border-bottom: 1px solid #f1f3f5;">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; background-color: rgba(0, 123, 255, 0.1);">
+                        <i class="fas fa-bell" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-weight-bold text-dark mb-0" id="agreementModalLabel" style="font-size: 1.15rem; letter-spacing: -0.2px;">Important Notification
+                        </h5>
+                        <small class="text-muted">Agreement Renewal Notice – Action Required</small>
+                    </div>
+                </div>
+                <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close" style="font-size: 1.25rem; outline: none; opacity: 0.7;">
+                    <span aria-hidden="true">×</span>
                 </button>
             </div>
-            
             <!-- Modal Body -->
             <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
-                <!-- Subject Row -->
-                <div class="row mb-3">
-                    <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
-                    <div class="col-sm-10 font-weight-bold text-dark">Rate Revision Date Renewal Notice</div>
-                </div>
-                
                 <!-- Message Row -->
                 <div class="row">
-                    <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-12">
                         <ul class="list-unstyled pl-0 mb-0">
                             <li class="mb-2">
-                                <span class="font-weight-bold">Attention!</span> Rate Revision Date has expired.
+                                <span class="font-weight-bold">Attention!</span> This is to notify you that the following vendor's  Agreement has expired and requires your attention.
+                                                     
                             </li>
-                           <li class="mb-2">
-    <span class="font-weight-bold">Vendor Name:</span>
-    <ul id="RateRevisionDateList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
-</li>
-                            <li class="mb-0 text-danger">
-                                <span class="font-weight-bold">Important Message:</span> Rate Revision Date has expired. Please renew Rate Revision Date as soon as possible!
+                            <li class="mb-3 p-2 bg-light border rounded" style="font-size: 0.9rem;">
+                                <span class="font-weight-bold">Vendor Name:</span>
+                                <ul id="vendorList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+                            </li>
+
+                            <li class="mb-0 text-danger mt-3 p-2 rounded d-flex align-items-center" style="font-weight: 600; font-size: 0.88rem; background-color: rgba(220, 53, 69, 0.08);">
+                                <i class="fas fa-exclamation-circle mr-2" style="font-size: 1rem;"></i>
+                                <span>Important Message:  Agreement has expired. Please renew agreement as soon as possible!</span>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            
+
             <!-- Modal Footer -->
             <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
-               
                 <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
-                     Mark as read
+                    Mark as read        
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="RateRevisionDateModal" tabindex="-1" role="dialog" aria-labelledby="RateRevisionDateModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
+            <div class="modal-header bg-white px-4 py-3 align-items-center" style="border-bottom: 1px solid #f1f3f5;">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; background-color: rgba(0, 123, 255, 0.1);">
+                        <i class="fas fa-bell" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-weight-bold text-dark mb-0" id="RateRevisionDateModalLabel" style="font-size: 1.15rem; letter-spacing: -0.2px;">Important Notification
+                        </h5>
+                        <small class="text-muted">Rate Revision Date Renewal Notice – Action Required</small>
+                    </div>
+                </div>
+                <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close" style="font-size: 1.25rem; outline: none; opacity: 0.7;">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+                <!-- Message Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="list-unstyled pl-0 mb-0">
+                            <li class="mb-2">
+                                <span class="font-weight-bold">Attention!</span> This is to notify you that the following vendor's Rate Revision Date has expired and requires your attention.
+                                
+                            </li>
+                            <li class="mb-3 p-2 bg-light border rounded" style="font-size: 0.9rem;">
+                                <span class="font-weight-bold">Vendor Name:</span>
+                                <ul id="RateRevisionDateList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+                            </li>
+
+                            <li class="mb-0 text-danger mt-3 p-2 rounded d-flex align-items-center" style="font-weight: 600; font-size: 0.88rem; background-color: rgba(220, 53, 69, 0.08);">
+                                <i class="fas fa-exclamation-circle mr-2" style="font-size: 1rem;"></i>
+                                <span>Important Message:  Rate Revision Date has expired. Please renew Rate Revision Date as soon as possible!</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
+
+                <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
+                    Mark as read
                 </button>
             </div>
 
@@ -669,63 +669,64 @@
 
 
 <!-- Modal for Vendor Rate Status -->
-    <div class="modal fade" id="RateStatusModal" tabindex="-1" role="dialog" aria-labelledby="RateStatusModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
-                
-                <!-- Modal Header -->
-                <div class="modal-header bg-light py-3 px-4" style="border-bottom: 1px solid #e9ecef;">
-                    <h5 class="modal-title font-weight-bold text-dark" id="RateStatusModalLabel" style="font-size: 1.25rem;">
-                        Important Notification
-                    </h5>
-                    <button type="button" class="close text-danger" data-dismiss="modal" aria-label="Close" style="font-size: 1.5rem; outline: none;">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                
-                <!-- Modal Body -->
-                <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
-                    <!-- Subject Row -->
-                    <div class="row mb-3">
-                        <div class="col-sm-2 font-weight-bold text-secondary">Subject:</div>
-                        <div class="col-sm-10 font-weight-bold text-dark">Rate Approved Status Notice</div>
-                    </div>
-                    
-                    <!-- Message Row -->
-                    <div class="row">
-                        <div class="col-sm-2 font-weight-bold text-secondary">Message:</div>
-                        <div class="col-sm-10">
-                            <ul class="list-unstyled pl-0 mb-0">
-                                <li class="mb-2">
-                                    <span class="font-weight-bold">Attention!</span> Rate Approved Status requires attention.
-                                </li>
-                                <li class="mb-2">
-                                    <span class="font-weight-bold">Pending Vendors:</span>
-                                    <ul id="RateStatusList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
-                                </li>
+<div class="modal fade" id="RateStatusModal" tabindex="-1" role="dialog" aria-labelledby="RateStatusModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content shadow-lg border-0" style="border-radius: 6px;">
 
-                                <li class="mb-3 p-2 bg-light border rounded" style="font-size: 0.9rem;">
-                                <span class="font-weight-bold text-primary"><i class="fas fa-directions"></i> How to Approve Status:</span><br />
-                                <span style="color: #555;">
-                                    Go to <b>Vendor Registration Master</b> &gt; <b>Rate Configuration Section</b> &gt; Select Pending Vendor &gt; Click <b>Edit</b> &gt; <b>Approve Rate</b>
+            <!-- Modal Header -->
+            <div class="modal-header bg-white px-4 py-3 align-items-center" style="border-bottom: 1px solid #f1f3f5;">
+                <div class="d-flex align-items-center">
+                    <div class="bg-light-primary text-primary rounded-circle d-flex align-items-center justify-content-center mr-3" style="width: 40px; height: 40px; background-color: rgba(0, 123, 255, 0.1);">
+                        <i class="fas fa-bell" style="font-size: 1.1rem;"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title font-weight-bold text-dark mb-0" id="RateStatusModalLabel" style="font-size: 1.15rem; letter-spacing: -0.2px;">Important Notification
+                        </h5>
+                        <small class="text-muted">Rate Approval Pending – Action Required</small>
+                    </div>
+                </div>
+                <button type="button" class="close text-secondary" data-dismiss="modal" aria-label="Close" style="font-size: 1.25rem; outline: none; opacity: 0.7;">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body p-4" style="font-size: 0.95rem; color: #333; line-height: 1.6;">
+
+                <!-- Message Row -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="list-unstyled pl-0 mb-0">
+                            <li class="mb-2">
+                                <span class="font-weight-bold">Attention!</span> This is to notify you that the following vendor's rate approval is currently pending and requires your attention.
+                            </li>
+                            <li class="mb-2">
+                                <span class="font-weight-bold">Pending Vendors:</span>
+                                <ul id="RateStatusList" style="list-style-type: disc !important; padding-left: 20px;" class="mt-1 mb-0"></ul>
+                            </li>
+
+                            <li class="mb-3 p-2 bg-light border rounded" style="font-size: 0.9rem;">
+                                <span class="font-weight-bold text-primary"><i class="fas fa-directions"></i>How to Approve Status:</span><br />
+                                <span style="color: #1f1c1c;">Please navigate to <b>Vendor Registration Master</b> &gt; <b>Rate Configuration Section</b> &gt; Select Pending Vendor &gt; Click <b>Edit</b> &gt; <b>Approve Rate</b>
                                 </span>
                             </li>
 
-                                <li class="mb-0 text-danger mt-2" style="font-weight: bold;">
-                                    <span>Important Message: Rate Approved is Pending. Please approve rate as soon as possible!</span>
-                                </li>
-                            </ul>
-                        </div>
+                            <li class="mb-0 text-danger mt-3 p-2 rounded d-flex align-items-center" style="font-weight: 600; font-size: 0.88rem; background-color: rgba(220, 53, 69, 0.08);">
+                                <i class="fas fa-exclamation-circle mr-2" style="font-size: 1rem;"></i>
+                                <span>Important Message: Rate Approved is Pending. Please approve rate as soon as possible!</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                
-                <!-- Modal Footer -->
-                <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
-                    <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
-                        Mark as read
-                    </button>
-                </div>
-
             </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer bg-light justify-content-end py-3 px-4" style="border-top: 1px solid #e9ecef;">
+                <button type="button" class="btn btn-primary px-4 py-2" data-dismiss="modal" style="background-color: #007bff; border-color: #007bff; border-radius: 4px; font-weight: 500;">
+                    Mark as read
+                </button>
+            </div>
+
         </div>
     </div>
+</div>
