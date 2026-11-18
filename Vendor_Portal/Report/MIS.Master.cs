@@ -24,11 +24,6 @@ namespace Vendor_Portal
                 Menu_Billing.Visible = true;
             }
 
-            else if(LoginID == 1502)
-            {
-                Menu_Billing.Visible = true;
-
-            }
 
 
             else if (LoginID == 291) //PPL

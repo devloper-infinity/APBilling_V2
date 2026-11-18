@@ -16,9 +16,9 @@ function GetAllLogInOutDatafordownInvoice() {
 
             if (data && data.length > 0) {
                 $thead.append(`
-                  <th>Billing Period</th>
+                 <th>Billing Period</th>
                     <th>Remote UW</th>
-                  
+                   
                     <th>Billing Hours</th>
                     <th class="text-center">View</th>
                     <th class="text-center">Download</th>
@@ -80,8 +80,8 @@ $(document).on('click', '.view-btn', function () {
     var EndDate = formatDate($row.attr('data-EndDate'));
 
     var employeeCode = $row.attr('data-code');
-    var employeeName = $row.find('td').eq(0).text();
-    var period = $row.find('td').eq(1).text().replace(/\bto\b/gi, '~');
+    var employeeName = $row.find('td').eq(1).text();
+    var period = $row.find('td').eq(0).text().replace(/\bto\b/gi, '~');
     var hours = $row.find('td').eq(2).text();
 
     $("#modalPeriod").text(period);
@@ -458,8 +458,8 @@ $(document).ready(function () {
 
         var StartDate = formatDate($row.attr('data-StartDate'));
         var EndDate = formatDate($row.attr('data-EndDate'));
-        var employeeName = $row.find('td').eq(0).text();
-        var period = $row.find('td').eq(1).text().replace(/\bto\b/gi, '~');
+        var employeeName = $row.find('td').eq(1).text();
+        var period = $row.find('td').eq(0).text().replace(/\bto\b/gi, '~');
         var periodParts = period.split(/~|to/i);
         var invoiceDateVal = periodParts.length > 1 ? periodParts[1].trim() : period;
 
@@ -869,7 +869,7 @@ $(document).ready(function () {
                                                             <small style="color: #555;">If you have any questions about this invoice, please contact <span id="pdfContactVendorName" style="color: #000; font-weight: bold;">${contactVendorName}</span>.</small>
                                                         </td>
                                                         <td style="padding: 8px; text-align: right; vertical-align: middle; font-weight: bold; font-size: 15px;">
-                                                            ${totalAmountDecimal}.00
+                                                            ${totalAmountDecimal}
                                                         </td>
                                                     </tr>
                                                 </tbody>

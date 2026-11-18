@@ -15,7 +15,7 @@ namespace Vendor_Portal.Vendor
 
             //Master
 
-            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128 || LoginID == 9961 || LoginID == 6959)
+            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128 || LoginID == 9961)
             {
                 li_MasterSection.Visible = true;
                 li_UpdateClientInvoice.Visible = true;
@@ -28,7 +28,7 @@ namespace Vendor_Portal.Vendor
                 li1.Visible = true;
                 Menu_Billing.Visible = true;
             }
-
+            
             else if (LoginID == 9858 || LoginID == 9852)  //IT
             {
                 li_MasterSection.Visible = false;
