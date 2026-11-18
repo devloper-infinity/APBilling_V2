@@ -771,7 +771,7 @@ function editRateRecord(row) {
 
     var currentStatus = row.IsApprovedStatus ? row.IsApprovedStatus.toLowerCase() : '';
     var currentUserId = parseInt($('#hdfCurrentUserId').val()) || 0;
-    if (currentUserId === 235 && currentStatus === 'pending') {
+    if (currentUserId === 235 && currentStatus === 'pending' || currentUserId === 5 && currentStatus === 'pending') {
         $('#vendorreg_btnIsaaprove').show();
     } else {
         $('#vendorreg_btnIsaaprove').hide();

@@ -29,7 +29,7 @@
     <script>
         $(document).ready(function () {
             var currentUserId = parseInt($('#hdfCurrentUserId').val()) || 0;
-            if (currentUserId === 235) {
+            if (currentUserId === 235 || currentUserId === 5 || currentUserId === 6959 ) {
                 loadPendingNotifications();
                 $(document).on('click', 'a[href*="Logout.aspx"]', function () {
                     sessionStorage.removeItem('popupsShown');
@@ -357,8 +357,6 @@
                                         </ul>
                                     </li>
 
-
-
                                 </ul>
                             </li>
 
@@ -390,21 +388,6 @@
                                     <li><a href="DownloadInvoice.aspx" id="BillingInvoice" runat="server" class="dropdown-item">Download Invoice</a></li>
                                 </ul>
                             </li>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -666,7 +649,6 @@
         </div>
     </div>
 </div>
-
 
 <!-- Modal for Vendor Rate Status -->
 <div class="modal fade" id="RateStatusModal" tabindex="-1" role="dialog" aria-labelledby="RateStatusModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
