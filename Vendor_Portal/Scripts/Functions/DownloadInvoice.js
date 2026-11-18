@@ -67,7 +67,7 @@ function GetAllLogInOutDatafordownInvoice() {
     });
 }
 
-//View Invoice
+//View InvoicemodalTotalloanCount
 $(document).on('click', '.view-btn', function () {
     var $row = $(this).closest('tr');
     var pseudoName = $row.attr('data-pseudoname');
@@ -86,6 +86,10 @@ $(document).on('click', '.view-btn', function () {
     $("#modalHours").text(hours);
     $("#modalClientName").text("Infinity IPS");
     $("#modalEmpNameSpan").text(employeeName);
+    $("#modalTotalloanCount").text("0");
+    $("#modalTotalloanCountCost").text("0.00");
+    $("#modalAmount").text("$0.00");
+    $("#modalTotalAmount").text("$0.00");
     
 
     var periodParts = period.split(/~|to/i);
@@ -95,7 +99,17 @@ $(document).on('click', '.view-btn', function () {
     var modalEl = document.getElementById('invoiceModal');
     var invoiceViewModal = new bootstrap.Modal(modalEl);
     invoiceViewModal.show();
+    var currentTotalAmount = 0;
+    var currentRowCount = 0;
 
+    function calculatePerLoanCostSafely() {
+        if (currentTotalAmount > 0 && currentRowCount > 0) {
+            var perLoanCost = currentTotalAmount / currentRowCount;
+            $("#modalTotalloanCountCost").text(perLoanCost.toFixed(2));
+        } else {
+            $("#modalTotalloanCountCost").text("0.00");
+        }
+    }
     var $modalTbody = $("#modalDetailedTable tbody");
     $modalTbody.html(`<tr><td colspan="5" class="text-center text-muted py-3"><i class="fas fa-spinner fa-spin"></i> Loading details...</td></tr>`);
 
@@ -164,6 +178,7 @@ $(document).on('click', '.view-btn', function () {
     $("#modalInvoiceNo").text('');
     $("#modalContactVendorName").text('');
     $("#modalRate").text('');
+   
 
     $.ajax({
         type: "POST",
@@ -202,6 +217,8 @@ $(document).on('click', '.view-btn', function () {
                 var vendorNameForLabel = $("#modalVendorName").text();      
                 var dynamicInvoiceLabel = "Inv" + "_" + vendorNameForLabel + "_" + period;
                 $("#modalInvoiceNo").text(dynamicInvoiceLabel);
+                currentTotalAmount = calculatedTotal;
+                calculatePerLoanCostSafely();
             } 
         },
         error: function (xhr, status, error) {
@@ -225,7 +242,7 @@ $(document).on('click', '.view-btn', function () {
         dataType: "json",
         success: function (response) {
             var countData = typeof response.d === 'string' ? JSON.parse(response.d) : response.d;
-
+            $prodCountTbody.empty();
             if (countData && countData.length > 0) {
                 countData.forEach(function (item) {
                     var review = item.Review !== null && item.Review !== undefined ? item.Review : '';
@@ -249,17 +266,20 @@ $(document).on('click', '.view-btn', function () {
                     $prodCountTbody.append(countTr);
                 });
 
-                // $prodCountContainer.show();
-                // $prodCountDivider.show();
+                $prodCountContainer.show();
+                $prodCountDivider.show();
             }
         },
         error: function (xhr, status, error) {
             console.error("Error fetching production count summary: ", error);
+            $prodCountContainer.hide();
+            $prodCountDivider.hide();
         }
     });
     // ==========================================
     // 2. NAVIN AJAX CALL: Loan Production Track
     // ==========================================
+  
     var $loanThead = $("#LoanProductionTrackTable thead");
     var $loanTbody = $("#LoanProductionTrackTable tbody");
     $loanThead.empty();
@@ -277,15 +297,14 @@ $(document).on('click', '.view-btn', function () {
             $loanTbody.empty();
 
             if (trackData && trackData.length > 0) {
-                $("#modalTotalloanCount").text(trackData.length);
-                var amountText = $("#modalAmount").text().replace('$', '').replace(/,/g, '').trim();
-                var totalAmountVal = parseFloat(amountText) || 0;
-                if (totalAmountVal > 0 && rowCount > 0) {
-                    var perLoanCost = totalAmountVal / rowCount;
-                    $("#modalTotalloanCountCost").text(perLoanCost.toFixed(2));
-                } else {
-                    $("#modalTotalloanCountCost").text("0.00");
-                }
+                var rowCount = trackData.length;
+                $("#modalTotalloanCount").text(rowCount);
+
+               
+                currentRowCount = rowCount;
+                calculatePerLoanCostSafely();
+
+
                 var headers = Object.keys(trackData[0]);
                 headers.unshift("Sr.No");
 
@@ -595,7 +614,7 @@ $(document).ready(function () {
                                         <div style="page-break-before: always;"></div>
                                         <div style="margin-top: 20px; width: 100%;">
                                             <div style="background-color: #143961; color: white; padding: 10px; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
-                                                Production Count Summary
+                                                Production Summary
                                             </div>
                                             <table style="width: 100%; font-size: 9px; border-collapse: collapse; table-layout: fixed;" border="1" bordercolor="#b4c6e7">
                                                 <thead style="background-color: #143961; color: white;">
@@ -696,7 +715,7 @@ $(document).ready(function () {
                                                 <div style="page-break-before: always;"></div>
                                                 <div style="margin-top: 20px; width: 100%;">
                                                     <div style="background-color: #143961; color: white; padding: 10px; font-weight: bold; font-size: 14px; margin-bottom: 10px;">
-                                                        Loan Production Track
+                                                         Production Track
                                                     </div>
                                                     <table style="width: 100%; font-size: 9px; border-collapse: collapse; table-layout: fixed;" border="1" bordercolor="#b4c6e7">
                                                         <thead style="background-color: #143961; color: white;">
@@ -869,6 +888,8 @@ $(document).ready(function () {
 
                                             <!-- Non-Productive Hours Section -->
                                             ${nonProdSectionHTML}
+
+                                            ${prodCountSectionHTML}
 
                                             <!-- Loan Production Track Pages -->
                                             ${loanProductionPagesHTML}
