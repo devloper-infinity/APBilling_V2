@@ -16,13 +16,14 @@ function GetAllLogInOutDatafordownInvoice() {
 
             if (data && data.length > 0) {
                 $thead.append(`
-                    <th>Employee Name</th>
-                    <th>Period</th>
-                    <th>Total Hours</th>
+                  <th>Billing Period</th>
+                    <th>Remote UW</th>
+                  
+                    <th>Billing Hours</th>
                     <th class="text-center">View</th>
                     <th class="text-center">Download</th>
                     <th class="text-center">Excel</th>
-                    <th class="text-center">Approve</th>
+                    <th class="text-center d-none">Approve</th>
                 `);
 
                 data.forEach(function (row) {
@@ -44,14 +45,15 @@ function GetAllLogInOutDatafordownInvoice() {
 
 
                     var tr = `<tr data-code="${employeeCode}" data-pseudoname="${pseudoName}" data-StartDate="${formattedStartDate}" data-EndDate="${formattedEndDate}">`;
-                    tr += `<td class="align-middle">${employeeName}</td>`;
                     tr += `<td class="align-middle">${Period}</td>`;
+                    tr += `<td class="align-middle">${employeeName}</td>`;
+                    
                     tr += `<td class="align-middle">${totalHours}</td>`;
 
                     tr += `<td class="text-center align-middle"><button type="button" class="btn btn-link text-dark view-btn p-1 border-0 bg-transparent" title="View"><i class="fas fa-eye fa-lg"></i></button></td>`;
                     tr += `<td class="text-center align-middle"><button type="button" class="btn btn-link text-primary download-btn p-1 border-0 bg-transparent" title="Download"><i class="fas fa-download fa-lg"></i></button></td>`;
                     tr += `<td class="text-center align-middle"><button type="button" class="btn btn-link  text-success excel-btn p-1 border-0 bg-transparent" title="Excel"><i class="fas fa-file-excel fa-lg"></i></button></td>`;
-                    tr += `<td class="text-center align-middle"><button type="button" class="btn btn-link text-primary approve-btn p-1 border-0 bg-transparent" title="Approve"><i class="fas fa-check-circle fa-lg"></i></button></td>`;
+                    tr += `<td class="text-center align-middle d-none"><button type="button" class="btn btn-link text-primary approve-btn p-1 border-0 bg-transparent" title="Approve"><i class="fas fa-check-circle fa-lg"></i></button></td>`;
                     tr += `</tr>`;
 
                     $tbody.append(tr);
@@ -67,7 +69,7 @@ function GetAllLogInOutDatafordownInvoice() {
     });
 }
 
-//View InvoicemodalTotalloanCount
+//View Invoice
 $(document).on('click', '.view-btn', function () {
     var $row = $(this).closest('tr');
     var pseudoName = $row.attr('data-pseudoname');
@@ -244,12 +246,13 @@ $(document).on('click', '.view-btn', function () {
             var countData = typeof response.d === 'string' ? JSON.parse(response.d) : response.d;
             $prodCountTbody.empty();
             if (countData && countData.length > 0) {
+                var totalLoanCount = 0;
                 countData.forEach(function (item) {
                     var review = item.Review !== null && item.Review !== undefined ? item.Review : '';
                     var projectNumber = item.ProjectNumber !== null && item.ProjectNumber !== undefined ? item.ProjectNumber : '';
                     var process = item.Process !== null && item.Process !== undefined ? item.Process : '';
                     var loanCount = item.LoanCount !== null && item.LoanCount !== undefined ? item.LoanCount : 0;
-
+                    totalLoanCount += parseInt(loanCount) || 0;
                     if (review) {
                         var parsedRevDate = new Date(review);
                         if (!isNaN(parsedRevDate.getTime())) {
@@ -265,7 +268,11 @@ $(document).on('click', '.view-btn', function () {
                     </tr>`;
                     $prodCountTbody.append(countTr);
                 });
-
+                var totalTr = `<tr class="fw-bold" style="background-color: #d0d5db; color: black;">
+                    <td colspan="3" style="padding: 6px; border: 0.5px solid #b4c6e7; text-align: right;"><strong>Total Loan Count:</strong></td>
+                    <td style="padding: 6px; border: 0.5px solid #b4c6e7; text-align: center;">${totalLoanCount}</td>
+                </tr>`;
+                $prodCountTbody.append(totalTr);
                 $prodCountContainer.show();
                 $prodCountDivider.show();
             }
@@ -585,14 +592,14 @@ $(document).ready(function () {
                                 if (countData && countData.length > 0) {
                                     var countRowsHTML = '';
                                     var countSrNo = 0;
-
+                                    var totalLoanCountPdf = 0;
                                     countData.forEach(function (cItem) {
                                         countSrNo++;
                                         var review = cItem.Review !== null && cItem.Review !== undefined ? cItem.Review : '';
                                         var projectNumber = cItem.ProjectNumber !== null && cItem.ProjectNumber !== undefined ? cItem.ProjectNumber : '';
                                         var process = cItem.Process !== null && cItem.Process !== undefined ? cItem.Process : '';
                                         var loanCount = cItem.LoanCount !== null && cItem.LoanCount !== undefined ? cItem.LoanCount : 0;
-
+                                        totalLoanCountPdf += parseInt(loanCount) || 0;
                                         if (review) {
                                             var parsedRevDate = new Date(review);
                                             if (!isNaN(parsedRevDate.getTime())) {
@@ -609,7 +616,11 @@ $(document).ready(function () {
                                                 <td style="padding: 3px 2px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px; width: 15%;">${loanCount}</td>
                                             </tr>`;
                                     });
-
+                                    countRowsHTML += `
+                                        <tr style="background-color: #f2f5f9; font-weight: bold;">
+                                            <td colspan="4" style="padding: 4px; border: 0.5px solid #b4c6e7; text-align: right; font-size: 9px;">Total Loan Count:</td>
+                                            <td style="padding: 4px; border: 0.5px solid #b4c6e7; text-align: center; font-size: 9px;">${totalLoanCountPdf}</td>
+                                        </tr>`;
                                     prodCountSectionHTML = `
                                         <div style="page-break-before: always;"></div>
                                         <div style="margin-top: 20px; width: 100%;">

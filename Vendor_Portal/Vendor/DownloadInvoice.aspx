@@ -134,7 +134,7 @@
         <section class="ud-hero">
             <div class="ud-hero-icon"><i class="fa-solid fa-download"></i></div>
             <div class="ud-hero-content">
-                <h1 class="ud-title">Download Invoice</h1>
+                <h1 class="ud-title">Generate Invoice</h1>
                 <p class="ud-subtitle">View and download Invoices, Logs Details, Non-Productive Hour Details, and Production Details.</p>
             </div>
            

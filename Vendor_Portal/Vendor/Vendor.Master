@@ -383,9 +383,9 @@
                             </li>
 
                             <li class="nav-item dropdown" id="Menu_Billing" runat="server" >
-                                <a id="Billing" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Billing</a>
+                                <a id="Billing" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Generate Billing</a>
                                 <ul aria-labelledby="pmutilities" class="dropdown-menu border-0 shadow">
-                                    <li><a href="DownloadInvoice.aspx" id="BillingInvoice" runat="server" class="dropdown-item">Download Invoice</a></li>
+                                    <li><a href="DownloadInvoice.aspx" id="BillingInvoice" runat="server" class="dropdown-item">Generate Billing</a></li>
                                 </ul>
                             </li>
 
