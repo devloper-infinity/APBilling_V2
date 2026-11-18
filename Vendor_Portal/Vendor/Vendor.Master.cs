@@ -15,7 +15,7 @@ namespace Vendor_Portal.Vendor
 
             //Master
 
-            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128 || LoginID == 9961)
+            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128 || LoginID == 9961 )
             {
                 li_MasterSection.Visible = true;
                 li_UpdateClientInvoice.Visible = true;
@@ -26,6 +26,20 @@ namespace Vendor_Portal.Vendor
                 li2.Visible = true;
                 li3.Visible = true;
                 li1.Visible = true;
+                Menu_Billing.Visible = true;
+            }
+
+            else if (LoginID== 6959)
+            {
+                li_MasterSection.Visible = false;
+                li_UpdateClientInvoice.Visible = false;
+                li_UpdatePaidDate.Visible = false;
+                li_UpdatePaidDateOther.Visible = false;
+                li_CanopyMGTReport.Visible = false;
+                li_IPSMGTReport.Visible = false;
+                li1.Visible = true;
+                li2.Visible = true;
+                li3.Visible = true;
                 Menu_Billing.Visible = true;
             }
             
