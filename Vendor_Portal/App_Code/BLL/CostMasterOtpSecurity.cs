@@ -132,7 +132,16 @@ INSERT dbo.CostMasterOtpChallenge(SecurityArea,EmployeeID,SessionID,OtpHash,OtpS
                 cmd.Parameters.Add("@EmployeeID", SqlDbType.BigInt).Value=employeeId; cmd.Parameters.Add("@SessionID",SqlDbType.NVarChar,88).Value=sessionId;
                 cmd.Parameters.Add("@Hash",SqlDbType.VarBinary,32).Value=hash; cmd.Parameters.Add("@Salt",SqlDbType.VarBinary,32).Value=salt; cn.Open(); cmd.ExecuteNonQuery();
             }
-            SendEmail(officialEmail, otp); Audit(employeeId,sessionId,"OTP_SENT",true);
+            if (securityArea == "VENDORREGISTRATION_MASTER")
+            {
+                SendEmailregistration(officialEmail, otp); Audit(employeeId, sessionId, "OTP_SENT", true);
+
+            }
+            else
+            {
+                SendEmail(officialEmail, otp); Audit(employeeId, sessionId, "OTP_SENT", true);
+
+            }
             return "A verification code was sent to your registered official email.";
         }
 
@@ -195,6 +204,8 @@ WHERE EmployeeID=@EmployeeID AND SessionID=@SessionID AND ConsumedUtc IS NULL;",
         private static string SecureSixDigitCode(){byte[] b=new byte[4];using(RandomNumberGenerator r=RandomNumberGenerator.Create()){uint x;do{r.GetBytes(b);x=BitConverter.ToUInt32(b,0);}while(x>=UInt32.MaxValue-(UInt32.MaxValue%1000000));return (x%1000000).ToString("D6");}}
         private static bool IsValidEmail(string value){try{MailAddress m=new MailAddress(value);return String.Equals(m.Address,value,StringComparison.OrdinalIgnoreCase);}catch{return false;}}
         private static void SendEmail(string to,string otp){using(MailMessage mail=new MailMessage()){mail.To.Add(to);mail.From=new MailAddress("ack@infinity-data.com","IPS AP Billing",Encoding.UTF8);mail.Subject="Costing Master verification code";mail.Body="Your Costing Master verification code is <b>"+HttpUtility.HtmlEncode(otp)+"</b>. It expires in 5 minutes and can be used once.";mail.IsBodyHtml=true;using(SmtpClient client=new SmtpClient()){client.UseDefaultCredentials=false;client.Credentials=new NetworkCredential("ack@infinity-data.com",new bllInvoice().GetPassword("ackdata"));client.Host="smtp.office365.com";client.Port=587;client.EnableSsl=true;ServicePointManager.SecurityProtocol=SecurityProtocolType.Tls12;client.Send(mail);}}}
+        private static void SendEmailregistration(string to, string otp) { using (MailMessage mail = new MailMessage()) { mail.To.Add(to); mail.From = new MailAddress("ack@infinity-data.com", "IPS AP Billing", Encoding.UTF8); mail.Subject = "Vendor Registration verification code"; mail.Body = "Your Vendor Registration Master verification code is <b>" + HttpUtility.HtmlEncode(otp) + "</b>. It expires in 5 minutes and can be used once."; mail.IsBodyHtml = true; using (SmtpClient client = new SmtpClient()) { client.UseDefaultCredentials = false; client.Credentials = new NetworkCredential("ack@infinity-data.com", new bllInvoice().GetPassword("ackdata")); client.Host = "smtp.office365.com"; client.Port = 587; client.EnableSsl = true; ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12; client.Send(mail); } } }
+
         private static void Audit(int id,string sid,string action,bool success){try{using(SqlConnection cn=new SqlConnection(SQLHelper.ConnectionString))using(SqlCommand cmd=new SqlCommand("INSERT dbo.CostMasterSecurityAudit(EmployeeID,SessionID,ActionName,WasSuccessful,SourceIP) VALUES(@E,@S,@A,@OK,@IP)",cn)){cmd.Parameters.Add("@E",SqlDbType.BigInt).Value=id;cmd.Parameters.Add("@S",SqlDbType.NVarChar,88).Value=sid;cmd.Parameters.Add("@A",SqlDbType.NVarChar,40).Value=action;cmd.Parameters.Add("@OK",SqlDbType.Bit).Value=success;cmd.Parameters.Add("@IP",SqlDbType.NVarChar,45).Value=(HttpContext.Current.Request.UserHostAddress??"");cn.Open();cmd.ExecuteNonQuery();}}catch{}}
     }
 }

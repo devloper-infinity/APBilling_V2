@@ -269,11 +269,36 @@ div[class*="container"] {
     display: inline-block;
     width: auto;
 }
+.alert-info {  
+    max-width: 1290px; 
+    margin: 6px auto 4px auto !important;
+    padding: 8px 16px !important;
+
+}
+.cm-countdown { font-weight: bold; color: #c82333; }
  </style>
 
         <script src="../Scripts/Functions/VendorRegistrationMaster.js" type="text/javascript"></script>
-
- <script>
+      <script>
+          var acCsrf ='<%= HttpUtility.JavaScriptStringEncode(ApproveCostCsrfToken) %>', acAllowed =<%= ApproveCostAccessAllowed?"true":"false" %>, acAuthorized=<%= ApproveCostAuthorized?"true":"false" %>, acExpiry='<%= HttpUtility.JavaScriptStringEncode(ApproveCostExpiryUtc) %>', acTimer;
+          $.ajaxPrefilter(function (o, x, h) { if (o.url && o.url.indexOf('VendorRegistrationMaster.aspx/') >= 0) h.setRequestHeader('X-CostMaster-CSRF', acCsrf); });
+          function acSecurePost(m, d, ok, msg) { $('#acBusyText').text(msg || 'Please wait...'); $('#acBusy').show(); $.ajax({ type: 'POST', url: 'VendorRegistrationMaster.aspx/' + m, data: JSON.stringify(d || {}), dataType: 'json', contentType: 'application/json; charset=utf-8', headers: { 'X-CostMaster-CSRF': acCsrf }, success: function (r) { ok(r.d); }, error: function (x) { $('#acSecurityMessage').text((x.responseJSON && x.responseJSON.Message) || 'Unable to complete verification.').addClass('text-danger'); }, complete: function () { $('#acBusy').hide(); } }); }
+          function acRequestOtp() { acSecurePost('RequestApproveCostOtp', { employeeCode: $('#acEmployeeCode').val() }, function (m) { $('#acSecurityMessage').text(m).removeClass('text-danger'); $('#acOtpRow').show(); }, 'Sending verification code...'); }
+          function acVerifyOtp() { acSecurePost('VerifyApproveCostOtp', { otp: $('#acOtp').val() }, function (r) { acUnlock(r.expiryUtc); }, 'Verifying OTP...'); }
+          function acUnlock(e) {
+              acExpiry = e; $('#acSecurityPanel,#acUnauthorized').hide(); $('#acProtected').show(); clearInterval(acTimer); acTick(); acTimer = setInterval(acTick, 1000); GetVendors_bindgrid();
+              const urlParams = new URLSearchParams(window.location.search);
+              const vendorIdFromURL = urlParams.get('VendorID');
+              if (vendorIdFromURL) {
+                  EditConfiguration(vendorIdFromURL);
+              }
+           }
+          function acTick() { var s = Math.max(0, Math.ceil((Date.parse(acExpiry) - Date.now()) / 1000)); $('#acCountdown').text(String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')); if (!s) { clearInterval(acTimer); $('#acProtected').hide(); $('#acSecurityPanel').show(); $('#acSecurityMessage').text('Your Vendor Registration Master access has expired. Please verify again.').addClass('text-danger'); } }
+          $(document).ready(function () {
+              if (!acAllowed) { $('#acUnauthorized').show(); return; } if (acAuthorized) acUnlock(acExpiry); else $('#acSecurityPanel').show();
+          });
+      </script>
+ <%--<script>
 
      $(document).ready(function () {
          GetVendors_bindgrid();
@@ -285,69 +310,90 @@ div[class*="container"] {
      });
 
     
- </script>
+ </script>--%>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 20px; box-sizing: border-box;">
-        <div class="vendorreg-page">
-            <div class="page-header">
-                <div class="header-content">
-                    <div class="header-left">
-                        <div class="header-icon"><i class="fas fa-clipboard-list"></i></div>
-                        <div>
-                            <h1>Vendor Details Master</h1>
-                            <p>Display Vendor details.</p>
+    <div id="acBusy" style="display: none; position: fixed; inset: 0; background: rgba(255,255,255,.72); z-index: 99999">
+        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%,-50%); background: white; padding: 24px; box-shadow: 0 4px 18px #888"><i class="fas fa-spinner fa-spin fa-2x"></i>
+            <div id="acBusyText">Please wait...</div>
+        </div>
+    </div>
+    <div id="acUnauthorized" class="alert alert-danger" style="display: none">You are not authorized to access Vendor Registration Master Page data.</div>
+    <div id="acSecurityPanel" class="card" style="display: none; max-width: 520px; margin: 25px auto">
+        <div class="card-body">
+            <h5>Vendor Registration Master verification</h5>
+            <input id="acEmployeeCode" class="form-control" placeholder="Employee Code" maxlength="50" />
+            <button type="button" class="btn btn-primary mt-2" onclick="acRequestOtp()">Send OTP</button><div id="acOtpRow" style="display: none" class="mt-3">
+                <input id="acOtp" class="form-control" placeholder="6-digit OTP" maxlength="6" />
+                <button type="button" class="btn btn-success mt-2" onclick="acVerifyOtp()">Verify OTP</button></div>
+            <div id="acSecurityMessage" class="mt-3"></div>
+        </div>
+    </div>
+    <div id="acProtected" style="display: none">
+        <div class="alert alert-info">Access remaining: <b id="acCountdown">15:00</b></div>
+
+        <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 4px 20px 20px 20px; box-sizing: border-box;">
+
+            <div class="vendorreg-page">
+                <div class="page-header">
+                    <div class="header-content">
+                        <div class="header-left">
+                            <div class="header-icon"><i class="fas fa-clipboard-list"></i></div>
+                            <div>
+                                <h1>Vendor Details Master</h1>
+                                <p>Display Vendor details.</p>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <span class="module-badge">Masters</span>
                         </div>
                     </div>
-                    <div class="header-right">
-                        <span class="module-badge">Masters</span>
+                </div>
+
+                <div class="loading" id="load1" style="display: none;">
+                    <div class="loading__box">
+                        <img src="../images/Load_1.gif" alt="Loading" />
+                        <div class="loading__text">One moment, please...</div>
                     </div>
                 </div>
-            </div>
-        
-            <div class="loading" id="load1" style="display:none;">
-                <div class="loading__box">
-                    <img src="../images/Load_1.gif" alt="Loading" />
-                    <div class="loading__text">One moment, please...</div>
-                </div>
-            </div>
 
-            <div class="vendorreg-page-shell vendorreg-master-modern" style="padding: 20px 0;">
-                
-                <div class="col-lg-12" style="padding: 0;">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="vendorreg-toolbar">
-                                <div class="vendorreg-toolbar-title"><i class="fas fa-list"></i>&nbsp; Vendor List</div>
-                                <button id="vendorreg_btnaddnewvendor" name="vendorreg_btnaddnewvendor" class="btn btn-primary" onclick="return addnewvendor();">
-                                    <i class="fas fa-plus-circle"></i><span>Add New Vendor</span>
-                                </button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="vendorregistration_table" style="width:100%;">
-                                    <thead>
-                                        <tr>
-                                            <th style="display:none;">ID</th>
-                                            <th>Action</th>
-                                            <th>Sr.No.</th>
-                                             <th>Company</th>
-                                                                                        <th>Vendor Type</th>
+                <div class="vendorreg-page-shell vendorreg-master-modern" style="padding: 12px 0 20px 0;">
 
-                                            <th>Vendor</th>
-                                           
-                                            <th >Contact Person</th>
-                                            <th>Contact No</th>
-                                            <th>Email ID</th>
-                                           
-                                            <th>Account Number</th>
-                                               <th>Billing Cycle</th>
-  
-   <th>Process</th>
+                    <div class="col-lg-12" style="padding: 0;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="vendorreg-toolbar">
+                                    <div class="vendorreg-toolbar-title"><i class="fas fa-list"></i>&nbsp; Vendor List</div>
+                                    <button id="vendorreg_btnaddnewvendor" name="vendorreg_btnaddnewvendor" class="btn btn-primary" onclick="return addnewvendor();">
+                                        <i class="fas fa-plus-circle"></i><span>Add New Vendor</span>
+                                    </button>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="vendorregistration_table" style="width: 100%;">
+                                        <thead>
+                                            <tr>
+                                                <th style="display: none;">ID</th>
+                                                <th>Action</th>
+                                                <th>Sr.No.</th>
+                                                <th>Company</th>
+                                                <th>Vendor Type</th>
 
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                                                <th>Vendor</th>
+
+                                                <th>Contact Person</th>
+                                                <th>Contact No</th>
+                                                <th>Email ID</th>
+
+                                                <th>Account Number</th>
+                                                <th>Billing Cycle</th>
+
+                                                <th>Process</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>

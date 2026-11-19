@@ -16,14 +16,28 @@ namespace Vendor_Portal.Vendor
 {
     public partial class VendorRegistration : System.Web.UI.Page
     {
+        protected string ApproveCostCsrfToken { get; private set; }
+        protected string ApproveCostExpiryUtc { get; private set; }
+        protected bool ApproveCostAuthorized { get; private set; }
+        protected bool ApproveCostAccessAllowed { get; private set; }
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            ApproveCostCsrfToken = CostMasterOtpSecurity.EnsureCsrfToken();
+            ApproveCostAccessAllowed = CostMasterOtpSecurity.HasPageAccess("VENDORREGISTRATION_MASTER");
+            if (!ApproveCostAccessAllowed) return;
+            DateTime? expiry = CostMasterOtpSecurity.GetAuthorizationExpiryUtc("VENDORREGISTRATION_MASTER");
+            ApproveCostAuthorized = expiry.HasValue;
+            ApproveCostExpiryUtc = expiry.HasValue ? expiry.Value.ToString("o") : "";
         }
-        [System.Web.Services.WebMethod] 
+        [WebMethod(EnableSession = true)] public static string RequestApproveCostOtp(string employeeCode) { return CostMasterOtpSecurity.SendOtp(employeeCode, "VENDORREGISTRATION_MASTER"); }
+        [WebMethod(EnableSession = true)] public static object VerifyApproveCostOtp(string otp) { DateTime e = CostMasterOtpSecurity.VerifyOtp(otp, "VENDORREGISTRATION_MASTER"); return new { message = "Verification successful. You can access Vendor Registration Master for the next 15 minutes.", expiryUtc = e.ToString("o") }; }
+        [WebMethod(EnableSession = true)] public static string RestartApproveCostVerification() { CostMasterOtpSecurity.RestartVerification("VENDORREGISTRATION_MASTER"); return "Enter your Employee Code to request a new OTP."; }
+
+        [WebMethod(EnableSession = true)]
         public static int InsertVendorRegistration(string vendorName,string companyName,string contactPerson,string contactNo,string emailID,
             string websiteURL,string address,string payToVendorName,string accountNumber,string remark,int vendorId,string VendorType)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
 
@@ -55,10 +69,11 @@ namespace Vendor_Portal.Vendor
         }
 
 
-        [System.Web.Services.WebMethod]
+        [WebMethod(EnableSession = true)]
         public static int AddVendorOtherInfo(int vendorRegistrationID, string startDate,string rateRevisionDate,string scopeOfWork,string remark,
         string isNDASigned,string agreementDate,string expiryDate,string signedByClient,string signedByInfinity,string workDocument,string agreementCopy)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
             try
@@ -80,22 +95,19 @@ namespace Vendor_Portal.Vendor
                 if (!string.IsNullOrEmpty(workDocument) && workDocument.Contains("|"))
                 {
                     string[] parts = workDocument.Split('|');
-                    string originalFileName = parts[0]; // Actual File Name
-                    //string uniqueFileName = DateTime.Now.Ticks.ToString() + "_" + originalFileName;
+                    string originalFileName = parts[0]; 
 
                     string base64Data = parts[1].Substring(parts[1].IndexOf(",") + 1);
                     byte[] fileBytes = Convert.FromBase64String(base64Data);
 
-                    // Full Physical Server Path (e.g., C:\...\WorkDocument\filename.pdf)
                     string fullPath = workFolderPath + originalFileName;
                     System.IO.File.WriteAllBytes(fullPath, fileBytes);
 
-                    // Database la full path + actual file name sathi (hava tar tu fat path save kru shaktoes)
-                    savedWorkDocPath = fullPath; // Full Path
+                    savedWorkDocPath = fullPath; 
                 }
                 else
                 {
-                    savedWorkDocPath = workDocument; // Jar user ne file change keli nsel tar juna path tasaach rahato
+                    savedWorkDocPath = workDocument; 
                 }
 
                 // --- AgreementCopy File Save Logic ---
@@ -103,13 +115,11 @@ namespace Vendor_Portal.Vendor
                 if (!string.IsNullOrEmpty(agreementCopy) && agreementCopy.Contains("|"))
                 {
                     string[] parts = agreementCopy.Split('|');
-                    string originalFileName = parts[0]; // Actual File Name
-                   // string uniqueFileName = DateTime.Now.Ticks.ToString() + "_" + originalFileName;
+                    string originalFileName = parts[0]; 
 
                     string base64Data = parts[1].Substring(parts[1].IndexOf(",") + 1);
                     byte[] fileBytes = Convert.FromBase64String(base64Data);
 
-                    // Full Physical Server Path
                     string fullPath = agreementFolderPath + originalFileName;
                     System.IO.File.WriteAllBytes(fullPath, fileBytes);
 
@@ -154,9 +164,10 @@ namespace Vendor_Portal.Vendor
 
 
 
-        [System.Web.Services.WebMethod]
+        [WebMethod(EnableSession = true)]
         public static int InsertVendorRate(int vendorRegistrationID, string fromDate, string rateType, string rate,string Process,int rateID,string BillingCycle,int EmployeeID,int savedEmployeeId)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
             try
@@ -209,9 +220,10 @@ namespace Vendor_Portal.Vendor
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static string GetVendorDetailsByID(int vendorRegistrationID)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             DataTable dt1 = new bllInvoice().GetVendorDetailsByID(vendorRegistrationID);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -233,9 +245,10 @@ namespace Vendor_Portal.Vendor
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static string GetRateConfiguration(int  VendorId)
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             DataTable dt1 = new bllInvoice().GetRateConfiguration(VendorId);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -257,11 +270,11 @@ namespace Vendor_Portal.Vendor
         }
 
 
-        [WebMethod]
+        [WebMethod(EnableSession = true)]
         public static int ApproveVendorRate(int rateID, int vendorRegistrationID)
         {
 
-
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
             try
