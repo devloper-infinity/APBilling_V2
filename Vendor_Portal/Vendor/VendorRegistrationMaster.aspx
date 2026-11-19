@@ -288,9 +288,14 @@ div[class*="container"] {
           $.ajaxPrefilter(function (o, x, h) { if (o.url && o.url.indexOf('VendorRegistrationMaster.aspx/') >= 0) h.setRequestHeader('X-CostMaster-CSRF', acCsrf); });
           function acSecurePost(m, d, ok, msg) { $('#acBusyText').text(msg || 'Please wait...'); $('#acBusy').show(); $.ajax({ type: 'POST', url: 'VendorRegistrationMaster.aspx/' + m, data: JSON.stringify(d || {}), dataType: 'json', contentType: 'application/json; charset=utf-8', headers: { 'X-CostMaster-CSRF': acCsrf }, success: function (r) { ok(r.d); }, error: function (x) { $('#acSecurityMessage').text((x.responseJSON && x.responseJSON.Message) || 'Unable to complete verification.').addClass('text-danger'); }, complete: function () { $('#acBusy').hide(); } }); }
           function acRequestOtp() { acSecurePost('RequestApproveCostOtp', { employeeCode: $('#acEmployeeCode').val() }, function (m) { $('#acSecurityMessage').text(m).removeClass('text-danger'); $('#acOtpRow').show(); }, 'Sending verification code...'); }
-          function acVerifyOtp() { acSecurePost('VerifyApproveCostOtp', { otp: $('#acOtp').val() }, function (r) { acUnlock(r.expiryUtc); }, 'Verifying OTP...'); }
-          function acUnlock(e) {
-              acExpiry = e; $('#acSecurityPanel,#acUnauthorized').hide(); $('#acProtected').show(); clearInterval(acTimer); acTick(); acTimer = setInterval(acTick, 1000); GetVendors_bindgrid();
+          function acVerifyOtp() { acSecurePost('VerifyApproveCostOtp', { otp: $('#acOtp').val() }, function (r) { acUnlock(r.expiryUtc, r.message); }, 'Verifying OTP...'); }
+          function acUnlock(e, msg) {
+              acExpiry = e; $('#acSecurityPanel,#acUnauthorized').hide(); $('#acProtected').show();
+              if (msg) {
+                  $('#acVerifyBanner').text(msg).show();
+              }
+              clearInterval(acTimer); acTick(); acTimer = setInterval(acTick, 1000);
+              GetVendors_bindgrid();
               const urlParams = new URLSearchParams(window.location.search);
               const vendorIdFromURL = urlParams.get('VendorID');
               if (vendorIdFromURL) {
@@ -318,7 +323,7 @@ div[class*="container"] {
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div id="acBusy" style="display: none; position: fixed; inset: 0; background: rgba(255,255,255,.72); z-index: 99999">
-        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%,-50%); background: white; padding: 24px; box-shadow: 0 4px 18px #888"><i class="fas fa-spinner fa-spin fa-2x"></i>
+        <div style="position: absolute; top: 40%; left: 50%; transform: translate(-50%,-50%); background: white; padding: 24px; box-shadow: 0 4px 18px #888; text-align: center;"><i class="fas fa-spinner fa-spin fa-2x" style="margin-bottom: 10px;"></i>
             <div id="acBusyText">Please wait...</div>
         </div>
     </div>
@@ -330,11 +335,12 @@ div[class*="container"] {
             <button type="button" class="btn btn-primary mt-2" onclick="acRequestOtp()">Send OTP</button><div id="acOtpRow" style="display: none" class="mt-3">
                 <input id="acOtp" class="form-control" placeholder="6-digit OTP" maxlength="6" />
                 <button type="button" class="btn btn-success mt-2" onclick="acVerifyOtp()">Verify OTP</button></div>
-            <div id="acSecurityMessage" class="mt-3"></div>
+            <div id="acSecurityMessage" class="mt-3 text-success"></div>
         </div>
     </div>
     <div id="acProtected" style="display: none">
-        <div class="alert alert-info">Access remaining: <b id="acCountdown">15:00</b></div>
+        <div id="acVerifyBanner" class="alert alert-success" style="display:none; max-width: 1290px; margin: 6px auto 4px auto;"></div>
+        <div class="alert alert-info">Access remaining: <b id="acCountdown" class="text-danger cm-countdown">15:00</b></div>
 
         <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 4px 20px 20px 20px; box-sizing: border-box;">
 
