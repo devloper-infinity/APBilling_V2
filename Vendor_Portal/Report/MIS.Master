@@ -111,7 +111,7 @@
 
                     $('#RateRevisionDateList').html(listHtml);
                     totalCount += 1;
-                    sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateRevisionDateModal');"><i class="fas fa-calendar-alt text-warning"></i> <strong>Rate Revision Date Notice</strong><br/><small class="text-light">Rate revision dates have expired.</small></div>`;
+                    sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateRevisionDateModal');"><i class="fas fa-calendar-alt text-info"></i> <strong>Rate Revision Date Notice</strong><br/><small class="text-light">Rate revision dates have expired.</small></div>`;
                 }
                 checkRateStatusNotification(totalCount, sidebarHtml);
             },
@@ -149,7 +149,7 @@
                     if (listHtml !== '') {
                         $('#RateStatusList').html(listHtml);
                         totalCount += 1;
-                        sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateStatusModal');"><i class="fas fa-check-circle text-danger"></i> <strong>Rate Approved Status Notice</strong><br/><small class="text-light">Rate approval pending.</small></div>`;
+                        sidebarHtml += `<div class="mb-3 p-3 bg-secondary rounded shadow-sm" style="cursor:pointer;" onclick="openManualModal('#RateStatusModal');"><i class="fas fa-check-circle text-success"></i> <strong>Rate Approved Status Notice</strong><br/><small class="text-light">Rate approval pending.</small></div>`;
                     }
                 }
                 finalizeNotifications(totalCount, sidebarHtml);
