@@ -431,6 +431,10 @@ div[class*="container"] {
     padding: 8px 16px !important;
 
 }
+.alert-danger {  
+    max-width: 1290px; 
+    margin: 6px auto 4px auto !important;
+}
  </style>
 
         <script src="../Scripts/Functions/VendorRegistrationMaster.js" type="text/javascript"></script>
@@ -477,7 +481,7 @@ div[class*="container"] {
             <div id="acBusyText">Please wait...</div>
         </div>
     </div>
-    <div id="acUnauthorized" class="alert alert-danger" style="display: none">You are not authorized to access Vendor Registration data.</div>
+    <div id="acUnauthorized" class="alert alert-danger" style="display: none">You are not authorized to access Vendor Registration Page data.</div>
     <div id="acSecurityPanel" class="card" style="display: none; max-width: 520px; margin: 25px auto">
         <div class="card-body">
             <h5>Vendor Registration verification</h5>

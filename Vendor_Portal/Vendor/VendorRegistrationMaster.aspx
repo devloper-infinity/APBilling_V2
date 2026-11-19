@@ -269,6 +269,10 @@ div[class*="container"] {
     display: inline-block;
     width: auto;
 }
+.alert-danger {  
+    max-width: 1290px; 
+    margin: 6px auto 4px auto !important;
+}
 .alert-info {  
     max-width: 1290px; 
     margin: 6px auto 4px auto !important;
