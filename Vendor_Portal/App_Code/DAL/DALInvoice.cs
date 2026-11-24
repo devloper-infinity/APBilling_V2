@@ -104,19 +104,6 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@Delay", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Delay"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Remark"]);
 
-            SQLHelper.AddParamToSQLCmd(cmd, "@SeletedVendorName", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["SeletedVendorName"]);
-
-            SQLHelper.AddParamToSQLCmd(cmd, "@VendorType", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["VendorType"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@ToCompany", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["ToCompany"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@EmailAddress", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["EmailAddress"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@ServicePeriodFrom", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["ServicePeriodFrom"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@ServicePeriodTo", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["ServicePeriodTo"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceCategory", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["InvoiceCategory"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceDescription", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["InvoiceDescription"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentTerms", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["PaymentTerms"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentMethod", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["PaymentMethod"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@BankAccount", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["BankAccount"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentFromCompany", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["PaymentFromCompany"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
             SQLHelper.ExecuteNonQueryCmd(cmd);
             int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
@@ -1447,7 +1434,7 @@ namespace Vendor_Portal.App_Code.DAL
 
         public int Insert_Infinity_InvoiceDetails_Sales(Hashtable htParam)
         {
-            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_Insert_Infinity_InvoiceDetails_Sales");
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "Insert_Infinity_InvoiceDetails_Sales");
             SQLHelper.AddParamToSQLCmd(cmd, "@Month", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["Month"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Year", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["Year"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@StatementDate", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["StatementDate"]);
@@ -1463,7 +1450,21 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@AddedBy", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["AddedBy"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ProjectId", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["ProjectId"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Delay", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Delay"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Remark"]); 
+            SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Remark"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@SeletedVendorName", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["SeletedVendorName"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorType", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["VendorType"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ToCompany", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["ToCompany"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmailAddress", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["EmailAddress"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ServicePeriodFrom", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["ServicePeriodFrom"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ServicePeriodTo", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, htParam["ServicePeriodTo"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceCategory", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["InvoiceCategory"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceDescription", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["InvoiceDescription"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentTerms", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["PaymentTerms"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentMethod", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["PaymentMethod"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@BankAccount", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["BankAccount"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@PaymentFromCompany", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["PaymentFromCompany"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
             SQLHelper.ExecuteNonQueryCmd(cmd);
             int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
