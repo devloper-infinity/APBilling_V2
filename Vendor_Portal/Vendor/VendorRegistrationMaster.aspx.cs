@@ -28,7 +28,7 @@ namespace Vendor_Portal.Vendor
         }
 
         [WebMethod(EnableSession = true)] public static string RequestApproveCostOtp(string employeeCode) { return CostMasterOtpSecurity.SendOtp(employeeCode, "VENDORREGISTRATION_MASTER"); }
-        [WebMethod(EnableSession = true)] public static object VerifyApproveCostOtp(string otp) { DateTime e = CostMasterOtpSecurity.VerifyOtp(otp, "VENDORREGISTRATION_MASTER"); return new { message = "Verification successful. You can access Vendor Registration Master Page for the next 20 minutes.", expiryUtc = e.ToString("o") }; }
+        [WebMethod(EnableSession = true)] public static object VerifyApproveCostOtp(string otp) { DateTime e = CostMasterOtpSecurity.VerifyOtp(otp, "VENDORREGISTRATION_MASTER"); return new { message = "Verification successful. You can access Vendor Registration Master Page for the next 15 minutes.", expiryUtc = e.ToString("o") }; }
         [WebMethod(EnableSession = true)] public static string RestartApproveCostVerification() { CostMasterOtpSecurity.RestartVerification("VENDORREGISTRATION_MASTER"); return "Enter your Employee Code to request a new OTP."; }
 
         [WebMethod(EnableSession = true)]

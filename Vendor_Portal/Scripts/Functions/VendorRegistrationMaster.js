@@ -358,7 +358,14 @@ function btnsubmitInsertVendorRegistration() {
         Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Tax ID' }).then(() => { $('#vendorreg_TaxID').focus(); });
         return false;
     }
-
+    if (Number(accountNo) <= 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Invalid Account Number',
+            text: 'Account number must be greater than 0!'
+        });
+        return false;
+    }
     var paymentDocFile = $('#vendorreg_PaymentDocument')[0] ? $('#vendorreg_PaymentDocument')[0].files[0] : null;
     var w9DocFile = $('#vendorreg_W9Form')[0] ? $('#vendorreg_W9Form')[0].files[0] : null;
     var existingPaymentDocPath = $('#lnk_paymentdoc_download').attr('data-original-path') || "";
@@ -899,7 +906,7 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
     var BillingCycle = $('#vendorreg_BillingCycle').val();
     var EmployeeID = $('#vendorreg_EmployeeList').val();
 
-    if (!vendorRegistrationID || !fromDate || !rateType || !rate || !BillingCycle || !EmployeeID) {
+    if (!vendorRegistrationID || !fromDate || !rateType || !rate || !BillingCycle) {
         Swal.fire({
             icon: 'warning',
             title: 'Required Field',
@@ -907,7 +914,15 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
         });
         return;
     }
-
+    if (isNaN(parseFloat(rate)) || parseFloat(rate) <= 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Invalid Rate',
+            text: 'Rate must be greater than 0!'
+        });
+        $('#vendorreg_rate').focus();
+        return;
+    }
     var isUpdate = parseInt(rateID) > 0;
 
     var htParam = {

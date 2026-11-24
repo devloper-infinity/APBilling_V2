@@ -131,7 +131,7 @@
     padding: 2px 0 40px;
 }
     </style>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         window.onload = function () {
             document.getElementById('RemoteUWSalesInvoice').addEventListener('change', getFileNamestewartinvoice);
@@ -204,7 +204,7 @@
                     <!-- Column 1 -->
                     <div class="col-md-6">
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Vendor Name:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Vendor Name: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <select class="form-control" id="RemoteUWSales_VendorName" name="RemoteUWSales_VendorName">
                                     <option value="">Select</option>
@@ -212,25 +212,25 @@
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>To Company:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>To Company: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="Invoicesales_ToCompany" name="Invoicesales_ToCompany" class="form-control" disabled/>
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Invoice No:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Invoice No: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_invoiceaNo_canopy" name="RemoteUWSales_invoiceaNo_canopy" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Service Period From:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Service Period From: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="date" id="RemoteUWSales_ServicePeriodFrom" name="RemoteUWSales_invoicedate" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Invoice Category:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Invoice Category: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <select id="saleinvoice_InvoiceCategory" name="saleinvoice_InvoiceCategory" class="form-control">
                                     <option value="">Select</option>
@@ -244,19 +244,19 @@
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Invoice Amount($):</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Invoice Amount($): <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_invoiceamount_canopy" name="RemoteUWSales_invoiceamount_canopy" class="form-control" disabled/>
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center"> 
-                            <label class="col-sm-4 col-form-label"><b>Payment Terms:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Payment Terms: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_PaymentTerms" name="RemoteUWSales_PaymentTerms" class="form-control" disabled />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Bank Account:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Bank Account: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_BankAccount" name="RemoteUWSales_BankAccount" class="form-control" disabled />
                             </div>
@@ -265,44 +265,44 @@
                     <!-- Column 2 -->
                     <div class="col-md-6">
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Vendor Type:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Vendor Type: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                <input type="text" class="form-control" id="Invoicesales_vendortype" name="Invoicesales_vendortype" disabled />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Email Address:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Email Address: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="Invoicesales_EmailAddress" name="Invoicesales_EmailAddress" class="form-control" disabled/>
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Invoice Date:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Invoice Date: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="date" id="RemoteUWSales_invoicedate" name="RemoteUWSales_invoicedate" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Service Period To:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Service Period To: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="date" id="RemoteUWSales_ServicePeriodTo" name="RemoteUWSales_ServicePeriodTo" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Invoice Description:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Invoice Description: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_InvoiceDescription" name="RemoteUWSales_InvoiceDescription" class="form-control" />
                             </div>
                         </div>
 
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Due Date:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Due Date: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="date" id="cm_DueDateSales" name="cm_DueDateSales" class="form-control" />
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Payment Method:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Payment Method: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                                                 <input type="text" id="Invoicesales_PaymentMethod" name="Invoicesales_PaymentMethod" class="form-control" disabled/>
 
@@ -310,7 +310,7 @@
                             </div>
                         </div>
                         <div class="form-group form-group-item row align-items-center">
-                            <label class="col-sm-4 col-form-label"><b>Payment From Company:</b></label>
+                            <label class="col-sm-4 col-form-label"><b>Payment From Company: <span style="color: red;">*</span></b></label>
                             <div class="col-sm-8">
                                 <input type="text" id="RemoteUWSales_PaymentFromCompany" name="RemoteUWSales_PaymentFromCompany" class="form-control" disabled />
                             </div>

@@ -885,7 +885,7 @@ div[class*="container"] {
                             </select>
                         </div>
                         <div class="col-md-6 form-group">
-                            <label for="vendorreg_EmployeeList">Employee <span style="color: red;">*</span></label>
+                            <label for="vendorreg_EmployeeList">Employee </label>
                             <select class="form-control" id="vendorreg_EmployeeList" name="vendorreg_EmployeeList">
                                 <option value="">Select Employee</option>
                             </select>

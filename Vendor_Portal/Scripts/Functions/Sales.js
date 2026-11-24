@@ -45,7 +45,73 @@ function RemoteUWSales_submit() {
     var Invoicesales_PaymentMethod = document.getElementById("Invoicesales_PaymentMethod").value;
     var RemoteUWSales_BankAccount = document.getElementById("RemoteUWSales_BankAccount").value;
     var RemoteUWSales_PaymentFromCompany = document.getElementById("RemoteUWSales_PaymentFromCompany").value;
-    //var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].value;
+
+
+   
+    if ( VendorName === "Select" || VendorName === "") {
+        showAlert("Please select Vendor Name.");
+        return false;
+    }
+    if (invoicedate === "") {
+        showAlert("Please select Invoice Date.");
+        return false;
+    }
+    if (duedate === "") {
+        showAlert("Please select Due Date.");
+        return false;
+    }
+    if (invoiceamount === "") {
+        showAlert("Please enter a valid Invoice Amount.");
+        return false;
+    }
+    if (invoicenumber === "") {
+        showAlert("Please enter Invoice Number.");
+        return false;
+    }
+    if (Invoicesales_vendortype === "" || Invoicesales_vendortype === "0") {
+        showAlert("Please select Vendor Type.");
+        return false;
+    }
+    if (Invoicesales_ToCompany === "") {
+        showAlert("Please enter To Company.");
+        return false;
+    }
+    if (Invoicesales_EmailAddress === "") {
+        showAlert("Please enter Email Address.");
+        return false;
+    }
+    if (RemoteUWSales_ServicePeriodFrom === "") {
+        showAlert("Please select Service Period From date.");
+        return false;
+    }
+    if (RemoteUWSales_ServicePeriodTo === "") {
+        showAlert("Please select Service Period To date.");
+        return false;
+    }
+    if (saleinvoice_InvoiceCategory === "" || saleinvoice_InvoiceCategory === "0") {
+        showAlert("Please select Invoice Category.");
+        return false;
+    }
+    if (RemoteUWSales_InvoiceDescription === "") {
+        showAlert("Please enter Invoice Description.");
+        return false;
+    }
+    if (RemoteUWSales_PaymentTerms === "" || RemoteUWSales_PaymentTerms === "0") {
+        showAlert("Please select Payment Terms.");
+        return false;
+    }
+    if (Invoicesales_PaymentMethod === "" || Invoicesales_PaymentMethod === "0") {
+        showAlert("Please select Payment Method.");
+        return false;
+    }
+    if (RemoteUWSales_BankAccount === "" ) {
+        showAlert("Please select Bank Account.");
+        return false;
+    }
+    if (RemoteUWSales_PaymentFromCompany === "" || RemoteUWSales_PaymentFromCompany === "0") {
+        showAlert("Please select Payment From Company.");
+        return false;
+    }
   
     $('#load1').show();
     PageMethods.InsertRemoteUWSalesInvoice(
@@ -344,3 +410,19 @@ $(document).ready(function () {
         });
     });
 });
+
+function showAlert(message) {
+    // Jar tu SweetAlert2 (Swal.fire) vaprat asshil tar he use kar:
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Required Field',
+            text: message,
+            confirmButtonColor: '#3085d6'
+        });
+    }
+    // Jar juna SweetAlert (swal) asel tar he chalel:
+    else {
+        swal("Required Field", message, "warning");
+    }
+}
