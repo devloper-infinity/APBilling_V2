@@ -679,5 +679,10 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.GetSalesVendors();
         }
+
+        public int Insert_Infinity_InvoiceDetails_Sales(Hashtable htParam)
+        {
+            return dalInvoice.Insert_Infinity_InvoiceDetails_Sales(htParam);
+        }
     }
 }

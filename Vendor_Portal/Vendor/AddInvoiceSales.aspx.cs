@@ -162,7 +162,7 @@ namespace Vendor_Portal.Vendor
             htParam.Add("ProjectId", 0);
             htParam.Add("Remark", "Sales-Invoice :" + "Sales" + '~' + Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
 
-            returnvalue = new bllInvoice().Insert_Infinity_InvoiceDetails(htParam);
+            returnvalue = new bllInvoice().Insert_Infinity_InvoiceDetails_Sales(htParam);
 
             if (returnvalue > 0)
             {
