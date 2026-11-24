@@ -29,7 +29,7 @@
     <script>
         $(document).ready(function () {
             var currentUserId = parseInt($('#hdfCurrentUserId').val()) || 0;
-            if (currentUserId === 235 || currentUserId === 5 || currentUserId === 6959 ) {
+            if (currentUserId === 235 || currentUserId === 5 || currentUserId === 6959 || currentUserId === 12) {
                 loadPendingNotifications();
                 $(document).on('click', 'a[href*="Logout.aspx"]', function () {
                     sessionStorage.removeItem('popupsShown');
