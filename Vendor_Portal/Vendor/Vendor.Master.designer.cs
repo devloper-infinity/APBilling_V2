@@ -213,6 +213,33 @@ namespace Vendor_Portal.Vendor
         protected global::System.Web.UI.HtmlControls.HtmlAnchor A1;
 
         /// <summary>
+        /// Menu_SalesInvoice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl Menu_SalesInvoice;
+
+        /// <summary>
+        /// A5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor A5;
+
+        /// <summary>
+        /// A9 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlAnchor A9;
+
+        /// <summary>
         /// li_IPSReport control.
         /// </summary>
         /// <remarks>

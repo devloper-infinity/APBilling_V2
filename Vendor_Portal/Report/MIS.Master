@@ -436,6 +436,15 @@
 
        </ul>
    </li>
+
+                               <li class="nav-item dropdown" id="Menu_SalesInvoice" runat="server" >
+       <a id="SalesInvoice" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-toggle">Sales Invoice</a>
+       <ul aria-labelledby="pmutilities" class="dropdown-menu border-0 shadow">
+           <li><a href="AddInvoiceSales.aspx" id="A5" runat="server" class="dropdown-item">Sales Invoice</a></li>
+           <li><a href="InvoiceApproval.aspx?type=Sales" id="A9" runat="server" class="dropdown-item">Approve Sales Invoice</a></li>
+
+       </ul>
+   </li>
                           
                         </ul>
                     </div>

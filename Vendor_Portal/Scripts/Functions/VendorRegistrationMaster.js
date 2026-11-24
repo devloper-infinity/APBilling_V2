@@ -95,6 +95,13 @@ function EditConfiguration(vendorId) {
                 $('#vendorreg_acno').val(row.AccountNumber || '');
                 $('#vendorreg_address').val(row.Address || '');
                 $('#vendorreg_remark').val(row.Remark || '');
+
+                $('#vendorreg_Domain').val((row.Domain || '').trim());
+                $('#vendorreg_PaymentMethod').val((row.PaymentMethod || '').trim());
+                $('#vendorreg_Routingno').val(row.RoutingNo || '');
+                $('#vendorreg_SSNEIN').val(row.TaxSSNEIN || '');
+                $('#vendorreg_TaxID').val(row.TaxID || '');
+
                 var vendorIdVal = row.VendorRegistrationID || row.VendorID;
                 $('#vendorregother_vendor').val(vendorIdVal).prop('disabled', true);
                 $('#vendorreg_expectedstartdate').val(row.StartDate || '');          
@@ -107,9 +114,10 @@ function EditConfiguration(vendorId) {
                 $('#vendorreg_agreementexpirydate').val(row.ExpiryDate || '');
                 $('#vendorreg_agreementclientsigned').val(row.SignedByClient || '');
                 $('#vendorreg_agreementinfinitysigned').val(row.SignedByInfinity || '');
+
+                // Agreement Copy
                 if (row.AgreementCopy && row.AgreementCopy !== "") {
                     var dbPath = row.AgreementCopy.replace(/\\/g, '/');
-
                     var virtualIndex = dbPath.indexOf('VendorDocument');
                     var fileUrl = '';
 
@@ -119,25 +127,30 @@ function EditConfiguration(vendorId) {
                     } else {
                         fileUrl = dbPath.replace('~', '');
                     }
+
+                    var fileName = dbPath.split('/').pop();
 
                     $('#lnk_agreementattachment_download')
                         .attr('href', fileUrl)
-                        .attr('download', '')
+                        .attr('download', fileName)
                         .attr('data-original-path', row.AgreementCopy)
                         .show();
+
+                    $('#lbl_agreementattachment_name')
+                        .text(fileName)
+                        .attr('title', fileName)
+                        .show();
                 } else {
-                    $('#lnk_agreementattachment_download').hide();
+                    $('#lnk_agreementattachment_download').hide().removeAttr('data-original-path');
+                    $('#lbl_agreementattachment_name').text('').hide();
                 }
 
-
-
-
-
+                // Work Document
                 if (row.WorkDocument && row.WorkDocument !== "") {
                     var dbPath = row.WorkDocument.replace(/\\/g, '/');
                     var virtualIndex = dbPath.indexOf('VendorDocument');
-
                     var fileUrl = '';
+
                     if (virtualIndex !== -1) {
                         var baseUrl = window.location.origin;
                         fileUrl = baseUrl + '/' + dbPath.substring(virtualIndex);
@@ -145,16 +158,76 @@ function EditConfiguration(vendorId) {
                         fileUrl = dbPath.replace('~', '');
                     }
 
+                    var fileName = dbPath.split('/').pop();
+
                     $('#lnk_workdoc_download')
                         .attr('href', fileUrl)
-                        .attr('download', '')
+                        .attr('download', fileName)
                         .attr('data-original-path', row.WorkDocument)
                         .show();
+
+                    $('#lbl_workdoc_name')
+                        .text(fileName)
+                        .attr('title', fileName)
+                        .show();
                 } else {
-                    $('#lnk_workdoc_download').hide();
+                    $('#lnk_workdoc_download').hide().removeAttr('data-original-path');
+                    $('#lbl_workdoc_name').text('').hide();
                 }
 
+                if (row.PaymentDocument && row.PaymentDocument !== "") {
+                    var dbPath = row.PaymentDocument.replace(/\\/g, '/');
+                    var virtualIndex = dbPath.indexOf('VendorDocument');
+                    var fileUrl = virtualIndex !== -1
+                        ? window.location.origin + '/' + dbPath.substring(virtualIndex)
+                        : dbPath.replace('~', '');
 
+                    var fileName = dbPath.split('/').pop();
+
+                    $('#lnk_paymentdoc_download')
+                        .attr('href', fileUrl)
+                        .attr('download', fileName)
+                        .attr('data-original-path', row.PaymentDocument)
+                        .show();
+
+                    $('#lbl_paymentdoc_name')
+                        .text(fileName)
+                        .attr('title', fileName)
+                        .show();
+                } else {
+                    $('#lnk_paymentdoc_download').hide().removeAttr('data-original-path');
+                    $('#lbl_paymentdoc_name').text('').hide();
+                }
+
+                var w9DocPath = row.W9FormDocument || row.W9Form || "";
+                if (w9DocPath && w9DocPath !== "") {
+                    var dbPath = w9DocPath.replace(/\\/g, '/');
+                    var virtualIndex = dbPath.indexOf('VendorDocument');
+                    var fileUrl = '';
+
+                    if (virtualIndex !== -1) {
+                        var baseUrl = window.location.origin;
+                        fileUrl = baseUrl + '/' + dbPath.substring(virtualIndex);
+                    } else {
+                        fileUrl = dbPath.replace('~', '');
+                    }
+
+                    var fileName = dbPath.split('/').pop();
+
+                    $('#lnk_w9doc_download')
+                        .attr('href', fileUrl)
+                        .attr('download', fileName)
+                        .attr('data-original-path', w9DocPath)
+                        .show();
+
+                    $('#lbl_w9doc_name')
+                        .text(fileName)
+                        .attr('title', fileName)
+                        .show();
+                } else {
+                    $('#lnk_w9doc_download').hide().removeAttr('data-original-path');
+                    $('#lbl_w9doc_name').text('').hide();
+                }
 
                 $('#vendorreg_btnsubmitstep1').text('Update');
                 $('#vendorreg_btnsubmit').text('Update');
@@ -216,208 +289,231 @@ function btnsubmitInsertVendorRegistration() {
     var address = $('#vendorreg_address').val().trim();
     var remark = $('#vendorreg_remark').val().trim();
     var VendorType = $('#vendorreg_individualcomp').val().trim();
+    var VendorDomain = $('#vendorreg_Domain').val().trim();
+    var VendorPaymentMethod = $('#vendorreg_PaymentMethod').val().trim();
+    var VendorRoutingNo = $('#vendorreg_Routingno').val().trim();
+    var taxSSNEIN = ($('#vendorreg_SSNEIN').val() || '').trim();
+    var taxID = ($('#vendorreg_TaxID').val() || '').trim();
 
+    if (VendorDomain === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please Vendor Domain' }).then(() => { $('#vendorreg_Domain').focus(); });
+        return false;
+    }
     if (VendorType === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please Vendor Type'
-        }).then(() => {
-            $('#vendorreg_individualcomp').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please Vendor Type' }).then(() => { $('#vendorreg_individualcomp').focus(); });
         return false;
     }
     if (vendorName === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Vendor Name.'
-        }).then(() => {
-            $('#vendorreg_vendorname').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Vendor Name.' }).then(() => { $('#vendorreg_vendorname').focus(); });
         return false;
     }
-
     if (companyName === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please select a Company Name.'
-        }).then(() => {
-            $('#vendorreg_companyname').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please select a Company Name.' }).then(() => { $('#vendorreg_companyname').focus(); });
         return false;
     }
-
     if (contactPerson === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Contact Person name.'
-        }).then(() => {
-            $('#vendorreg_contactperson').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Contact Person name.' }).then(() => { $('#vendorreg_contactperson').focus(); });
         return false;
     }
     if (contactNo === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Contact No'
-        }).then(() => {
-            $('#vendorreg_contactno').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Contact No' }).then(() => { $('#vendorreg_contactno').focus(); });
         return false;
     }
-   
+    if (email === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Email' }).then(() => { $('#vendorreg_email').focus(); });
+        return false;
+    }
     if (email !== "") {
         var emailRegex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if (!emailRegex.test(email)) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Invalid Input',
-                text: 'Please enter a valid Email ID.'
-            }).then(() => {
-                $('#vendorreg_email').focus();
-            });
+            Swal.fire({ icon: 'warning', title: 'Invalid Input', text: 'Please enter a valid Email ID.' }).then(() => { $('#vendorreg_email').focus(); });
             return false;
         }
     }
-
-    if (email === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Email'
-        }).then(() => {
-            $('#vendorreg_email').focus();
-        });
-        return false;
-    }
     if (payVendorName === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Pay Vendor Name'
-        }).then(() => {
-            $('#vendorreg_payvendorname').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Pay Vendor Name' }).then(() => { $('#vendorreg_payvendorname').focus(); });
         return false;
     }
-
     if (accountNo === "") {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Required Field',
-            text: 'Please enter Account No'
-        }).then(() => {
-            $('#vendorreg_acno').focus();
-        });
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Account No' }).then(() => { $('#vendorreg_acno').focus(); });
+        return false;
+    }
+    if (VendorPaymentMethod === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please Vendor Payment Method' }).then(() => { $('#vendorreg_PaymentMethod').focus(); });
+        return false;
+    }
+    if (VendorRoutingNo === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Routing No' }).then(() => { $('#vendorreg_Routingno').focus(); });
+        return false;
+    }
+    if (address === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Address' }).then(() => { $('#vendorreg_address').focus(); });
+        return false;
+    }
+    if (taxSSNEIN === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter SSN/EIN' }).then(() => { $('#vendorreg_SSNEIN').focus(); });
+        return false;
+    }
+    if (taxID === "") {
+        Swal.fire({ icon: 'warning', title: 'Required Field', text: 'Please enter Tax ID' }).then(() => { $('#vendorreg_TaxID').focus(); });
         return false;
     }
 
-    if (address === "") {
+    var paymentDocFile = $('#vendorreg_PaymentDocument')[0] ? $('#vendorreg_PaymentDocument')[0].files[0] : null;
+    var w9DocFile = $('#vendorreg_W9Form')[0] ? $('#vendorreg_W9Form')[0].files[0] : null;
+    var existingPaymentDocPath = $('#lnk_paymentdoc_download').attr('data-original-path') || "";
+    var existingW9DocPath = $('#lnk_w9doc_download').attr('data-original-path') || "";
+
+    if (!w9DocFile && !existingW9DocPath) {
         Swal.fire({
             icon: 'warning',
             title: 'Required Field',
-            text: 'Please enter Address'
+            text: 'Please upload W-9 Form.'
         }).then(() => {
-            $('#vendorreg_address').focus();
+            $('#vendorreg_W9Form').focus();
         });
         return false;
     }
 
     const urlParams = new URLSearchParams(window.location.search);
     const vendorIdFromURL = urlParams.get('VendorID') || '0';
-    var formData = {
-        vendorName: vendorName,
-        companyName: companyName,
-        contactPerson: contactPerson,
-        contactNo: contactNo,
-        emailID: email,
-        websiteURL: webUrl,
-        address: address,
-        payToVendorName: payVendorName,
-        accountNumber: accountNo,
-        remark: remark,
-        vendorId: vendorIdFromURL,
-        VendorType: VendorType
-    };
 
-    $.ajax({
-        type: "POST",
-        url: "VendorRegistration.aspx/InsertVendorRegistration",
-        data: JSON.stringify(formData),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        success: function (response) {
-            var newVendorID = response.d;
+    function sendVendorData(paymentDocBase64, w9DocBase64) {
+        var formData = {
+            vendorName: vendorName,
+            companyName: companyName,
+            contactPerson: contactPerson,
+            contactNo: contactNo,
+            emailID: email,
+            websiteURL: webUrl,
+            address: address,
+            payToVendorName: payVendorName,
+            accountNumber: accountNo,
+            remark: remark,
+            vendorId: parseInt(vendorIdFromURL, 10) || 0,
+            VendorType: VendorType,
+            VendorDomain: VendorDomain,
+            VendorPaymentMethod: VendorPaymentMethod,
+            VendorRoutingNo: VendorRoutingNo,
+            taxSSNEIN: taxSSNEIN,
+            taxID: taxID,
+            paymentDocument: paymentDocBase64 || existingPaymentDocPath || "",
+            w9FormDocument: w9DocBase64 || existingW9DocPath || ""
+        };
 
-            if (newVendorID > 0) {
-                savedVendorID = newVendorID;
-                $('input[id$="hdfVendorID"]').val(newVendorID);
+        $.ajax({
+            type: "POST",
+            url: "VendorRegistration.aspx/InsertVendorRegistration",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var newVendorID = response.d;
 
-                var successMessage = (parseInt(vendorIdFromURL) > 0)
-                    ? 'Vendor updated successfully!'
-                    : 'Vendor added successfully!';
+                if (newVendorID > 0) {
+                    savedVendorID = newVendorID;
+                    $('input[id$="hdfVendorID"]').val(newVendorID);
 
+                    var successMessage = (parseInt(vendorIdFromURL) > 0)
+                        ? 'Vendor updated successfully!'
+                        : 'Vendor added successfully!';
+
+                    Swal.fire({
+                        title: 'Success!',
+                        text: successMessage,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((res) => {
+                        if (res.isConfirmed) {
+                            window.location.href = 'VendorRegistrationMaster.aspx';
+                            $('#vendorreg_vendorname').val('');
+                            $('#vendorreg_companyname').val('');
+                            $('#vendorreg_contactperson').val('');
+                            $('#vendorreg_contactno').val('');
+                            $('#vendorreg_email').val('');
+                            $('#vendorreg_weburl').val('');
+                            $('#vendorreg_payvendorname').val('');
+                            $('#vendorreg_acno').val('');
+                            $('#vendorreg_address').val('');
+                            $('#vendorreg_remark').val('');
+                            $('#vendorreg_individualcomp').val('').trigger('change');
+                            $('input[id$="hdfVendorID"]').val('0');
+                            $('#vendorreg_SSNEIN').val('');
+                            $('#vendorreg_TaxID').val('');
+                            $('#vendorreg_PaymentDocument').val('');
+                            $('#vendorreg_W9Form').val('');
+                            $('#lnk_paymentdoc_download').hide().removeAttr('data-original-path');
+                            $('#lnk_w9doc_download').hide().removeAttr('data-original-path');
+                        }
+                    });
+                    loadVendors();
+                }
+                else if (newVendorID === -1) {
+                    Swal.fire({
+                        title: 'Duplicate Entry!',
+                        text: 'A vendor with this name already exists.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                }
+                else {
+                    var errorMessage = (parseInt(vendorIdFromURL) > 0)
+                        ? 'Something went wrong while updating vendor data.'
+                        : 'Something went wrong while saving vendor data.';
+
+                    Swal.fire({
+                        title: 'Error!',
+                        text: errorMessage,
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
                 Swal.fire({
-                    title: 'Success!',
-                    text: successMessage,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((res) => {
-                    if (res.isConfirmed) {
-                        window.location.href = 'VendorRegistrationMaster.aspx';
-                        $('#vendorreg_vendorname').val('');
-                        $('#vendorreg_companyname').val('');
-                        $('#vendorreg_contactperson').val('');
-                        $('#vendorreg_contactno').val('');
-                        $('#vendorreg_email').val('');
-                        $('#vendorreg_weburl').val('');
-                        $('#vendorreg_payvendorname').val('');
-                        $('#vendorreg_acno').val('');
-                        $('#vendorreg_address').val('');
-                        $('#vendorreg_remark').val('');
-                        $('#vendorreg_individualcomp').val('').trigger('change');
-                        $('input[id$="hdfVendorID"]').val('0');
-                       
-
-                        
-                    }
-                });
-                loadVendors();
-            }
-            else if (newVendorID === -1) {
-                Swal.fire({
-                    title: 'Duplicate Entry!',
-                    text: 'A vendor with this name already exists.',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-            }
-            else {
-                var errorMessage = (parseInt(vendorIdFromURL) > 0)
-                    ? 'Something went wrong while updating vendor data.'
-                    : 'Something went wrong while saving vendor data.';
-
-                Swal.fire({
-                    title: 'Error!',
-                    text: errorMessage,
+                    title: 'AJAX Error!',
+                    text: "An error occurred while saving data: " + error,
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
             }
-        
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'AJAX Error!',
-                text: "An error occurred while saving data: " + error,
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
+        });
+    }
+
+    function processPaymentDoc(callback) {
+        if (!paymentDocFile) {
+            callback("");
+            return;
         }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            callback(paymentDocFile.name + "|" + e.target.result);
+        };
+        reader.onerror = function () {
+            callback("");
+        };
+        reader.readAsDataURL(paymentDocFile);
+    }
+
+    function processW9Doc(callback) {
+        if (!w9DocFile) {
+            callback("");
+            return;
+        }
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            callback(w9DocFile.name + "|" + e.target.result);
+        };
+        reader.onerror = function () {
+            callback("");
+        };
+        reader.readAsDataURL(w9DocFile);
+    }
+
+    processPaymentDoc(function (paymentDocBase64) {
+        processW9Doc(function (w9DocBase64) {
+            sendVendorData(paymentDocBase64, w9DocBase64);
+        });
     });
 
     return false;
@@ -425,6 +521,7 @@ function btnsubmitInsertVendorRegistration() {
 
 
 //Add / Update Vendor Other Info
+
 function btnsubmitInsertVendorOtherInfo() {
     var vendorRegistrationID = $('#vendorregother_vendor').val();
     var startDate = $('#vendorreg_expectedstartdate').val();
@@ -615,7 +712,6 @@ function btnsubmitInsertVendorOtherInfo() {
 
     return false;
 }
-
 
 //Load Vendor For Dropdown
 function loadVendors() {

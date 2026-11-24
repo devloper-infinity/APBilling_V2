@@ -24,7 +24,10 @@ namespace Vendor_Portal
                 Menu_Billing.Visible = true;
             }
 
-
+            else if (LoginID == 209 || LoginID == 8128 || LoginID == 5)
+            {
+                Menu_SalesInvoice.Visible = true;
+            }
 
             else if (LoginID == 291) //PPL
             {
@@ -46,7 +49,7 @@ namespace Vendor_Portal
                 //li_AddInvSales.Visible = false;
                 //li_AddInvSales.Visible = false;
 
-
+                Menu_SalesInvoice.Visible = false;
 
 
             }
@@ -70,6 +73,7 @@ namespace Vendor_Portal
                 li_IPSMGTReport.Visible = false;
                 //li_AddInvSales.Visible = false;
                 //li_AddInvSales.Visible = true;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else if (LoginID == 9251) //MPV
@@ -90,6 +94,7 @@ namespace Vendor_Portal
                // li_ERPExcelFormat.Visible = false;
                 li_CanopyMGTReport.Visible = false;
                 li_IPSMGTReport.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else if (LoginID == 394 || LoginID == 9858 || LoginID == 9852) //IT
@@ -110,6 +115,7 @@ namespace Vendor_Portal
                 li_UpdatePaidDateOther.Visible = false;
                 li_CanopyMGTReport.Visible = false;
                 li_IPSMGTReport.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else if (LoginID == 9961)
@@ -129,6 +135,7 @@ namespace Vendor_Portal
                 li_UpdatePaidDateOther.Visible = false;
                 li_CanopyMGTReport.Visible = true;
                 li_IPSMGTReport.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else if (LoginID == 6959 || LoginID == 292 || LoginID == 277 || LoginID == 216)  // Canopy for 
@@ -148,6 +155,7 @@ namespace Vendor_Portal
                 li_UpdatePaidDateOther.Visible = false;
                 li_CanopyMGTReport.Visible = false;
                 li_IPSMGTReport.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else
@@ -168,6 +176,7 @@ namespace Vendor_Portal
                 li_UpdatePaidDateOther.Visible = false;
                 li_CanopyMGTReport.Visible = false;
                 li_IPSMGTReport.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
 

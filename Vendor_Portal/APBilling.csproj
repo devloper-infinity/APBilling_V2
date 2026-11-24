@@ -2833,6 +2833,8 @@
     <Folder Include="TempFiles\" />
     <Folder Include="Temp\" />
     <Folder Include="VendorDocument\AgreementCopy\" />
+    <Folder Include="VendorDocument\PaymentDocument\" />
+    <Folder Include="VendorDocument\W9FormDocument\" />
     <Folder Include="VendorDocument\WorkDocument\" />
   </ItemGroup>
   <PropertyGroup>

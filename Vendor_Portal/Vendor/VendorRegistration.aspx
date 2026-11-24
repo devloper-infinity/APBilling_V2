@@ -439,32 +439,43 @@ div[class*="container"] {
 
         <script src="../Scripts/Functions/VendorRegistrationMaster.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        var acCsrf ='<%= HttpUtility.JavaScriptStringEncode(ApproveCostCsrfToken) %>', acAllowed =<%= ApproveCostAccessAllowed?"true":"false" %>, acAuthorized=<%= ApproveCostAuthorized?"true":"false" %>, acExpiry='<%= HttpUtility.JavaScriptStringEncode(ApproveCostExpiryUtc) %>', acTimer;
-        $.ajaxPrefilter(function (o, x, h) { if (o.url && o.url.indexOf('VendorRegistration.aspx/') >= 0) h.setRequestHeader('X-CostMaster-CSRF', acCsrf); });
-        function acSecurePost(m, d, ok, msg) { $('#acBusyText').text(msg || 'Please wait...'); $('#acBusy').show(); $.ajax({ type: 'POST', url: 'VendorRegistration.aspx/' + m, data: JSON.stringify(d || {}), dataType: 'json', contentType: 'application/json; charset=utf-8', headers: { 'X-CostMaster-CSRF': acCsrf }, success: function (r) { ok(r.d); }, error: function (x) { $('#acSecurityMessage').text((x.responseJSON && x.responseJSON.Message) || 'Unable to complete verification.').addClass('text-danger'); }, complete: function () { $('#acBusy').hide(); } }); }
-        function acRequestOtp() { acSecurePost('RequestApproveCostOtp', { employeeCode: $('#acEmployeeCode').val() }, function (m) { $('#acSecurityMessage').text(m).removeClass('text-danger'); $('#acOtpRow').show(); }, 'Sending verification code...'); }
-        function acVerifyOtp() { acSecurePost('VerifyApproveCostOtp', { otp: $('#acOtp').val() }, function (r) { acUnlock(r.expiryUtc, r.message); }, 'Verifying OTP...'); }
-        function acUnlock(e,msg) {
-            acExpiry = e; $('#acSecurityPanel,#acUnauthorized').hide(); $('#acProtected').show();
-            if (msg) {
-                $('#acVerifyBanner').text(msg).show();
-            }
-            clearInterval(acTimer); acTick(); acTimer = setInterval(acTick, 1000);
-            loadVendors();
-            GetEmployeeForRateConfig();
-            GetRateConfigProcess();
-            const urlParams = new URLSearchParams(window.location.search);
-            const vendorIdFromURL = urlParams.get('VendorID');
-            var vendorId = vendorIdFromURL ? parseInt(vendorIdFromURL) : 0;
+     <script>
+         var acCsrf ='<%= HttpUtility.JavaScriptStringEncode(ApproveCostCsrfToken) %>', acAllowed =<%= ApproveCostAccessAllowed?"true":"false" %>, acAuthorized=<%= ApproveCostAuthorized?"true":"false" %>, acExpiry='<%= HttpUtility.JavaScriptStringEncode(ApproveCostExpiryUtc) %>', acTimer;
+         $.ajaxPrefilter(function (o, x, h) { if (o.url && o.url.indexOf('VendorRegistration.aspx/') >= 0) h.setRequestHeader('X-CostMaster-CSRF', acCsrf); });
+         function acSecurePost(m, d, ok, msg) { $('#acBusyText').text(msg || 'Please wait...'); $('#acBusy').show(); $.ajax({ type: 'POST', url: 'VendorRegistration.aspx/' + m, data: JSON.stringify(d || {}), dataType: 'json', contentType: 'application/json; charset=utf-8', headers: { 'X-CostMaster-CSRF': acCsrf }, success: function (r) { ok(r.d); }, error: function (x) { $('#acSecurityMessage').text((x.responseJSON && x.responseJSON.Message) || 'Unable to complete verification.').addClass('text-danger'); }, complete: function () { $('#acBusy').hide(); } }); }
+         function acRequestOtp() { acSecurePost('RequestApproveCostOtp', { employeeCode: $('#acEmployeeCode').val() }, function (m) { $('#acSecurityMessage').text(m).removeClass('text-danger'); $('#acOtpRow').show(); }, 'Sending verification code...'); }
+         function acVerifyOtp() { acSecurePost('VerifyApproveCostOtp', { otp: $('#acOtp').val() }, function (r) { acUnlock(r.expiryUtc, r.message); }, 'Verifying OTP...'); }
+         function acUnlock(e, msg) {
+             acExpiry = e;
+             $('#acSecurityPanel,#acUnauthorized').hide();
+             $('#acProtected').show();
+             if (msg) {
+                 $('#acVerifyBanner').text(msg).show();
+             }
 
-            loadRateConfiguration(vendorId);
-        }
-        function acTick() { var s = Math.max(0, Math.ceil((Date.parse(acExpiry) - Date.now()) / 1000)); $('#acCountdown').text(String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')); if (!s) { clearInterval(acTimer); $('#acProtected').hide(); $('#acSecurityPanel').show(); $('#acSecurityMessage').text('Your Vendor Registration Master access has expired. Please verify again.').addClass('text-danger'); } }
-        $(document).ready(function () {
-            if (!acAllowed) { $('#acUnauthorized').show(); return; } if (acAuthorized) acUnlock(acExpiry); else $('#acSecurityPanel').show();
-        });
-    </script>
+             // Start / reset countdown timer
+             if (acTimer) {
+                 clearInterval(acTimer);
+             }
+             acTick();
+             acTimer = setInterval(acTick, 1000);
+
+             loadVendors();
+             GetEmployeeForRateConfig();
+             GetRateConfigProcess();
+             const urlParams = new URLSearchParams(window.location.search);
+             const vendorIdFromURL = urlParams.get('VendorID');
+             var vendorId = vendorIdFromURL ? parseInt(vendorIdFromURL, 10) : 0;
+
+             loadRateConfiguration(vendorId);
+         }
+         function acTick() { var s = Math.max(0, Math.ceil((Date.parse(acExpiry) - Date.now()) / 1000)); $('#acCountdown').text(String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')); if (!s) { clearInterval(acTimer); $('#acProtected').hide(); $('#acSecurityPanel').show(); $('#acSecurityMessage').text('Your Vendor Registration Master access has expired. Please verify again.').addClass('text-danger'); } }
+         $(document).ready(function () {
+             if (!acAllowed) { $('#acUnauthorized').show(); return; } if (acAuthorized) acUnlock(acExpiry); else $('#acSecurityPanel').show();
+         });
+
+
+     </script>
  <%--<script>
      $(document).ready(function () {
 
@@ -551,25 +562,7 @@ div[class*="container"] {
                                             <div class="tab-content" id="custom-tabs-one-tabContent_addinvocie">
                                                 <div class="tab-pane fade show active" id="custom-tabs-one-home_company" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab_company">
                                                     <table class="table">
-                                                        <tr>
-                                                            <td><b>Domain: <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <input type="text" class="form-control" style="width: 250px;" disabled="disabled" value="Underwriting" /></td>
-                                                            <td><b>Individual/Company <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <select id="vendorreg_individualcomp" name="vendorreg_individualcomp" class="form-control" style="width: 250px;">
-                                                                    <option value="">Select</option>
-                                                                    <option value="Company">Company</option>
-                                                                    <option value="Remote UW">Remote UW</option>
-
-                                                                </select>
-                                                            </td>
-
-                                                            <td><b>Vendor Name: <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <input type="text" id="vendorreg_vendorname" name="vendorreg_vendorname" class="form-control" style="width: 250px;" /></td>
-
-                                                        </tr>
+                                                        
                                                         <tr>
                                                             <td><b>Company Name: <span style="color: red;">*</span></b></td>
                                                             <td>
@@ -577,9 +570,40 @@ div[class*="container"] {
                                                                     <option value="">Select</option>
                                                                     <option value="IPS">IPS</option>
                                                                     <option value="Canopy">Canopy</option>
+                                                                    <option value="Medasset">Medasset</option>
+                                                                    <option value="LenderBridge AI">LenderBridge AI</option>
+                                                                </select>
+                                                            </td>
+                                                            <td><b>Domain: <span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <select id="vendorreg_Domain" name="vendorreg_Domain" class="form-control" style="width: 250px;">
+                                                                    <option value="">Select</option>
+                                                                    <option value="DD">DD</option>
+                                                                    <option value="Non-DD">Non-DD</option>
 
                                                                 </select>
                                                             </td>
+                                                            <td><b>Vendor Type<span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <select id="vendorreg_individualcomp" name="vendorreg_individualcomp" class="form-control" style="width: 250px;">
+                                                                    <option value="">Select</option>
+                                                                    <option value="Advisor">Advisor </option>
+                                                                    <option value="Company">Company</option>
+                                                                    <option value="Consultant">Consultant</option>
+                                                                    <option value="Remote UW">Remote UW</option>
+                                                                    <option value="Sales Representative">Sales Representative</option>
+
+
+                                                                </select>
+                                                            </td>
+
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Vendor Name: <span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <input type="text" id="vendorreg_vendorname" name="vendorreg_vendorname" class="form-control" style="width: 250px;" /></td>
+
                                                             <td><b>Contact Person: <span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <input type="text" id="vendorreg_contactperson" name="vendorreg_contactperson" class="form-control" style="width: 250px;" /></td>
@@ -595,23 +619,86 @@ div[class*="container"] {
                                                             <td><b>Website URL: <span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <input type="text" id="vendorreg_weburl" name="vendorreg_weburl" class="form-control" style="width: 250px;" /></td>
-                                                            <td><b>Pay To Vendor Name<span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <input type="text" id="vendorreg_payvendorname" name="vendorreg_payvendorname" class="form-control" style="width: 250px;" /></td>
 
-                                                        </tr>
-
-                                                        <tr>
-                                                            <td><b>Account No.: <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <input type="text" id="vendorreg_acno" name="vendorreg_acno" class="form-control" style="width: 250px;" /></td>
                                                             <td><b>Address: <span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <textarea id="vendorreg_address" name="vendorreg_address" class="form-control" style="width: 250px; resize: none;"></textarea></td>
-                                                            <td><b>Remark:</b></td>
-                                                            <td>
-                                                                <textarea id="vendorreg_remark" name="vendorreg_remark" class="form-control" style="width: 250px; resize: none;"></textarea></td>
+
                                                         </tr>
+                                                        <tr>
+                                                            <td colspan="6" style="padding-top: 15px; padding-bottom: 10px;"><b><i class="fas fa-credit-card mr-1"></i>Payment Details</b></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><b>Pay To Vendor Name<span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <input type="text" id="vendorreg_payvendorname" name="vendorreg_payvendorname" class="form-control" style="width: 250px;" /></td>
+                                                            <td><b>Payment Method<span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <select id="vendorreg_PaymentMethod" name="vendorreg_PaymentMethod" class="form-control" style="width: 250px;">
+                                                                    <option value="">Select</option>
+                                                                    <option value="ACH">ACH </option>
+                                                                    <option value="Check">Check </option>
+                                                                    <option value="Wire">Wire</option>
+
+
+
+                                                                </select>
+                                                            </td>
+                                                            <td><b>Account No.:<span style="color: red;">*</span></b></td>
+                                                            <td>
+                                                                <input type="text" id="vendorreg_acno" name="vendorreg_acno" class="form-control" style="width: 250px;" /></td>
+
+
+                                                        </tr>
+                                                        <tr>
+                                                              <td><b>Routing No.: <span style="color: red;">*</span></b></td>
+  <td>
+      <input type="text" id="vendorreg_Routingno" name="vendorreg_Routingno" class="form-control" style="width: 250px;" /></td>
+
+                                                                                                                     <td><b>Payment Document:<span style="color: red;">*</span></b></td>
+<td>
+    <div class="d-flex align-items-center">
+        <input type="file" id="vendorreg_PaymentDocument" name="vendorreg_PaymentDocument" class="form-control" style="width: 250px;" />
+        <a id="lnk_paymentdoc_download" href="#" target="_blank" download title="Download Existing File" style="display: none; margin-left: 12px; text-decoration: none; cursor: pointer; font-size: 1.15rem; color: #0d6efd;">
+            <i class="fas fa-download"></i>
+        </a>
+    </div>
+    <div id="lbl_paymentdoc_name" style="display: none; font-size: 12px; color: #495057; margin-top: 4px; word-break: break-all;"></div>
+</td>
+
+                                                           
+
+                                                        </tr>
+
+
+                                                        <tr>
+                                                            <td colspan="6" style="padding-top: 15px; padding-bottom: 10px;"><b><i class="fas fa-file-invoice-dollar mr-1"></i>Tax Information</b></td>
+                                                        </tr>
+                                                          <tr>
+      <td><b>SSN/EIN: <span style="color: red;">*</span></b></td>
+      <td>
+          <input type="text" id="vendorreg_SSNEIN" name="vendorreg_SSNEIN" class="form-control" style="width: 250px;" /></td>
+
+      <td><b>Tax ID: <span style="color: red;">*</span></b></td>
+      <td>
+          <input type="text" id="vendorreg_TaxID" name="vendorreg_TaxID" class="form-control" style="width: 250px;" /></td>
+      <td><b>W-9 Form: <span style="color: red;">*</span></b></td>
+<td>
+    <div class="d-flex align-items-center gap-3">
+        <input type="file" id="vendorreg_W9Form" name="vendorreg_W9Form" class="form-control" style="width: 250px;" />
+        <a id="lnk_w9doc_download" href="#" target="_blank" download title="Download Existing File" style="display: none; text-decoration: none; cursor: pointer; font-size: 1.2rem; color: #0d6efd; margin-left: 12px;">
+            <i class="fas fa-download"></i>
+        </a>
+    </div>
+    <div id="lbl_w9doc_name" style="display: none; font-size: 12px; color: #495057; margin-top: 4px; word-break: break-all;"></div>
+</td>
+  </tr>
+                                                        <tr>
+    <td><b>Remark:</b></td>
+    <td colspan="5">
+        <textarea id="vendorreg_remark" name="vendorreg_remark" class="form-control" rows="2" style="width: 100%; resize: none;"></textarea>
+    </td>
+</tr>
                                                         <tr>
                                                             <td colspan="6" style="text-align: center; padding-top: 20px;">
                                                                 <button id="vendorreg_btnsubmitstep1" class="btn btn-primary" onclick="return btnsubmitInsertVendorRegistration();">Add</button>
@@ -626,7 +713,7 @@ div[class*="container"] {
 
                                                             <td><b>Vendor: <span style="color: red;">*</span></b></td>
                                                             <td>
-                                                                <select class="form-control" id="vendorregother_vendor" name="vendor">
+                                                                <select class="form-control" id="vendorregother_vendor" name="vendor" >
                                                                     <option value="">Select Vendor</option>
                                                                 </select></td>
                                                             <td><b>Start Date:<span style="color: red;">*</span></b></td>
@@ -639,16 +726,17 @@ div[class*="container"] {
                                                         </tr>
 
                                                         <tr>
-                                                            <td><b>Work Document: <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <div class="d-flex align-items-center gap-3">
-                                                                    <input type="file" id="vendorreg_workdocument" name="vendorreg_workdocument" class="form-control" style="width: 250px;" />
-                                                                    <a id="lnk_workdoc_download" href="#" target="_blank" download title="Download Existing File" style="display: none; text-decoration: none; cursor: pointer; font-size: 1.2rem; color: #0d6efd; margin-left: 12px;">
-                                                                        <i class="fas fa-download"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </td>
-                                                            <td><b>Scope of Work: <span style="color: red;">*</span></b></td>
+                                                            <td><b>Work Document:<span style="color: red;">*</span></b></td>
+<td>
+    <div class="d-flex align-items-center gap-3">
+        <input type="file" id="vendorreg_workdocument" name="vendorreg_workdocument" class="form-control" style="width: 250px;" />
+        <a id="lnk_workdoc_download" href="#" target="_blank" download title="Download Existing File" style="display: none; text-decoration: none; cursor: pointer; font-size: 1.2rem; color: #0d6efd; margin-left: 12px;">
+            <i class="fas fa-download"></i>
+        </a>
+    </div>
+    <div id="lbl_workdoc_name" style="display: none; font-size: 12px; color: #495057; margin-top: 4px; word-break: break-all;"></div>
+</td>
+                                                            <td><b>Scope of Work:<span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <textarea id="vendorreg_workscope" name="vendorreg_workscope" class="form-control" style="width: 250px; resize: none;"></textarea></td>
                                                             <td><b>Remark:</b></td>
@@ -669,13 +757,13 @@ div[class*="container"] {
                                                             </td>
                                                         </tr>
                                                         <tr id="nda1" style="display: none;">
-                                                            <td><b>Agreement Date: <span style="color: red;">*</span></b></td>
+                                                            <td><b>Agreement Date:<span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <input type="date" id="vendorreg_agreementdate" name="vendorreg_agreementdate" class="form-control" style="width: 250px;"></td>
                                                             <td><b>Expiry Date: <span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <input type="date" id="vendorreg_agreementexpirydate" name="vendorreg_agreementexpirydate" class="form-control" style="width: 250px;"></td>
-                                                            <td><b>Signed by Client: <span style="color: red;">*</span></b></td>
+                                                            <td><b>Signed by Client:<span style="color: red;">*</span></b></td>
                                                             <td>
                                                                 <select id="vendorreg_agreementclientsigned" name="vendorreg_agreementclientsigned" class="form-control" style="width: 250px;">
                                                                     <option value="">Select</option>
@@ -694,17 +782,18 @@ div[class*="container"] {
                                                                 </select>
                                                             </td>
                                                             <td><b>Agreement Copy: <span style="color: red;">*</span></b></td>
-                                                            <td>
-                                                                <div class="d-flex align-items-center gap-3">
-                                                                    <input type="file" id="vendorreg_agreementattachment" name="vendorreg_agreementattachment" class="form-control" style="width: 250px;" />
-                                                                    <a id="lnk_agreementattachment_download" href="#" target="_blank" download title="Download Existing File" style="display: none; text-decoration: none; cursor: pointer; font-size: 1.2rem; color: #0d6efd; margin-left: 12px;">
-                                                                        <i class="fas fa-download"></i>
-                                                                    </a>
-                                                                </div>
-                                                            </td>
+<td>
+    <div class="d-flex align-items-center gap-3">
+        <input type="file" id="vendorreg_agreementattachment" name="vendorreg_agreementattachment" class="form-control" style="width: 250px;" />
+        <a id="lnk_agreementattachment_download" href="#" target="_blank" download title="Download Existing File" style="display: none; text-decoration: none; cursor: pointer; font-size: 1.2rem; color: #0d6efd; margin-left: 12px;">
+            <i class="fas fa-download"></i>
+        </a>
+    </div>
+    <div id="lbl_agreementattachment_name" style="display: none; font-size: 12px; color: #495057; margin-top: 4px; word-break: break-all;"></div>
+</td>
 
                                                         </tr>
-
+                                                       
                                                         <tr>
                                                             <td colspan="6" style="text-align: center; padding-top: 20px;">
                                                                 <button type="button" id="vendorreg_btnsubmit" name="vendorreg_btnsubmit" class="btn btn-primary" onclick="return btnsubmitInsertVendorOtherInfo();">Add</button>

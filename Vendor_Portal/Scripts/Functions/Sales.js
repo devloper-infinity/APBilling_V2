@@ -19,57 +19,75 @@ function blankForNull(s) {
 }
 
 function RemoteUWSales_submit() {
-    var month = document.getElementById("addinvoiceSales_month").value;
-    var year = document.getElementById("addinvoiceSales_year").value;
-    var invoicedate = document.getElementById("RemoteUWSales_invoicedate").value;
-    
-    var loancount = document.getElementById("RemoteUWSales_NoOfLoans_canopy").value;
-    
-    var duedate = document.getElementById("cm_DueDateSales").value;
-    
-    var invoiceamount = document.getElementById("RemoteUWSales_invoiceamount_canopy").value;
-    
+    //var month = document.getElementById("addinvoiceSales_month").value;
+   // var year = document.getElementById("addinvoiceSales_year").value;
+    var invoicedate = document.getElementById("RemoteUWSales_invoicedate").value;   
+    //var loancount = document.getElementById("RemoteUWSales_NoOfLoans_canopy").value;   
+    var duedate = document.getElementById("cm_DueDateSales").value;  
+    var invoiceamount = document.getElementById("RemoteUWSales_invoiceamount_canopy").value;  
     var invoicenumber = document.getElementById("RemoteUWSales_invoiceaNo_canopy").value;
-    var ddlinvoicetype = document.getElementById("RemoteUWSales");
+    //var ddlinvoicetype = document.getElementById("RemoteUWSales");
+   // var Rate = document.getElementById("RemoteUWSales_Rate_canopy").value;
 
-    var Rate = document.getElementById("RemoteUWSales_Rate_canopy").value;
+    var VendorName = $("#RemoteUWSales_VendorName option:selected").text();
+    var Invoicesales_vendortype = document.getElementById("Invoicesales_vendortype").value;
 
+    var Invoicesales_ToCompany = document.getElementById("Invoicesales_ToCompany").value;
+    var Invoicesales_EmailAddress = document.getElementById("Invoicesales_EmailAddress").value;
 
-    var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].value;
-    if (invoicetype == "") {
-        alert("Please select InvoiceType");
-        return false;
-    }
-    PageMethods.InsertRemoteUWSalesInvoice(month, year, invoicedate, duedate, loancount, invoiceamount, invoicenumber, invoicetype,Rate,RemoreUWSales_OnSuccess, RemoreUWSales_OnError);
+    var RemoteUWSales_ServicePeriodFrom = document.getElementById("RemoteUWSales_ServicePeriodFrom").value;
+    var RemoteUWSales_ServicePeriodTo = document.getElementById("RemoteUWSales_ServicePeriodTo").value;
+
+    var saleinvoice_InvoiceCategory = document.getElementById("saleinvoice_InvoiceCategory").value;
+    var RemoteUWSales_InvoiceDescription = document.getElementById("RemoteUWSales_InvoiceDescription").value;
+
+    var RemoteUWSales_PaymentTerms = document.getElementById("RemoteUWSales_PaymentTerms").value;
+    var Invoicesales_PaymentMethod = document.getElementById("Invoicesales_PaymentMethod").value;
+    var RemoteUWSales_BankAccount = document.getElementById("RemoteUWSales_BankAccount").value;
+    var RemoteUWSales_PaymentFromCompany = document.getElementById("RemoteUWSales_PaymentFromCompany").value;
+    //var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].value;
+  
+    $('#load1').show();
+    PageMethods.InsertRemoteUWSalesInvoice(
+       
+      
+        invoicedate,
+        duedate,
+       
+        invoiceamount,
+        invoicenumber,
+       
+       
+        VendorName,
+        Invoicesales_vendortype,
+        Invoicesales_ToCompany,
+        Invoicesales_EmailAddress,
+        RemoteUWSales_ServicePeriodFrom,
+        RemoteUWSales_ServicePeriodTo,
+        saleinvoice_InvoiceCategory,
+        RemoteUWSales_InvoiceDescription,
+        RemoteUWSales_PaymentTerms,
+        Invoicesales_PaymentMethod,
+        RemoteUWSales_BankAccount,
+        RemoteUWSales_PaymentFromCompany,
+        RemoreUWSales_OnSuccess,
+        RemoreUWSales_OnError
+    );
     return false;
 }
 
-function addinvoiceSales_BindYear() {
-    var start = new Date().getFullYear();
-
-    var select = document.getElementById("addinvoiceSales_year");
-    let options = select.getElementsByTagName('option');
-
-    for (var i = options.length; i--;) {
-        select.removeChild(options[i]);
-    }
-
-    $("#addinvoiceSales_year").append($("<option></option>").val("").html("Select"));
-    for (var i = start; i > start - 5; i--) {
-        $("#addinvoiceSales_year").append($("<option></option>").val(i).html(i));
-    }
-}
-
 function RemoreUWSales_OnSuccess(result) {
+    $('#load1').hide();
 
-    alert(result);
+   // alert(result);
 
     InvoiceID = result;
-    alert(InvoiceID);
+    //alert(InvoiceID);
 
     if (result > 0) {
         document.getElementById("RemoreUWSales_errmsg").innerHTML = "Invoice added successfully!";
         $('#RemoreUWSales_dverror').modal('show');
+        clearRemoteUWSalesForm();
         //var month = document.getElementById("addinvoiceSales_month").value;
         //var year = document.getElementById("addinvoiceSales_year").value;
         //var ddlinvoicetype = document.getElementById("RemoteUWSales");
@@ -200,5 +218,129 @@ function uploadexcel_OnError(error) {
 }
 
 function RemoreUWSales_OnError(error) {
+    $('#load1').hide();
     alert(error.responseText);
 }
+
+function clearRemoteUWSalesForm() {
+    document.getElementById("RemoteUWSales_VendorName").value = "";
+    document.getElementById("Invoicesales_ToCompany").value = "";
+    document.getElementById("RemoteUWSales_invoiceaNo_canopy").value = "";
+    document.getElementById("RemoteUWSales_ServicePeriodFrom").value = "";
+    document.getElementById("saleinvoice_InvoiceCategory").value = "";
+    document.getElementById("RemoteUWSales_invoiceamount_canopy").value = "";
+    document.getElementById("RemoteUWSales_PaymentTerms").value = "";
+    document.getElementById("RemoteUWSales_BankAccount").value = "";
+
+    document.getElementById("Invoicesales_vendortype").value = "";
+    document.getElementById("Invoicesales_EmailAddress").value = "";
+    document.getElementById("RemoteUWSales_invoicedate").value = "";
+    document.getElementById("RemoteUWSales_ServicePeriodTo").value = "";
+    document.getElementById("RemoteUWSales_InvoiceDescription").value = "";
+    document.getElementById("cm_DueDateSales").value = "";
+    document.getElementById("Invoicesales_PaymentMethod").value = "";
+    document.getElementById("RemoteUWSales_PaymentFromCompany").value = "";
+    document.getElementById("RemoteUWSalesInvoiceExcel").value = "";
+
+    document.getElementById("RWSalesFromDate").value = "";
+    document.getElementById("RWSalesToDate").value = "";
+}
+
+//Load Vendor For Dropdown
+function GetSalesVendors() {
+    $.ajax({
+        type: "POST",
+        url: "AddInvoiceSales.aspx/GetSalesVendors",
+        data: '{}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var vendors = response.d;
+            var dropdowns = ['#RemoteUWSales_VendorName'];
+            $.each(dropdowns, function (i, selector) {
+                var dropdown = $(selector);
+
+                dropdown.empty();
+                dropdown.append('<option value="">Select</option>');
+
+                $.each(vendors, function (index, item) {
+                    dropdown.append($('<option></option>')
+                        .val(item.VendorRegistrationID)
+                        .text(item.VendorName));
+                });
+            });
+           
+        },
+        error: function (xhr, status, error) {
+            console.log("Error fetching vendors: " + error);
+        }
+    });
+}
+
+$(document).ready(function () {
+    $('#RemoteUWSales_VendorName').on('change', function () {
+        var vendorId = $(this).val();
+        var vendorTypeInput = $('#Invoicesales_vendortype');
+        var toCompanyInput = $('#Invoicesales_ToCompany');
+        var toEmailInput = $('#Invoicesales_EmailAddress');
+        var toPaymentMethod = $('#Invoicesales_PaymentMethod');
+        var toPaymentFromCompany = $('#RemoteUWSales_PaymentFromCompany');
+        var toBankAccount = $('#RemoteUWSales_BankAccount');
+        var toPaymentTerms = $('#RemoteUWSales_PaymentTerms');
+        var toinvoiceamount = $('#RemoteUWSales_invoiceamount_canopy');
+
+        if (!vendorId) {
+            vendorTypeInput.val('');
+            toCompanyInput.val('');
+            toEmailInput.val('');
+            toPaymentMethod.val('');
+            toPaymentFromCompany.val('');
+            toBankAccount.val('');
+            toPaymentTerms.val('');
+            toinvoiceamount.val('');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "AddInvoiceSales.aspx/GetVendorTypes",
+            data: JSON.stringify({ vendorRegistrationID: parseInt(vendorId, 10) }),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var data = typeof response.d === "string" ? JSON.parse(response.d) : response.d;
+
+                if (data && data.length > 0) {
+                    vendorTypeInput.val(data[0].VendorType || '');
+                    toCompanyInput.val(data[0].CompanyName || '');
+                    toEmailInput.val(data[0].EmailID || '');
+                    toPaymentMethod.val(data[0].PaymentMethod || '');
+                    toPaymentFromCompany.val(data[0].CompanyName || '');
+                    toBankAccount.val(data[0].AccountNumber || '');
+                    toPaymentTerms.val(data[0].BillingCycle || '');
+                    toinvoiceamount.val(data[0].Rate || '');
+                } else {
+                    vendorTypeInput.val('');
+                    toCompanyInput.val('');
+                    toEmailInput.val('');
+                    toPaymentMethod.val('');
+                    toPaymentFromCompany.val('');
+                    toBankAccount.val('');
+                    toPaymentTerms.val('');
+                    toinvoiceamount.val('');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error fetching vendor details: " + xhr.responseText);
+                vendorTypeInput.val('');
+                toCompanyInput.val('');
+                toEmailInput.val('');
+                toPaymentMethod.val('');
+                toPaymentFromCompany.val('');
+                toBankAccount.val('');
+                toPaymentTerms.val('');
+                toinvoiceamount.val('');
+            }
+        });
+    });
+});

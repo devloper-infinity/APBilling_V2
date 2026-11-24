@@ -27,6 +27,11 @@ namespace Vendor_Portal.Vendor
                 li3.Visible = true;
                 li1.Visible = true;
                 Menu_Billing.Visible = true;
+                Menu_SalesInvoice.Visible = false;
+            }
+            else if (LoginID == 209 || LoginID == 8128 || LoginID == 5)
+            {
+                Menu_SalesInvoice.Visible = true;
             }
 
             else if (LoginID== 6959)
@@ -41,8 +46,10 @@ namespace Vendor_Portal.Vendor
                 li2.Visible = true;
                 li3.Visible = true;
                 Menu_Billing.Visible = true;
+                Menu_SalesInvoice.Visible = false;
+
             }
-            
+
             else if (LoginID == 9858 || LoginID == 9852)  //IT
             {
                 li_MasterSection.Visible = false;
@@ -55,6 +62,7 @@ namespace Vendor_Portal.Vendor
                 li2.Visible = true;
                 li3.Visible = false;
                 Menu_Billing.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
 
             else
@@ -69,6 +77,7 @@ namespace Vendor_Portal.Vendor
                 li2.Visible = false;
                 li3.Visible = false;
                 Menu_Billing.Visible = false;
+                Menu_SalesInvoice.Visible = false;
             }
                         
             }

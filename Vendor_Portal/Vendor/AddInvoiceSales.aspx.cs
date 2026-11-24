@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClosedXML.Excel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -6,6 +7,7 @@ using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Mail;
 using System.Text;
 using System.Web;
@@ -14,7 +16,6 @@ using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Vendor_Portal.App_Code.BLL;
-using ClosedXML.Excel;
 
 namespace Vendor_Portal.Vendor
 {
@@ -26,8 +27,8 @@ namespace Vendor_Portal.Vendor
         static string GUIDFile = "";
         static string GUIDFilePDF = "";
         static string MainPath = "";
-        public static string Con_Canopy = "Data Source=23.111.175.186;Initial Catalog=Canopy-UWVendorBilling;User ID=sa;Password=#Cl0ud^$ecure4";
-        public static string Con = "Data Source=23.111.175.186;Initial Catalog=Infinity-UWVendorBilling;User ID=sa;Password=#Cl0ud^$ecure4";
+        public static string Con_Canopy = "Data Source=192.168.11.11,8989;Initial Catalog=Canopy-UWVendorBilling;User ID=sa;Password=idt15central";
+        public static string Con = "Data Source=192.168.11.11,8989;Initial Catalog=Infinity-UWVendorBilling;User ID=sa;Password=idt15central";
         protected void Page_Load(object sender, EventArgs e)
         {
             try
@@ -77,25 +78,58 @@ namespace Vendor_Portal.Vendor
         }
 
         [WebMethod]
-        public static int InsertRemoteUWSalesInvoice(string Month, string Year, string InvoiceDate, string DueDate, string LoanCount, string InvoiceAmount, string InvoiceNumber,string InvoiceType,string Rate)
+        public static int InsertRemoteUWSalesInvoice(
+    
+     string InvoiceDate,
+     string DueDate,
+    
+     string InvoiceAmount,
+     string InvoiceNumber,
+     //string InvoiceType,
+     
+     string VendorName,
+     string VendorType,
+     string ToCompany,
+     string EmailAddress,
+     string ServicePeriodFrom,
+     string ServicePeriodTo,
+     string InvoiceCategory,
+     string InvoiceDescription,
+     string PaymentTerms,
+     string PaymentMethod,
+     string BankAccount,
+     string PaymentFromCompany)
         {
             var mc_Sales = new AddInvoiceSales();
             int returnvalue = 0;
-            //Convert.ToDateTime(InvoiceDate).ToString("MMM")
-            //string SInvoiceType = "Sales";
+
             Hashtable htParam = new Hashtable();
-            htParam.Add("Month", Month);
-            htParam.Add("Year", Year);
+            htParam.Add("Month", "");
+            htParam.Add("Year", "");
             htParam.Add("StatementDate", Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
             htParam.Add("DueDate", Convert.ToDateTime(DueDate).ToString("MM/dd/yyyy"));
             htParam.Add("Domain", "Underwriting");
             htParam.Add("Currency", "USD");
-            htParam.Add("NoOfLoans", LoanCount);
+            htParam.Add("NoOfLoans", "");
             htParam.Add("VendorInvoiceNumber", InvoiceNumber);
             htParam.Add("TotalDue", InvoiceAmount);
-            htParam.Add("VendorName", "IPS");
+            htParam.Add("VendorName", "IPS"); 
             htParam.Add("InvoiceType", "Sales");
-           
+
+            // New parameters
+            htParam.Add("SeletedVendorName", VendorName);
+
+            htParam.Add("VendorType", VendorType ?? string.Empty);
+            htParam.Add("ToCompany", ToCompany ?? string.Empty);
+            htParam.Add("EmailAddress", EmailAddress ?? string.Empty);
+            htParam.Add("ServicePeriodFrom", string.IsNullOrWhiteSpace(ServicePeriodFrom) ? (object)DBNull.Value : Convert.ToDateTime(ServicePeriodFrom).ToString("MM/dd/yyyy"));
+            htParam.Add("ServicePeriodTo", string.IsNullOrWhiteSpace(ServicePeriodTo) ? (object)DBNull.Value : Convert.ToDateTime(ServicePeriodTo).ToString("MM/dd/yyyy"));
+            htParam.Add("InvoiceCategory", InvoiceCategory ?? string.Empty);
+            htParam.Add("InvoiceDescription", InvoiceDescription ?? string.Empty);
+            htParam.Add("PaymentTerms", PaymentTerms ?? string.Empty);
+            htParam.Add("PaymentMethod", PaymentMethod ?? string.Empty);
+            htParam.Add("BankAccount", BankAccount ?? string.Empty);
+            htParam.Add("PaymentFromCompany", PaymentFromCompany ?? string.Empty);
 
             if (NewFileName_RemoteInvoice != "")
             {
@@ -104,12 +138,12 @@ namespace Vendor_Portal.Vendor
                 {
                     Directory.CreateDirectory(MainPath);
                 }
-                string SubPath = MainPath + "\\" + Convert.ToString(InvoiceType);
+                string SubPath = MainPath + "\\" + Convert.ToString("Sales");
                 if (!Directory.Exists(SubPath))
                 {
                     Directory.CreateDirectory(SubPath);
                 }
-                string UniquePath = MainPath + "\\" + Convert.ToString(InvoiceType) + "\\" + Convert.ToString(CodeDate);
+                string UniquePath = MainPath + "\\" + Convert.ToString("Sales") + "\\" + Convert.ToString(CodeDate);
                 if (!Directory.Exists(UniquePath))
                 {
                     Directory.CreateDirectory(UniquePath);
@@ -117,7 +151,6 @@ namespace Vendor_Portal.Vendor
                 File.Copy(NewFileName_RemoteInvoice, UniquePath + "\\" + GUIDFilePDF);
                 File.Delete(NewFileName_RemoteInvoice);
                 htParam.Add("FilePath", UniquePath + "\\" + GUIDFilePDF);
-
             }
             else
             {
@@ -125,16 +158,15 @@ namespace Vendor_Portal.Vendor
             }
 
             htParam.Add("AddedBy", int.Parse(HttpContext.Current.User.Identity.Name.ToString()));
-            htParam.Add("Delay", InvoiceType);
-            htParam.Add("ProjectId", Rate);
-            htParam.Add("Remark", "Sales-Invoice :"+ InvoiceType +  '~' + Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
-
+            htParam.Add("Delay", "Sales");
+            htParam.Add("ProjectId", 0);
+            htParam.Add("Remark", "Sales-Invoice :" + "Sales" + '~' + Convert.ToDateTime(InvoiceDate).ToString("MM/dd/yyyy"));
 
             returnvalue = new bllInvoice().Insert_Infinity_InvoiceDetails(htParam);
-            
+
             if (returnvalue > 0)
             {
-                mc_Sales.sendEmailAddNewInvoice_Sales(returnvalue, InvoiceType);
+                mc_Sales.sendEmailAddNewInvoice_Sales(returnvalue, "Sales");
             }
             return returnvalue;
         }
@@ -176,7 +208,28 @@ namespace Vendor_Portal.Vendor
         }
 
 
-
+        [WebMethod]
+        public static string GetVendorTypes(int vendorRegistrationID)
+        {
+            DataTable dt1 = new bllInvoice().GetVendorTypes(vendorRegistrationID);
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            if (dt1 != null)
+            {
+                foreach (DataRow dr in dt1.Rows)
+                {
+                    row = new Dictionary<string, object>();
+                    foreach (DataColumn col in dt1.Columns)
+                    {
+                        row.Add(col.ColumnName, dr[col]);
+                    }
+                    rows.Add(row);
+                }
+            }
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            ser.MaxJsonLength = int.MaxValue;
+            return ser.Serialize(rows);
+        }
 
         [WebMethod]
         public static int InsertRemoteUWCanopuSalesExcel(int InvoiceID, string Month, string Year)
@@ -410,11 +463,8 @@ namespace Vendor_Portal.Vendor
             string ToAddress = string.Empty;
             string ToCC = string.Empty;
 
-            //ToAddress = "p.kedar @infinityinternationals.us";
-            //ToCC = "";
-
-            ToAddress = "mdk@infinity-data.com,anita@infinity-data.com";
-            ToCC = "jim@infinity-data.com";
+            ToAddress = "k.aarti@infinity-data.com";
+            ToCC = "";
 
             string BillingDatePeriod = "";
 
@@ -426,34 +476,88 @@ namespace Vendor_Portal.Vendor
 
             if (dt.Rows.Count > 0)
             {
-                Subject = "IPS - New Invoice" + "-" + Convert.ToString(dt.Rows[0]["NewInvoiceType"]) + "-" + Convert.ToString(dt.Rows[0]["VendorInvoiceNumber"]) + " : Pending for Approval";
+                string invNo = dt.Columns.Contains("InvoiceNo")
+                    ? Convert.ToString(dt.Rows[0]["InvoiceNo"])
+                    : Convert.ToString(dt.Rows[0]["VendorInvoiceNumber"]);
+
+                string invType = dt.Columns.Contains("InvoiceType")
+                    ? Convert.ToString(dt.Rows[0]["InvoiceType"])
+                    : Convert.ToString(dt.Rows[0]["NewInvoiceType"]);
+
+                Subject = "IPS - New Invoice" + "-" + invType + "-" + invNo + " : Pending for Approval";
                 htmlBody.Append("<br />Dear Sir/Madam,<br />");
                 htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New invoice has been added in system with below details" + BillingDatePeriod + ".</b></font><br />");
 
-                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:Skyblue; color:Black;'><td colspan=9><center><b>" + ProjectName + "-Details " + BillingDatePeriod + "  </b></center></td></tr>");
-                htmlBody.Append("<tr style='background-color:Skyblue; color:Black;'><td><center><b>Invoice #</b></center></td><td><center><b>Invoice Type</b></center></td><td><center><b>Billing Period</b></center></td><td><center><b>Invoice Date</b></center></td><td><center><b>Due Date</b></center></td><td><center><b>No of Loans/Orders</b></center></td><td><center><b>Amount</b></center></td><td><center><b>Verification Remark</b></center></td><td><center><b>Invoice Added in System On </b></center></td></tr>");
+                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=18><center><b>" + ProjectName + "-Details " + BillingDatePeriod + "  </b></center></td></tr>");
+                htmlBody.Append("<tr style='background-color:#244b73; color:White;'>" +
+                    "<td><center><b>Vendor Name</b></center></td>" +
+                    "<td><center><b>Vendor Type</b></center></td>" +
+                    "<td><center><b>To Company</b></center></td>" +
+                    "<td><center><b>Email Address</b></center></td>" +
+                    "<td><center><b>Invoice No</b></center></td>" +
+                    "<td><center><b>Invoice Date</b></center></td>" +
+                    "<td><center><b>Service Period From</b></center></td>" +
+                    "<td><center><b>Service Period To</b></center></td>" +
+                    "<td><center><b>Invoice Category</b></center></td>" +
+                    "<td><center><b>Invoice Description</b></center></td>" +
+                    "<td><center><b>Invoice Amount</b></center></td>" +
+                    "<td><center><b>Due Date</b></center></td>" +
+                    "<td><center><b>Payment Terms</b></center></td>" +
+                    "<td><center><b>Payment Method</b></center></td>" +
+                    "<td><center><b>Bank Account</b></center></td>" +
+                    "<td><center><b>Payment From Company</b></center></td>" +
+                    "<td><center><b>Verification Remark</b></center></td>" +
+                    "<td><center><b>Invoice Added in System On </b></center></td>" +
+                    "</tr>");
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    htmlBody.Append("<tr style='background-color:White; color:black;'><td><center><b>" + Convert.ToString(dt.Rows[i]["VendorInvoiceNumber"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NewInvoiceType"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["BillingPeriod"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["StatementDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["DueDate"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["NoOfLoans"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceAmount"]) + "</b></center></td><td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b><td><center><b>" + Convert.ToString(dt.Rows[i]["AddedDate"]) + "</b></center></td></tr>");
+                    string rowInvoiceNo = dt.Columns.Contains("InvoiceNo")
+                        ? Convert.ToString(dt.Rows[i]["InvoiceNo"])
+                        : Convert.ToString(dt.Rows[i]["VendorInvoiceNumber"]);
+
+                    string rowInvoiceDate = dt.Columns.Contains("InvoiceDate")
+                        ? Convert.ToString(dt.Rows[i]["InvoiceDate"])
+                        : Convert.ToString(dt.Rows[i]["StatementDate"]);
+
+                    string rowAddedDate = dt.Columns.Contains("Addeddate")
+                        ? Convert.ToString(dt.Rows[i]["Addeddate"])
+                        : Convert.ToString(dt.Rows[i]["AddedDate"]);
+
+                    htmlBody.Append("<tr style='background-color:White; color:black;'>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorName"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorType"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["ToCompany"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["EmailAddress"]) + "</b></center></td>" +
+                        "<td><center><b>" + rowInvoiceNo + "</b></center></td>" +
+                        "<td><center><b>" + rowInvoiceDate + "</b></center></td>" +
+                        "<td><center><b>" + (string.IsNullOrWhiteSpace(Convert.ToString(dt.Rows[i]["ServicePeriodFrom"])) ? "" : Convert.ToDateTime(dt.Rows[i]["ServicePeriodFrom"]).ToString("MM/dd/yyyy")) + "</b></center></td>" +
+                        "<td><center><b>" + (string.IsNullOrWhiteSpace(Convert.ToString(dt.Rows[i]["ServicePeriodTo"])) ? "" : Convert.ToDateTime(dt.Rows[i]["ServicePeriodTo"]).ToString("MM/dd/yyyy")) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceCategory"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceDescription"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["InvoiceAmount"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["DueDate"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PaymentTerms"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PaymentMethod"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["BankAccount"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PaymentFromCompany"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b></center></td>" +
+                        "<td><center><b>" + rowAddedDate + "</b></center></td>" +
+                        "</tr>");
                 }
 
                 htmlBody.Append("</table>");
 
                 htmlBody.Append("<br /><table cellspacing='7px' cellpadding='3px' width='700px' style='font-family: Verdana; font-size: 12px; border-collapse: collapse;'><tr><td align=\"left\" width=600>Please <a href='http://192.168.11.11/Vendor/Login.aspx" + BillingDatePeriod + "'>click here</a> For Approval</td></tr></table><br />");
 
-
                 htmlBody.Append("<br /><br /><table width=\"650px\" style='font-size:13px;'><tr><td align=\"left\">Thanks,<br />Infinity </td></tr> <tr> <br /><td align=\"center\"><b>!!! This is software generated e-mail...Please do not reply. !!!</td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\"></td></tr> <tr> <br /><td align=\"center\"><b>" + "***********************************************************************************************************************************************************************************************" + "</td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "<b>CONFIDENTIALITY INFORMATION AND DISCLAIMER</b>" + "</td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
                 htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
-                // sendMailForOnlineTracking_New(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us", Subject, Path, htmlBody);
-                mc_Sales.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "n.nilkanth@infinityinternationals.us,p.kedar@infinityinternationals.us,b.shubhangi@infinityinternationals.us", Subject, Path, htmlBody);
+
+                mc_Sales.sendEmailInvoiceApproval_IPS(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
             }
-
-
-
         }
 
         [WebMethod]
@@ -477,18 +581,22 @@ namespace Vendor_Portal.Vendor
                     mail.CC.Add(ToCC);
                 if (ToBCC != "")
                     mail.Bcc.Add(ToBCC);
-                mail.From = new MailAddress("ack@infinityinternationals.us", "IPS AP Billing", System.Text.Encoding.UTF8);
+                mail.From = new MailAddress("ack@infinity-data.com", "IPS AP Billing", System.Text.Encoding.UTF8);
+
                 mail.Subject = Subject;
                 mail.SubjectEncoding = System.Text.Encoding.UTF8;
                 mail.Body = template.ToString();
                 mail.BodyEncoding = System.Text.Encoding.UTF8;
                 mail.IsBodyHtml = true;
 
-                string pass = new bllInvoice().GetPassword("ack");
-                mail.Priority = System.Net.Mail.MailPriority.High;
+                string pass = new bllInvoice().GetPassword("ackdata");
                 SmtpClient client = new SmtpClient();
-                client.Credentials = new System.Net.NetworkCredential("ack@infinityinternationals.us", pass);
-                client.Host = "smtpcorp.netcore.co.in";
+                client.UseDefaultCredentials = false;
+                client.Credentials = new System.Net.NetworkCredential("ack@infinity-data.com", pass);
+                client.Host = "smtp.office365.com";
+                client.Port = 587;
+                client.EnableSsl = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
                 try
                 {
@@ -509,5 +617,28 @@ namespace Vendor_Portal.Vendor
         }
 
 
+
+        [System.Web.Services.WebMethod]
+        public static List<object> GetSalesVendors()
+        {
+            List<object> vendorList = new List<object>();
+
+            bllInvoice inv = new bllInvoice();
+            DataTable dt = inv.GetSalesVendors();
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    vendorList.Add(new
+                    {
+                        VendorRegistrationID = dr["VendorRegistrationID"],
+                        VendorName = dr["VendorName"]
+                    });
+                }
+            }
+
+            return vendorList;
+        }
     }
 }

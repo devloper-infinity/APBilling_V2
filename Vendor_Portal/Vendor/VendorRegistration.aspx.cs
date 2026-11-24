@@ -35,11 +35,61 @@ namespace Vendor_Portal.Vendor
 
         [WebMethod(EnableSession = true)]
         public static int InsertVendorRegistration(string vendorName,string companyName,string contactPerson,string contactNo,string emailID,
-            string websiteURL,string address,string payToVendorName,string accountNumber,string remark,int vendorId,string VendorType)
+            string websiteURL,string address,string payToVendorName,string accountNumber,string remark,int vendorId,string VendorType,string VendorDomain,string VendorPaymentMethod,string VendorRoutingNo, string taxSSNEIN,
+            string taxID, string paymentDocument, string w9FormDocument)
         {
-            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
+           CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
+
+
+            string paymentFolderPath = HttpContext.Current.Server.MapPath("~/VendorDocument/PaymentDocument/");
+            if (!System.IO.Directory.Exists(paymentFolderPath))
+            {
+                System.IO.Directory.CreateDirectory(paymentFolderPath);
+            }
+
+            string w9FolderPath = HttpContext.Current.Server.MapPath("~/VendorDocument/W9FormDocument/");
+            if (!System.IO.Directory.Exists(w9FolderPath))
+            {
+                System.IO.Directory.CreateDirectory(w9FolderPath);
+            }
+
+            // --- PaymentDocument File Save Logic ---
+            string savedPaymentDocPath = string.Empty;
+            if (!string.IsNullOrEmpty(paymentDocument) && paymentDocument.Contains("|"))
+            {
+                string[] parts = paymentDocument.Split('|');
+                string originalFileName = System.IO.Path.GetFileName(parts[0]);
+                string base64Data = parts[1].Substring(parts[1].IndexOf(",") + 1);
+                byte[] fileBytes = Convert.FromBase64String(base64Data);
+
+                string fullPath = System.IO.Path.Combine(paymentFolderPath, originalFileName);
+                System.IO.File.WriteAllBytes(fullPath, fileBytes);
+                savedPaymentDocPath = fullPath;
+            }
+            else
+            {
+                savedPaymentDocPath = paymentDocument;
+            }
+
+            // --- W9FormDocument File Save Logic ---
+            string savedW9DocPath = string.Empty;
+            if (!string.IsNullOrEmpty(w9FormDocument) && w9FormDocument.Contains("|"))
+            {
+                string[] parts = w9FormDocument.Split('|');
+                string originalFileName = System.IO.Path.GetFileName(parts[0]);
+                string base64Data = parts[1].Substring(parts[1].IndexOf(",") + 1);
+                byte[] fileBytes = Convert.FromBase64String(base64Data);
+
+                string fullPath = System.IO.Path.Combine(w9FolderPath, originalFileName);
+                System.IO.File.WriteAllBytes(fullPath, fileBytes);
+                savedW9DocPath = fullPath;
+            }
+            else
+            {
+                savedW9DocPath = w9FormDocument;
+            }
 
             htParam.Add("VendorName", vendorName);
             htParam.Add("CompanyName", companyName);
@@ -53,7 +103,13 @@ namespace Vendor_Portal.Vendor
             htParam.Add("Remark", remark);
             htParam.Add("vendorId", vendorId);
             htParam.Add("VendorType", VendorType);
-
+            htParam.Add("VendorDomain", VendorDomain);
+            htParam.Add("VendorPaymentMethod", VendorPaymentMethod);
+            htParam.Add("VendorRoutingNo", VendorRoutingNo);
+            htParam.Add("TaxSSNEIN", taxSSNEIN);
+            htParam.Add("TaxID", taxID);
+            htParam.Add("PaymentDocument", string.IsNullOrEmpty(savedPaymentDocPath) ? DBNull.Value : (object)savedPaymentDocPath);
+            htParam.Add("W9FormDocument", string.IsNullOrEmpty(savedW9DocPath) ? DBNull.Value : (object)savedW9DocPath);
             htParam.Add("AddedBy", int.Parse(HttpContext.Current.User.Identity.Name.ToString()));
 
             try
@@ -73,7 +129,7 @@ namespace Vendor_Portal.Vendor
         public static int AddVendorOtherInfo(int vendorRegistrationID, string startDate,string rateRevisionDate,string scopeOfWork,string remark,
         string isNDASigned,string agreementDate,string expiryDate,string signedByClient,string signedByInfinity,string workDocument,string agreementCopy)
         {
-            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
+          CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
             Hashtable htParam = new Hashtable();
             try
@@ -196,9 +252,11 @@ namespace Vendor_Portal.Vendor
 
 
 
-        [System.Web.Services.WebMethod]
+        [WebMethod(EnableSession = true)]
         public static List<object> GetVendorList()
         {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
+
             List<object> vendorList = new List<object>();
 
             bllInvoice inv = new bllInvoice();
@@ -248,7 +306,7 @@ namespace Vendor_Portal.Vendor
         [WebMethod(EnableSession = true)]
         public static string GetRateConfiguration(int  VendorId)
         {
-            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
+           CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             DataTable dt1 = new bllInvoice().GetRateConfiguration(VendorId);
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
@@ -295,7 +353,7 @@ namespace Vendor_Portal.Vendor
 
 
 
-        [System.Web.Services.WebMethod]
+        [WebMethod(EnableSession = true)]
         public static List<object> GetEmployeeForRateConfig()
         {
             List<object> EmployeeList = new List<object>();
@@ -320,7 +378,7 @@ namespace Vendor_Portal.Vendor
 
 
 
-        [System.Web.Services.WebMethod]
+        [WebMethod(EnableSession = true)]
         public static List<object> GetRateConfigProcess()
         {
             List<object> ProcessList = new List<object>();

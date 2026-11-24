@@ -667,5 +667,17 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.GetUSLoanProductionLoanCountSummary(EmpName, StartDate, EndDate);
         }
+        public DataTable GetInfinity_SalesInvoiceDetails_Approval()
+        {
+            return dalInvoice.GetInfinity_SalesInvoiceDetails_Approval();
+        }
+        public DataTable GetVendorTypes(int VendorRegistrationID)
+        {
+            return dalInvoice.GetVendorTypes(VendorRegistrationID);
+        }
+        public DataTable GetSalesVendors()
+        {
+            return dalInvoice.GetSalesVendors();
+        }
     }
 }
