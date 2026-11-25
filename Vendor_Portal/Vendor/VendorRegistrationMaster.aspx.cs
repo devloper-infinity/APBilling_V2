@@ -36,7 +36,7 @@ namespace Vendor_Portal.Vendor
         {
             CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
 
-            DataTable dt1 = new bllInvoice().GetAllRegisteredVendors();
+            DataTable dt1 = new bllInvoice().GetAllRegisteredVendors(int.Parse(HttpContext.Current.User.Identity.Name.ToString()));
             List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
             Dictionary<string, object> row;
             if (dt1 != null)

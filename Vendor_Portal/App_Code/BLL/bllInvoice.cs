@@ -567,9 +567,9 @@ namespace Vendor_Portal.App_Code.BLL
             return dalInvoice.ApproveVendorAllAccountDetails(htParam);
         }
 
-        public DataTable GetAllRegisteredVendors()
+        public DataTable GetAllRegisteredVendors(int EmployeeId)
         {
-            return dalInvoice.GetAllRegisteredVendors();
+            return dalInvoice.GetAllRegisteredVendors(EmployeeId);
         }
 
 

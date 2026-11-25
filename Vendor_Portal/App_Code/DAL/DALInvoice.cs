@@ -1186,9 +1186,11 @@ namespace Vendor_Portal.App_Code.DAL
             return ReturnValue;
         }
 
-        public System.Data.DataTable GetAllRegisteredVendors()
+        public System.Data.DataTable GetAllRegisteredVendors(int EmployeeId)
         {
             SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "GetAllRegisteredVendors_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@EmployeeId", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, EmployeeId);
+
             System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
             return dt;
         }

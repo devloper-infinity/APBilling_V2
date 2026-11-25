@@ -24,19 +24,19 @@ function BindGrid_saleInvoiceApproval() {
                 invrec_html_sales += '<td style="text-wrap: nowrap; display:none;">' + blankForNull(value.InvoiceId) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.Month) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.Year) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.ToCompany) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorName) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorType) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceCategory) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceType) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceNo) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceDate) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.BillTo) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.Balance) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.Delay) + '</td>';
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.DueDate) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorName) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.ToCompany) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceCategory) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.ServicePeriodFrom) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.ServicePeriodTo) + '</td>';               
                 invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.InvoiceAmount) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.PaymentTerms) + '</td>';
-                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.PaymentFromCompany) + '</td>';
+                invrec_html_sales += '<td style="text-wrap: nowrap;">' + blankForNull(value.payment) + '</td>';
+              
                 invrec_html_sales += '</tr>';
             });
 

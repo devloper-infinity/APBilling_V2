@@ -98,10 +98,13 @@ namespace Vendor_Portal.Vendor
             {
                 string invoiceType = Convert.ToString(dt.Rows[0]["NewInvoiceType"]);
                 string vendorInvNo = Convert.ToString(dt.Rows[0]["VendorInvoiceNumber"]);
+                string ToCompany = Convert.ToString(dt.Rows[0]["ToCompany"]);
+                string VendorName = Convert.ToString(dt.Rows[0]["VendorName"]);
+                string VendorType = Convert.ToString(dt.Rows[0]["VendorType"]);
 
-                Subject = isApproved
-                    ? "Bill is approved for payment-" + invoiceType + "-" + vendorInvNo
-                    : "Bill is Hold for payment-" + invoiceType + "-" + vendorInvNo;
+                string statusText = isApproved ? "Bill is approved for payment" : "Bill is Hold for payment";
+
+                Subject = $"{ToCompany} - {statusText}-{invoiceType}-{vendorInvNo}-{VendorName}-{VendorType}";
 
                 string statusIntro = isApproved
                     ? "Below vendor payments are approved."
@@ -110,7 +113,7 @@ namespace Vendor_Portal.Vendor
                 htmlBody.Append("<br />Dear Sir/Madam,<br />");
                 htmlBody.Append("<br /><font color=brown face=Verdana size=2><b> " + statusIntro + BillingDatePeriod + "</b></font><br />");
                 htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'>");
-                htmlBody.Append("<tr style='background-color:#244b73; color:White;'><td colspan='15'><center><b>" + ProjectName + "-Details " + BillingDatePeriod + "</b></center></td></tr>");
+                htmlBody.Append("<tr style='background-color:#244b73; color:White;'><td colspan='" + colCount + "'><center><b>" + ProjectName + "-Details " + BillingDatePeriod + "</b></center></td></tr>");
                 htmlBody.Append("<tr><td colspan='" + colCount + "' style='border:none; height:3px; background-color:White;'></td></tr>");
 
                 if (isApproved)

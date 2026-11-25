@@ -301,19 +301,19 @@
             <th class="sort border-top ps-3" style="text-wrap: nowrap; display: none;">InvoiceId</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Month</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Year</th>
+             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Company</th>
+              <th class="sort border-top ps-3" style="text-wrap: nowrap;">Vendor Name</th>
+              <th class="sort border-top ps-3" style="text-wrap: nowrap;">Vendor Type</th>
+              <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice Category</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice Type</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice #</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice Date</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Bill To</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Balance</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Delay</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Due Date</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Vendor Name</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">To Company</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice Category</th>
+            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Service Period From</th>
+            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Service Period To</th>
             <th class="sort border-top ps-3" style="text-wrap: nowrap;">Invoice Amount</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Payment Terms</th>
-            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Payment From Company</th>
+            <th class="sort border-top ps-3" style="text-wrap: nowrap;">Payment</th>
+       
         </tr>
     </thead>
     <tbody></tbody>

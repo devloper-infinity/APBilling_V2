@@ -118,7 +118,6 @@ namespace Vendor_Portal.Vendor
 
             // New parameters
             htParam.Add("SeletedVendorName", VendorName);
-
             htParam.Add("VendorType", VendorType ?? string.Empty);
             htParam.Add("ToCompany", ToCompany ?? string.Empty);
             htParam.Add("EmailAddress", EmailAddress ?? string.Empty);
@@ -476,6 +475,18 @@ namespace Vendor_Portal.Vendor
 
             if (dt.Rows.Count > 0)
             {
+                string ToCompany = dt.Columns.Contains("ToCompany")
+                   ? Convert.ToString(dt.Rows[0]["ToCompany"])
+                   : Convert.ToString(dt.Rows[0]["ToCompany"]);
+
+                string VendorName = dt.Columns.Contains("VendorName")
+                  ? Convert.ToString(dt.Rows[0]["VendorName"])
+                  : Convert.ToString(dt.Rows[0]["VendorName"]);
+
+                string VendorType = dt.Columns.Contains("VendorType")
+                  ? Convert.ToString(dt.Rows[0]["VendorType"])
+                  : Convert.ToString(dt.Rows[0]["VendorType"]);
+
                 string invNo = dt.Columns.Contains("InvoiceNo")
                     ? Convert.ToString(dt.Rows[0]["InvoiceNo"])
                     : Convert.ToString(dt.Rows[0]["VendorInvoiceNumber"]);
@@ -484,7 +495,7 @@ namespace Vendor_Portal.Vendor
                     ? Convert.ToString(dt.Rows[0]["InvoiceType"])
                     : Convert.ToString(dt.Rows[0]["NewInvoiceType"]);
 
-                Subject = "IPS - New Invoice" + "-" + invType + "-" + invNo + " : Pending for Approval";
+                Subject = $"{ToCompany} - New Invoice-{invType}-{invNo}-{VendorName}-{VendorType} : Pending for Approval";
                 htmlBody.Append("<br />Dear Sir/Madam,<br />");
                 htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New invoice has been added in system with below details" + BillingDatePeriod + ".</b></font><br />");
 
