@@ -904,7 +904,7 @@ $(document).on('click', '#vendorreg_btnsubmitrate', function () {
     var processDropdown = $('#vendorreg_Process');
     var Process = (processDropdown.val() === "") ? null : processDropdown.find('option:selected').text();
     var BillingCycle = $('#vendorreg_BillingCycle').val();
-    var EmployeeID = $('#vendorreg_EmployeeList').val();
+    var EmployeeID = $('#vendorreg_EmployeeList').val() || 0;
 
     if (!vendorRegistrationID || !fromDate || !rateType || !rate || !BillingCycle) {
         Swal.fire({

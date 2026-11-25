@@ -1471,5 +1471,24 @@ namespace Vendor_Portal.App_Code.DAL
             cmd.Dispose();
             return ReturnValue;
         }
+
+        public int ApprovedInvoice_Sales(Hashtable htParam)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_ApprovedInvoice_Sales");
+            SQLHelper.AddParamToSQLCmd(cmd, "@InvoiceId", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["InvoiceId"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@IsApproved", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, htParam["IsApproved"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Remark"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@ApprovedBy", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["ApprovedBy"]);
+            SQLHelper.AddParamToSQLCmd(cmd, "@Status", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Status"]);
+            
+            SQLHelper.AddParamToSQLCmd(cmd, "@PaybleToVendor", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["PaybleToVendor"]);
+
+            SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
+            SQLHelper.ExecuteNonQueryCmd(cmd);
+            int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
+            cmd.Dispose();
+            return ReturnValue;
+        }
+
     }
 }

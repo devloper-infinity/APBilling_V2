@@ -27,10 +27,21 @@ namespace Vendor_Portal.Vendor
                 li3.Visible = true;
                 li1.Visible = true;
                 Menu_Billing.Visible = true;
-                Menu_SalesInvoice.Visible = false;
+               
+                Menu_SalesInvoice.Visible = true;
             }
-            else if (LoginID == 209 || LoginID == 8128 || LoginID == 5)
+            else if (LoginID == 209)//MDK
             {
+                li_MasterSection.Visible = true;
+                li_UpdateClientInvoice.Visible = false;
+                li_UpdatePaidDate.Visible = false;
+                li_UpdatePaidDateOther.Visible = false;
+                li_CanopyMGTReport.Visible = false;
+                li_IPSMGTReport.Visible = false;
+                li2.Visible = false;
+                li3.Visible = false;
+                li1.Visible = false;
+                Menu_Billing.Visible = false;
                 Menu_SalesInvoice.Visible = true;
             }
 

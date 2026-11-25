@@ -94,6 +94,31 @@ namespace Vendor_Portal.Vendor
         }
 
         [WebMethod]
+        public static string GetInfinity_SalesInvoiceDetails_Approval()
+        {
+
+            DataTable dt1 = new bllInvoice().GetInfinity_SalesInvoiceDetails_Approval();
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            if (dt1 != null)
+            {
+                foreach (DataRow dr in dt1.Rows)
+                {
+                    row = new Dictionary<string, object>();
+                    foreach (DataColumn col in dt1.Columns)
+                    {
+                        row.Add(col.ColumnName, dr[col]);
+                    }
+                    rows.Add(row);
+                }
+            }
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            ser.MaxJsonLength = int.MaxValue;
+            return ser.Serialize(rows);
+        }
+
+
+        [WebMethod]
         public static int ApprovalInvoice(int InvoiceId, string Remark, string strCompany, string InvType,string status, string Approval_LoansDeducted, string Approval_AmountDeducted, string Approval_PaybleToVendor)
         {
             int ReturnValue = 0;
@@ -626,7 +651,7 @@ namespace Vendor_Portal.Vendor
             try
             {
               
-                DataTable dt = new bllInvoice().GetInvoiceFilePath(invoiceId.ToString(), InvoiceType);
+                DataTable dt = new bllInvoice().GetInvoiceFilePath(invoiceId.ToString(), Company);
                 string filePath = string.Empty;
 
                 if (dt != null && dt.Rows.Count > 0)

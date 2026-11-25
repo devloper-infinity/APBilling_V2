@@ -110,7 +110,7 @@ namespace Vendor_Portal.Vendor
             htParam.Add("DueDate", Convert.ToDateTime(DueDate).ToString("MM/dd/yyyy"));
             htParam.Add("Domain", "Underwriting");
             htParam.Add("Currency", "USD");
-            htParam.Add("NoOfLoans", "");
+            htParam.Add("NoOfLoans", 0);
             htParam.Add("VendorInvoiceNumber", InvoiceNumber);
             htParam.Add("TotalDue", InvoiceAmount);
             htParam.Add("VendorName", "IPS"); 
