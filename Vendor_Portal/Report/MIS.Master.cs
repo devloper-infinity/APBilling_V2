@@ -13,7 +13,7 @@ namespace Vendor_Portal
         {
 
             int LoginID = int.Parse(HttpContext.Current.User.Identity.Name.ToString());
-            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128)
+            if (LoginID == 5  || LoginID == 235 || LoginID == 8128)
             {
                 li_MasterSection.Visible = true;
                 li_UpdateClientInvoice.Visible = true;
@@ -22,10 +22,36 @@ namespace Vendor_Portal
                 li_CanopyMGTReport.Visible = true;
                 li_IPSMGTReport.Visible = true;
                 Menu_Billing.Visible = true;
+                Menu_SalesInvoice.Visible = true;
             }
 
-            else if (LoginID == 209 || LoginID == 8128 || LoginID == 5)
+            if (LoginID == 12 )
             {
+                li_MasterSection.Visible = true;
+                li_UpdateClientInvoice.Visible = true;
+                li_UpdatePaidDate.Visible = true;
+                li_UpdatePaidDateOther.Visible = true;
+                li_CanopyMGTReport.Visible = true;
+                li_IPSMGTReport.Visible = true;
+                Menu_Billing.Visible = true;
+                Menu_SalesInvoice.Visible = false;
+            }
+
+
+            else if (LoginID == 209)
+            {
+                //Menu_SalesInvoice.Visible = true;
+
+                li_MasterSection.Visible = true;
+                li_UpdateClientInvoice.Visible = false;
+                li_UpdatePaidDate.Visible = false;
+                li_UpdatePaidDateOther.Visible = false;
+                li_CanopyMGTReport.Visible = false;
+                li_IPSMGTReport.Visible = false;
+                li2.Visible = false;
+                li3.Visible = false;
+                li1.Visible = false;
+                Menu_Billing.Visible = false;
                 Menu_SalesInvoice.Visible = true;
             }
 

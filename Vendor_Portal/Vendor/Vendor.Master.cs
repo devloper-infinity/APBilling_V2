@@ -15,7 +15,7 @@ namespace Vendor_Portal.Vendor
 
             //Master
 
-            if (LoginID == 5 || LoginID == 12 || LoginID == 235 || LoginID == 8128 || LoginID == 9961 )
+            if (LoginID == 5 || LoginID == 235 || LoginID == 8128 )
             {
                 li_MasterSection.Visible = true;
                 li_UpdateClientInvoice.Visible = true;
@@ -27,8 +27,22 @@ namespace Vendor_Portal.Vendor
                 li3.Visible = true;
                 li1.Visible = true;
                 Menu_Billing.Visible = true;
-               
                 Menu_SalesInvoice.Visible = true;
+            }
+
+            else if (LoginID == 12 || LoginID == 9961)
+            {
+                li_MasterSection.Visible = true;
+                li_UpdateClientInvoice.Visible = true;
+                li_UpdatePaidDate.Visible = true;
+                li_UpdatePaidDateOther.Visible = true;
+                li_CanopyMGTReport.Visible = true;
+                li_IPSMGTReport.Visible = true;
+                li2.Visible = true;
+                li3.Visible = true;
+                li1.Visible = true;
+                Menu_Billing.Visible = true;
+                Menu_SalesInvoice.Visible = false;
             }
             else if (LoginID == 209)//MDK
             {
@@ -45,7 +59,7 @@ namespace Vendor_Portal.Vendor
                 Menu_SalesInvoice.Visible = true;
             }
 
-            else if (LoginID== 6959)
+            else if (LoginID== 6959) //DGJ
             {
                 li_MasterSection.Visible = false;
                 li_UpdateClientInvoice.Visible = false;
