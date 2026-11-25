@@ -142,13 +142,13 @@ function salesInvoiceApproval() {
         window.popUp_InvType,
         Status,
         Approval_PaybleToVendor,
-        OnSuccessRemove,
-        OnErrorRemove
+        OnsalesSuccessRemove,
+        OnsalesErrorRemove
     );
     return false;
 }
 
-function OnSuccessRemove(result) {
+function OnsalesSuccessRemove(result) {
     $('#waitingpanel').modal('hide');
 
     if (result > 0) {
@@ -179,7 +179,7 @@ function OnSuccessRemove(result) {
     }
 }
 
-function OnErrorRemove(error) {
+function OnsalesErrorRemove(error) {
     $('#waitingpanel').modal('hide');
     console.error(error);
     alert("Error: " + (error.get_message ? error.get_message() : "Unable to process approval."));
