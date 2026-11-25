@@ -108,14 +108,24 @@ function SalesApproveInvoice(InvoiceId, index) {
 function salesInvoiceApproval() {
     var remark = document.getElementById("salesApproval_remark").value.trim();
     if (remark === "") {
-        alert("Approve remarks should not be blank.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Missing Remarks',
+            text: 'Approve remarks should not be blank.',
+            confirmButtonText: 'OK'
+        });
         return false;
     }
 
     var ApStatus = document.getElementById("salesApproval_Status");
     var Status = ApStatus.options[ApStatus.selectedIndex].value;
     if (Status === "") {
-        alert("Status should not be blank.");
+        Swal.fire({
+            icon: 'warning',
+            title: 'Missing Status',
+            text: 'Status should not be blank.',
+            confirmButtonText: 'OK'
+        });
         return false;
     }
 
@@ -145,12 +155,26 @@ function OnSuccessRemove(result) {
         window.popUp_InvID = 0;
         window.popUp_Company = '';
         window.popUp_InvType = '';
-        alert("Invoice remark has been added successfully and email has been sent.");
-        location.reload();
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Invoice remark has been added successfully and email has been sent.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            location.reload();
+        });
+
         return false;
     } else {
-        alert("Oops! Error occured while approved Invoice. Please contact administrator");
-        location.reload();
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Error occurred while approving Invoice. Please contact administrator.',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            location.reload();
+        });
+
         return false;
     }
 }
