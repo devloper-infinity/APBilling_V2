@@ -389,18 +389,10 @@ div[class*="container"] {
                                                 <th>Sr.No.</th>
                                                 <th>Company</th>
                                                 <th>Vendor Type</th>
-
                                                 <th>Vendor</th>
-
                                                 <th>Contact Person</th>
-                                                <th>Contact No</th>
-                                                <th>Email ID</th>
-
-                                                <th>Account Number</th>
                                                 <th>Billing Cycle</th>
-
                                                 <th>Process</th>
-
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

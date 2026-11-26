@@ -20,12 +20,8 @@ function GetVendors_bindgrid() {
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull((index + 1)) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.CompanyName) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorType) + '</td>';
-
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.VendorName) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.ContactPerson) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.ContactNo) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.EmailID) + '</td>';
-                vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.AccountNumber) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.BillingCycle) + '</td>';
                 vendorreg_html += '<td style="text-wrap: nowrap;">' + blankForNull(value.Process) + '</td>';
 
