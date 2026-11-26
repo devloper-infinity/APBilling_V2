@@ -419,7 +419,7 @@ function btnsubmitInsertVendorRegistration() {
 
                     var successMessage = (parseInt(vendorIdFromURL) > 0)
                         ? 'Vendor updated successfully!'
-                        : 'Vendor added successfully!';
+                        : 'Vendor added successfully  and email has been sent.!';
 
                     Swal.fire({
                         title: 'Success!',

@@ -5,6 +5,9 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
 using System.Web;
 using System.Web.Script.Serialization;
 using System.Web.Services;
@@ -40,6 +43,7 @@ namespace Vendor_Portal.Vendor
         {
            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
             int returnValue = 0;
+            var mc_VendorRegistration = new VendorRegistration();
             Hashtable htParam = new Hashtable();
 
 
@@ -120,7 +124,10 @@ namespace Vendor_Portal.Vendor
             {
                 returnValue = 0;
             }
-
+            if (returnValue > 0 && vendorId == 0) 
+            {
+                mc_VendorRegistration.sendEmailAddNewVendor(returnValue);
+            }
             return returnValue;
         }
 
@@ -400,6 +407,169 @@ namespace Vendor_Portal.Vendor
 
             return ProcessList;
         }
+
+
+
+        public void sendEmailAddNewVendor(int InvoiceId)
+        {
+            var mc_VendorRegistration = new VendorRegistration();
+            StringBuilder htmlBody = new StringBuilder();
+            string Subject;
+            string ProjectName = "Vendor";
+            string ProjectType = "";
+
+            DateTime dtime = DateTime.Today;
+
+            string Path = "";
+            string ToAddress = string.Empty;
+            string ToCC = string.Empty;
+
+            ToAddress = "k.aarti@infinity-data.com";
+            ToCC = "";
+
+            string BillingDatePeriod = "";
+
+            DataTable dt = new DataTable();
+            DataTable dtSummary = new DataTable();
+            DataTable dtAdvancePaymentSymmary = new DataTable();
+
+            dt = new bllInvoice().GetVendorDetailsByID(InvoiceId);
+
+            if (dt.Rows.Count > 0)
+            {
+                string ToCompany = dt.Columns.Contains("CompanyName")
+                   ? Convert.ToString(dt.Rows[0]["CompanyName"])
+                   : Convert.ToString(dt.Rows[0]["CompanyName"]);
+
+                string VendorName = dt.Columns.Contains("VendorName")
+                  ? Convert.ToString(dt.Rows[0]["VendorName"])
+                  : Convert.ToString(dt.Rows[0]["VendorName"]);
+
+                string VendorType = dt.Columns.Contains("VendorType")
+                  ? Convert.ToString(dt.Rows[0]["VendorType"])
+                  : Convert.ToString(dt.Rows[0]["VendorType"]);
+
+             
+
+             
+
+                Subject = $"{ToCompany} - New Vendor Registered-{VendorName}-{VendorType}";
+                htmlBody.Append("<br />Dear Sir/Madam,<br />");
+                htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New Vendor Registered in system with below details.</b></font><br />");
+
+                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=16><center><b>" + ProjectName + "-Details </b></center></td></tr>");
+                htmlBody.Append("<tr style='background-color:#244b73; color:White;'>" +
+                    "<td><center><b>Vendor Type</b></center></td>" +
+                    "<td><center><b>Vendor Name</b></center></td>" +
+                    "<td><center><b>Company Name</b></center></td>" +
+                    "<td><center><b>Contact Person</b></center></td>" +
+                    "<td><center><b>Contact No</b></center></td>" +
+                    "<td><center><b>Email ID</b></center></td>" +
+                    "<td><center><b>Website URL</b></center></td>" +
+                    "<td><center><b>Address</b></center></td>" +
+                    "<td><center><b>Pay To Vendor Name</b></center></td>" +
+                    "<td><center><b>Account Number</b></center></td>" +
+                    "<td><center><b>Remark</b></center></td>" +
+                    "<td><center><b>Domain</b></center></td>" +
+                    "<td><center><b>Payment Method</b></center></td>" +
+                    "<td><center><b>Routing No</b></center></td>" +
+                    "<td><center><b>Tax SSN EIN</b></center></td>" +
+                    "<td><center><b>Tax ID</b></center></td>" +
+                   
+                    "</tr>");
+
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    htmlBody.Append("<tr style='background-color:White; color:black;'>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorType"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorName"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["CompanyName"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactPerson"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactNo"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["EmailID"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["WebsiteURL"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Address"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PayToVendorName"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["AccountNumber"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Domain"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PaymentMethod"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["RoutingNo"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxSSNEIN"]) + "</b></center></td>" +
+                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxID"]) + "</b></center></td>" +
+                        "</tr>");
+                }
+
+                htmlBody.Append("</table>");
+
+          
+
+                htmlBody.Append("<br /><br /><table width=\"650px\" style='font-size:13px;'><tr><td align=\"left\">Thanks,<br />Infinity </td></tr> <tr> <br /><td align=\"center\"><b>!!! This is software generated e-mail...Please do not reply. !!!</td></tr></table>");
+                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\"></td></tr> <tr> <br /><td align=\"center\"><b>" + "***********************************************************************************************************************************************************************************************" + "</td></tr></table>");
+                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "<b>CONFIDENTIALITY INFORMATION AND DISCLAIMER</b>" + "</td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
+                htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
+                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
+
+                mc_VendorRegistration.sendEmailVendorRegistration(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+            }
+        }
+
+        [WebMethod]
+        public bool sendEmailVendorRegistration(string ToAddress, string ToCC, string ToBCC, string Subject, string Path, StringBuilder htmlBody)
+        {
+            try
+            {
+                String Body = htmlBody.ToString();
+                StringBuilder template = new StringBuilder();
+                template.Append("<html><head></head><body>");
+                //template.Append("<img src=\"http://www.infinity-data.com/images/TemplateHeader.png\" /><br />");
+                template.Append(Body);
+                //template.Append("<br /><img src=\"http://www.infinity-data.com/images/TemplateFooter.png\" />");
+                template.Append("</body></html>");
+                MailMessage mail = new MailMessage();
+
+                mail.To.Add(ToAddress);
+
+
+                if (ToCC != "")
+                    mail.CC.Add(ToCC);
+                if (ToBCC != "")
+                    mail.Bcc.Add(ToBCC);
+                mail.From = new MailAddress("ack@infinity-data.com", "IPS AP Billing", System.Text.Encoding.UTF8);
+
+                mail.Subject = Subject;
+                mail.SubjectEncoding = System.Text.Encoding.UTF8;
+                mail.Body = template.ToString();
+                mail.BodyEncoding = System.Text.Encoding.UTF8;
+                mail.IsBodyHtml = true;
+
+                string pass = new bllInvoice().GetPassword("ackdata");
+                SmtpClient client = new SmtpClient();
+                client.UseDefaultCredentials = false;
+                client.Credentials = new System.Net.NetworkCredential("ack@infinity-data.com", pass);
+                client.Host = "smtp.office365.com";
+                client.Port = 587;
+                client.EnableSsl = true;
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+                try
+                {
+                    client.Send(mail);
+                }
+                catch (Exception ex)
+                {
+                    //AddException(ex.Message + '~' + pass);
+                }
+                htmlBody.Remove(0, htmlBody.Length);
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
 
     }
 }
