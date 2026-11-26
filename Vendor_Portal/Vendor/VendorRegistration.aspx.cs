@@ -425,7 +425,7 @@ namespace Vendor_Portal.Vendor
             string ToCC = string.Empty;
 
             ToAddress = "k.aarti@infinity-data.com";
-            ToCC = "";
+            ToCC = "p.kedar@infinity-data.com";
 
             string BillingDatePeriod = "";
 
