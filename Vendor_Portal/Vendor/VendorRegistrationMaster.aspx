@@ -34,7 +34,7 @@ div[class*="container"] {
 
 .vendorreg-page, 
 .vendorreg-master-modern {
-    width: 100vw !important;
+    width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -269,17 +269,39 @@ div[class*="container"] {
     display: inline-block;
     width: auto;
 }
-.alert-danger {  
-    max-width: 1290px; 
-    margin: 6px auto 4px auto !important;
+.alert-danger,
+.alert-info,
+#acVerifyBanner {
+    width: calc(100% - 40px) !important;
+    max-width: 100% !important;
+    margin: 6px 20px 4px 20px !important;
+    box-sizing: border-box !important;
 }
-.alert-info {  
-    max-width: 1290px; 
-    margin: 6px auto 4px auto !important;
-    padding: 8px 16px !important;
 
+.alert-info {
+    padding: 8px 16px !important;
+}
+
+@media (max-width: 768px) {
+    .alert-danger,
+    .alert-info,
+    #acVerifyBanner {
+        width: calc(100% - 24px) !important;
+        margin: 6px 12px 4px 12px !important;
+    }
 }
 .cm-countdown { font-weight: bold; color: #c82333; }
+.vendorreg-master-modern .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+#vendorregistration_table th,
+#vendorregistration_table td {
+    white-space: nowrap;
+}
+
  </style>
 
         <script src="../Scripts/Functions/VendorRegistrationMaster.js" type="text/javascript"></script>
@@ -344,7 +366,7 @@ div[class*="container"] {
         <div id="acVerifyBanner" class="alert alert-success" style="display:none; max-width: 1290px; margin: 6px auto 4px auto;"></div>
         <div class="alert alert-info">Access remaining: <b id="acCountdown" class="text-danger cm-countdown">15:00</b></div>
 
-        <div style="width: 100%; max-width: 1400px; margin: 0 auto; padding: 4px 20px 20px 20px; box-sizing: border-box;">
+        <div style="width: 100%; max-width: 100%; margin: 0 auto; padding: 4px 20px 20px 20px; box-sizing: border-box;">
 
             <div class="vendorreg-page">
                 <div class="page-header">

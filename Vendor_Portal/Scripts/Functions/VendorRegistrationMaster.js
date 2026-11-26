@@ -36,7 +36,7 @@ function GetVendors_bindgrid() {
 
             $('#vendorregistration_table').DataTable({
                 dom: '<"row mb-3"<"col-md-6"l><"col-md-6"f>>rtip',
-                scrollX: true,
+               
                 destroy: true,
                 "paging": true,
                 "autoWidth": false,
