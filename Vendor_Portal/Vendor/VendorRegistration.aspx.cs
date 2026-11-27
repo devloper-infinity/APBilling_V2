@@ -412,97 +412,436 @@ namespace Vendor_Portal.Vendor
 
         public void sendEmailAddNewVendor(int InvoiceId)
         {
+            //var mc_VendorRegistration = new VendorRegistration();
+            //StringBuilder htmlBody = new StringBuilder();
+            //string Subject;
+            //string ProjectName = "Vendor";
+            //string ProjectType = "";
+
+            //DateTime dtime = DateTime.Today;
+
+            //string Path = "";
+            //string ToAddress = string.Empty;
+            //string ToCC = string.Empty;
+
+            //ToAddress = "k.aarti@infinity-data.com";
+            //ToCC = "p.kedar@infinity-data.com";
+
+            //string BillingDatePeriod = "";
+
+            //DataTable dt = new DataTable();
+            //DataTable dtSummary = new DataTable();
+            //DataTable dtAdvancePaymentSymmary = new DataTable();
+
+            //dt = new bllInvoice().GetVendorDetailsByID(InvoiceId);
+
+            //if (dt.Rows.Count > 0)
+            //{
+            //    string ToCompany = dt.Columns.Contains("CompanyName")
+            //       ? Convert.ToString(dt.Rows[0]["CompanyName"])
+            //       : Convert.ToString(dt.Rows[0]["CompanyName"]);
+
+            //    string VendorName = dt.Columns.Contains("VendorName")
+            //      ? Convert.ToString(dt.Rows[0]["VendorName"])
+            //      : Convert.ToString(dt.Rows[0]["VendorName"]);
+
+            //    string VendorType = dt.Columns.Contains("VendorType")
+            //      ? Convert.ToString(dt.Rows[0]["VendorType"])
+            //      : Convert.ToString(dt.Rows[0]["VendorType"]);
+
+
+            //    Subject = $"{ToCompany} - New Vendor Registered-{VendorName}-{VendorType}";
+            //    htmlBody.Append("<br />Dear Sir/Madam,<br />");
+            //    htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New Vendor Registered in system with below details.</b></font><br />");
+
+            //    htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=13><center><b>" + ProjectName + "-Details </b></center></td></tr>");
+            //    htmlBody.Append("<tr style='background-color:#244b73; color:White;'>" +
+            //        "<td><center><b>Vendor Type</b></center></td>" +
+            //        "<td><center><b>Vendor Name</b></center></td>" +
+            //        "<td><center><b>Company Name</b></center></td>" +
+            //        "<td><center><b>Contact Person</b></center></td>" +
+            //        "<td><center><b>Contact No</b></center></td>" +
+            //        "<td><center><b>Email ID</b></center></td>" +
+            //        "<td><center><b>Website URL</b></center></td>" +
+            //        "<td><center><b>Address</b></center></td>" +
+            //        "<td><center><b>Pay To Vendor Name</b></center></td>" +                  
+            //        "<td><center><b>Remark</b></center></td>" +
+            //        "<td><center><b>Domain</b></center></td>" +
+            //        "<td><center><b>Tax SSN EIN</b></center></td>" +
+            //        "<td><center><b>Tax ID</b></center></td>" +
+
+            //        "</tr>");
+
+            //    for (int i = 0; i < dt.Rows.Count; i++)
+            //    {
+            //        htmlBody.Append("<tr style='background-color:White; color:black;'>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorType"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorName"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["CompanyName"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactPerson"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactNo"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["EmailID"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["WebsiteURL"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["Address"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["PayToVendorName"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["Domain"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxSSNEIN"]) + "</b></center></td>" +
+            //            "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxID"]) + "</b></center></td>" +
+            //            "</tr>");
+            //    }
+
+            //    htmlBody.Append("</table>");
+
+
+
+            //    htmlBody.Append("<br /><br /><table width=\"650px\" style='font-size:13px;'><tr><td align=\"left\">Thanks,<br />Infinity </td></tr> <tr> <br /><td align=\"center\"><b>!!! This is software generated e-mail...Please do not reply. !!!</td></tr></table>");
+            //    htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\"></td></tr> <tr> <br /><td align=\"center\"><b>" + "***********************************************************************************************************************************************************************************************" + "</td></tr></table>");
+            //    htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "<b>CONFIDENTIALITY INFORMATION AND DISCLAIMER</b>" + "</td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
+            //    htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
+            //    htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
+
+            //    mc_VendorRegistration.sendEmailVendorRegistration(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+            //}
+
+
+
             var mc_VendorRegistration = new VendorRegistration();
+
             StringBuilder htmlBody = new StringBuilder();
-            string Subject;
-            string ProjectName = "Vendor";
-            string ProjectType = "";
 
-            DateTime dtime = DateTime.Today;
+            string Subject = string.Empty;
+            string ProjectName = "Vendor Registration";
+            string Path = string.Empty;
 
-            string Path = "";
-            string ToAddress = string.Empty;
-            string ToCC = string.Empty;
-
-            ToAddress = "k.aarti@infinity-data.com";
-            ToCC = "p.kedar@infinity-data.com";
-
-            string BillingDatePeriod = "";
+            string ToAddress = "k.aarti@infinity-data.com";
+            string ToCC = "p.kedar@infinity-data.com";
 
             DataTable dt = new DataTable();
-            DataTable dtSummary = new DataTable();
-            DataTable dtAdvancePaymentSymmary = new DataTable();
 
             dt = new bllInvoice().GetVendorDetailsByID(InvoiceId);
 
             if (dt.Rows.Count > 0)
             {
-                string ToCompany = dt.Columns.Contains("CompanyName")
-                   ? Convert.ToString(dt.Rows[0]["CompanyName"])
-                   : Convert.ToString(dt.Rows[0]["CompanyName"]);
+                string ToCompany = Convert.ToString(dt.Rows[0]["CompanyName"]);
+                string VendorName = Convert.ToString(dt.Rows[0]["VendorName"]);
+                string VendorType = Convert.ToString(dt.Rows[0]["VendorType"]);
 
-                string VendorName = dt.Columns.Contains("VendorName")
-                  ? Convert.ToString(dt.Rows[0]["VendorName"])
-                  : Convert.ToString(dt.Rows[0]["VendorName"]);
+                Subject = ToCompany + " - New Vendor Registration - "
+                          + VendorName + " (" + VendorType + ")";
 
-                string VendorType = dt.Columns.Contains("VendorType")
-                  ? Convert.ToString(dt.Rows[0]["VendorType"])
-                  : Convert.ToString(dt.Rows[0]["VendorType"]);
+                // -------------------------------------------------
+                // EMAIL HTML DESIGN
+                // -------------------------------------------------
 
-    
-                Subject = $"{ToCompany} - New Vendor Registered-{VendorName}-{VendorType}";
-                htmlBody.Append("<br />Dear Sir/Madam,<br />");
-                htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New Vendor Registered in system with below details.</b></font><br />");
+                htmlBody.Append(@"
+    <html>
+    <head>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>
+    </head>
 
-                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=13><center><b>" + ProjectName + "-Details </b></center></td></tr>");
-                htmlBody.Append("<tr style='background-color:#244b73; color:White;'>" +
-                    "<td><center><b>Vendor Type</b></center></td>" +
-                    "<td><center><b>Vendor Name</b></center></td>" +
-                    "<td><center><b>Company Name</b></center></td>" +
-                    "<td><center><b>Contact Person</b></center></td>" +
-                    "<td><center><b>Contact No</b></center></td>" +
-                    "<td><center><b>Email ID</b></center></td>" +
-                    "<td><center><b>Website URL</b></center></td>" +
-                    "<td><center><b>Address</b></center></td>" +
-                    "<td><center><b>Pay To Vendor Name</b></center></td>" +                  
-                    "<td><center><b>Remark</b></center></td>" +
-                    "<td><center><b>Domain</b></center></td>" +
-                    "<td><center><b>Tax SSN EIN</b></center></td>" +
-                    "<td><center><b>Tax ID</b></center></td>" +
-                   
-                    "</tr>");
+    <body style='margin:0; padding:0; background-color:#f4f6f9;
+                 font-family:Arial, Helvetica, sans-serif;'>
+
+    <table width='100%' cellpadding='0' cellspacing='0'
+           border='0' style='background-color:#f4f6f9; padding:20px 0;'>
+
+    <tr>
+    <td align='center'>
+
+    <table width='950' cellpadding='0' cellspacing='0'
+           border='0' style='background-color:#ffffff;
+           border:1px solid #dce2e8;'>
+
+    <!-- HEADER -->
+
+    <tr>
+    <td style='background-color:#244b73; padding:22px 25px;
+               color:#ffffff;'>
+
+        <div style='font-size:21px; font-weight:bold;'>
+            INFINITY
+        </div>
+
+        <div style='font-size:12px; padding-top:5px; color:#e3edf7;'>
+            Vendor Management System
+        </div>
+
+    </td>
+    </tr>
+
+    <!-- TITLE -->
+
+    <tr>
+    <td style='padding:25px 25px 10px 25px;'>
+
+        <div style='font-size:20px; font-weight:bold;
+                    color:#244b73;'>
+            New Vendor Registration
+        </div>
+
+        <div style='font-size:13px; color:#777777;
+                    padding-top:7px;'>
+            Vendor registration notification
+        </div>
+
+        <hr style='border:0; border-top:1px solid #e5e9ef;
+                   margin-top:18px;'>
+
+    </td>
+    </tr>
+
+    <!-- EMAIL CONTENT -->
+
+    <tr>
+    <td style='padding:5px 25px 20px 25px;
+               font-size:14px; color:#333333;
+               line-height:1.7;'>
+
+        Dear Team,
+
+        <br/><br/>
+
+        We are pleased to inform you that a new vendor has been
+        successfully registered in the Infinity Vendor Management
+        System.
+
+        <br/><br/>
+
+        Please find the vendor registration details below
+        for your reference.
+
+    </td>
+    </tr>
+
+    <!-- VENDOR DETAILS HEADING -->
+
+    <tr>
+    <td style='padding:0px 25px 10px 25px;'>
+
+        <div style='font-size:15px; font-weight:bold;
+                    color:#244b73;'>
+            Vendor Registration Details
+        </div>
+
+    </td>
+    </tr>
+
+    <!-- VENDOR DETAILS TABLE -->
+
+    <tr>
+    <td style='padding:0px 25px 20px 25px;'>
+
+    <table width='100%' cellpadding='8' cellspacing='0'
+           border='0'
+           style='border-collapse:collapse;
+                  font-size:12px;
+                  border:1px solid #d9e0e7;'>
+
+    <tr style='background-color:#244b73; color:#ffffff;'>
+
+        <th align='left' style='border:1px solid #d9e0e7;'>Vendor Type</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Vendor Name</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Company Name</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Contact Person</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Contact No.</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Email ID</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Website</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Address</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Pay To Vendor</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Remark</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Domain</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Tax SSN / EIN</th>
+        <th align='left' style='border:1px solid #d9e0e7;'>Tax ID</th>
+
+    </tr>
+    ");
+
+                // -------------------------------------------------
+                // DYNAMIC VENDOR DETAILS
+                // -------------------------------------------------
 
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    htmlBody.Append("<tr style='background-color:White; color:black;'>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorType"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["VendorName"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["CompanyName"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactPerson"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["ContactNo"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["EmailID"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["WebsiteURL"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Address"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PayToVendorName"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["Domain"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxSSNEIN"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxID"]) + "</b></center></td>" +
-                        "</tr>");
+                    string rowColor = (i % 2 == 0) ? "#ffffff" : "#f5f8fc";
+
+                    htmlBody.Append("<tr style='background-color:" + rowColor + ";'>");
+
+                    string[] columns =
+                    {
+            "VendorType",
+            "VendorName",
+            "CompanyName",
+            "ContactPerson",
+            "ContactNo",
+            "EmailID",
+            "WebsiteURL",
+            "Address",
+            "PayToVendorName",
+            "Remark",
+            "Domain",
+            "TaxSSNEIN",
+            "TaxID"
+        };
+
+                    foreach (string column in columns)
+                    {
+                        string value = dt.Columns.Contains(column)
+                            ? Convert.ToString(dt.Rows[i][column])
+                            : string.Empty;
+
+                        value = HttpUtility.HtmlEncode(value);
+
+                        if (column == "EmailID" && !string.IsNullOrWhiteSpace(value))
+                        {
+                            value = "<a href='mailto:" + value +
+                                    "' style='color:#1769aa; text-decoration:none;'>" +
+                                    value + "</a>";
+                        }
+                        else if (column == "WebsiteURL" &&
+                                 !string.IsNullOrWhiteSpace(value) &&
+                                 value != "NA")
+                        {
+                            string website = value;
+
+                            if (!website.StartsWith("http://",
+                                StringComparison.OrdinalIgnoreCase) &&
+                                !website.StartsWith("https://",
+                                StringComparison.OrdinalIgnoreCase))
+                            {
+                                website = "https://" + website;
+                            }
+
+                            value = "<a href='" + website +
+                                    "' style='color:#1769aa; text-decoration:none;'>" +
+                                    value + "</a>";
+                        }
+
+                        htmlBody.Append(
+                            "<td style='border:1px solid #d9e0e7;" +
+                            "padding:9px 7px;color:#333333;" +
+                            "vertical-align:top;'>" +
+                            value +
+                            "</td>");
+                    }
+
+                    htmlBody.Append("</tr>");
                 }
 
-                htmlBody.Append("</table>");
+                htmlBody.Append(@"
+    </table>
 
-          
+    </td>
+    </tr>
 
-                htmlBody.Append("<br /><br /><table width=\"650px\" style='font-size:13px;'><tr><td align=\"left\">Thanks,<br />Infinity </td></tr> <tr> <br /><td align=\"center\"><b>!!! This is software generated e-mail...Please do not reply. !!!</td></tr></table>");
-                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\"></td></tr> <tr> <br /><td align=\"center\"><b>" + "***********************************************************************************************************************************************************************************************" + "</td></tr></table>");
-                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "<b>CONFIDENTIALITY INFORMATION AND DISCLAIMER</b>" + "</td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
-                htmlBody.Append("<table width=\"600px\" style='font-size:12px;'><tr><td align=\"left\">" + "This message contains information which may be confidential and privileged. Unless you are the addressee (or authorized to receive for the addressee), you may not use copy or disclose to anyone the message or any information contained in the message. If you have received the message in error, please advise the sender by reply e-mail and delete the message. Thank you." + "</td></tr><tr><td align=\"center\"><b></td></tr></table>");
-                htmlBody.Append("<table width=\"600px\" style='font-size:10px;'><tr><td align=\"left\">" + "***********************************************************************************************************************************************************************************************" + " </td></tr> <tr> <br /><td align=\"center\"><b></td></tr></table>");
+    <!-- CLOSING MESSAGE -->
 
-                mc_VendorRegistration.sendEmailVendorRegistration(ToAddress, ToCC, "k.aarti@infinity-data.com", Subject, Path, htmlBody);
+    <tr>
+    <td style='padding:0px 25px 25px 25px;
+               font-size:13px; color:#333333;
+               line-height:1.7;'>
+
+        The vendor details have been successfully added
+        to the system.
+
+        <br/><br/>
+
+        Kindly review the above information and contact
+        the concerned team if any corrections or additional
+        information are required.
+
+        <br/><br/>
+
+        Best Regards,<br/>
+
+        <b style='color:#244b73;'>Infinity Team</b>
+
+    </td>
+    </tr>
+
+    <!-- AUTOMATED EMAIL NOTICE -->
+
+    <tr>
+    <td style='background-color:#eef3f8;
+               padding:14px 25px;
+               text-align:center;
+               font-size:12px;
+               color:#555555;'>
+
+        <b>This is an automatically generated email.
+        Please do not reply to this message.</b>
+
+    </td>
+    </tr>
+
+    <!-- CONFIDENTIALITY FOOTER -->
+
+    <tr>
+    <td style='padding:18px 25px;
+               font-size:10px;
+               color:#777777;
+               line-height:1.5;'>
+
+        <b>CONFIDENTIALITY INFORMATION AND DISCLAIMER</b>
+
+        <br/><br/>
+
+        This message contains information which may be
+        confidential and privileged. Unless you are the
+        intended recipient (or authorized to receive it),
+        you may not use, copy, or disclose any information
+        contained in this message.
+
+        If you have received this message in error, please
+        notify the sender by email and delete the message.
+
+        Thank you.
+
+    </td>
+    </tr>
+
+    <!-- BOTTOM -->
+
+    <tr>
+    <td style='background-color:#244b73;
+               padding:8px;
+               text-align:center;
+               color:#ffffff;
+               font-size:10px;'>
+
+        INFINITY FINANCIAL TECHNOLOGY PARTNERS
+
+    </td>
+    </tr>
+
+    </table>
+
+    </td>
+    </tr>
+    </table>
+
+    </body>
+    </html>
+    ");
+
+                // -------------------------------------------------
+                // SEND EMAIL
+                // -------------------------------------------------
+
+                mc_VendorRegistration.sendEmailVendorRegistration(
+                    ToAddress,
+                    ToCC,
+                    "k.aarti@infinity-data.com",
+                    Subject,
+                    Path,
+                    htmlBody
+                );
             }
+
+
+
+
+
         }
 
         [WebMethod]
