@@ -371,7 +371,7 @@ function btnsubmitInsertVendorRegistration() {
         Swal.fire({
             icon: 'warning',
             title: 'Required Field',
-            text: 'Please upload PaymentDocument.'
+            text: 'Please upload Payment Document.'
         }).then(() => {
             $('#vendorreg_PaymentDocument').focus();
         });
