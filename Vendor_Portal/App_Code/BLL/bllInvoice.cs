@@ -689,5 +689,15 @@ namespace Vendor_Portal.App_Code.BLL
         {
             return dalInvoice.ApprovedInvoice_Sales(htParam);
         }
+
+        public DataTable GetVendorsDocumentHistory(int VendorId)
+        {
+            return dalInvoice.GetVendorsDocumentHistory(VendorId);
+        }
+
+        public DataTable GetCompanyWiseVendor(string Company)
+        {
+            return dalInvoice.GetCompanyWiseVendor(Company);
+        }
     }
 }

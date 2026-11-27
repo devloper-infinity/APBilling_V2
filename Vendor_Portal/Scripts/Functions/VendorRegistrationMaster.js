@@ -1115,3 +1115,119 @@ function GetRateConfigProcess() {
         }
     });
 }
+
+
+function buildVendorDocInfo(rawPath) {
+    if (!rawPath || String(rawPath).trim() === "") {
+        return null;
+    }
+
+    var normalized = String(rawPath).replace(/\\/g, '/').trim();
+    var virtualIndex = normalized.toLowerCase().indexOf('vendordocument');
+    var fileUrl = '';
+
+    if (virtualIndex !== -1) {
+        fileUrl = window.location.origin + '/' + normalized.substring(virtualIndex);
+    } else {
+        fileUrl = normalized.replace(/^~/, '');
+        if (!fileUrl.startsWith('/') && !fileUrl.startsWith('http')) {
+            fileUrl = '/' + fileUrl;
+        }
+    }
+
+    var fileName = normalized.split('/').pop() || normalized;
+    return {
+        fileName: fileName,
+        fileUrl: fileUrl
+    };
+}
+
+function formatHistoryDate(dateVal) {
+    if (!dateVal) return '';
+    var str = String(dateVal).trim();
+    var msMatch = /\/Date\((\d+)\)\//.exec(str);
+    var dt = msMatch ? new Date(parseInt(msMatch[1], 10)) : new Date(str.replace(/^(\d{4}-\d{2}-\d{2})\s+/, '$1T'));
+    if (isNaN(dt.getTime())) return str;
+
+    var day = String(dt.getDate()).padStart(2, '0');
+    var month = String(dt.getMonth() + 1).padStart(2, '0');
+    var year = dt.getFullYear();
+    var hours = String(dt.getHours()).padStart(2, '0');
+    var minutes = String(dt.getMinutes()).padStart(2, '0');
+
+    return day + '-' + month + '-' + year + ' ' + hours + ':' + minutes;
+}
+function escapeHtml(str) {
+    return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function loadDocumentHistory(vendorId) {
+    if (!vendorId || parseInt(vendorId, 10) <= 0) return;
+
+    $('#vendorreg_dochistory_tbody').html(
+        '<tr><td colspan="4" class="text-center">Loading document history...</td></tr>'
+    );
+
+    $.ajax({
+        type: "POST",
+        url: "VendorRegistration.aspx/GetVendorsDocumentHistory",
+        data: JSON.stringify({ VendorId: parseInt(vendorId, 10) }),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success: function (response) {
+            var rows = typeof response.d === 'string' ? JSON.parse(response.d) : response.d;
+            var docColumns = [
+                { field: 'AgreementCopy', label: 'Agreement Copy' },
+                { field: 'PaymentDocument', label: 'Payment Document' },
+                { field: 'W9FormDocument', label: 'W-9 Form' },
+                { field: 'WorkDocument', label: 'Work Document' }
+            ];
+
+            var html = '';
+
+            if (rows && rows.length > 0) {
+                $.each(docColumns, function (_, col) {
+                    var isFirstRow = true;
+                    $.each(rows, function (_, histRow) {
+                        var docInfo = buildVendorDocInfo(histRow[col.field]);
+                        if (docInfo) {
+                            var formattedDate = formatHistoryDate(histRow.ActionDate);
+
+                            html += '<tr>';
+                            html += '<td>' + (isFirstRow ? '<strong>' + escapeHtml(col.label) + '</strong>' : '') + '</td>';
+                            html += '<td>' + escapeHtml(formattedDate) + '</td>';
+                            html += '<td>' + escapeHtml(docInfo.fileName) + '</td>';
+                            html += '<td class="text-center">' +
+                                '<a href="' + escapeHtml(docInfo.fileUrl) + '" ' +
+                                'download="' + escapeHtml(docInfo.fileName) + '" ' +
+                                'target="_blank" class="doc-download-icon" title="Download ' + escapeHtml(docInfo.fileName) + '">' +
+                                '<i class="fas fa-download"></i>' +
+                                '</a>' +
+                                '</td>';
+                            html += '</tr>';
+
+                            isFirstRow = false;
+                        }
+                    });
+                });
+            }
+
+            if (html === '') {
+                html = '<tr><td colspan="4" class="text-center text-muted">No documents found in history.</td></tr>';
+            }
+
+            $('#vendorreg_dochistory_tbody').html(html);
+        },
+        error: function (xhr, status, error) {
+            console.error("Error loading document history:", error);
+            $('#vendorreg_dochistory_tbody').html(
+                '<tr><td colspan="4" class="text-center text-danger">Failed to load document history.</td></tr>'
+            );
+        }
+    });
+}

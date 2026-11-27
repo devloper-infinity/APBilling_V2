@@ -264,7 +264,7 @@ namespace Vendor_Portal.Vendor
 
             if (returnvalue > 0)
             {
-                mc_KEB.sendEmailAddNewInvoice_KEB(returnvalue, InvoiceType);
+               mc_KEB.sendEmailAddNewInvoice_KEB(returnvalue, InvoiceType);
             }
             return returnvalue;
             }
@@ -1125,6 +1125,28 @@ namespace Vendor_Portal.Vendor
             }
         }
 
+        [WebMethod]
+        public static List<object> GetCompanyWiseVendor()
+        {
+            List<object> vendorList = new List<object>();
+
+            bllInvoice inv = new bllInvoice();
+            DataTable dt = inv.GetCompanyWiseVendor("Canopy");
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    vendorList.Add(new
+                    {
+                        VendorRegistrationID = dr["VendorRegistrationID"],
+                        VendorName = dr["VendorName"]
+                    });
+                }
+            }
+
+            return vendorList;
+        }
 
     }
 }

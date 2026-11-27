@@ -196,6 +196,7 @@
         $(document).ready(function () {
 
             addinvoiceKEB_BindYear();
+            GetCompanyWiseVendor();
 
         });
 
@@ -323,6 +324,37 @@
                 else if (selectedValue === "SmartHire") {
                 }
             }
+
+            //Load Vendor For Dropdown
+            function GetCompanyWiseVendor() {
+                $.ajax({
+                    type: "POST",
+                    url: "AddInvoiceKEB.aspx/GetCompanyWiseVendor",
+                    data: '{}',
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (response) {
+                        var vendors = response.d;
+                        var dropdowns = ['#RemoteUWKEB'];
+                        $.each(dropdowns, function (i, selector) {
+                            var dropdown = $(selector);
+
+                            dropdown.empty();
+                            dropdown.append('<option value="">Select Vendor</option>');
+
+                            $.each(vendors, function (index, item) {
+                                dropdown.append($('<option></option>')
+                                    .val(item.VendorRegistrationID)
+                                    .text(item.VendorName));
+                            });
+                        });
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Error fetching vendors: " + error);
+                    }
+                });
+            }
         </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </asp:Content>
@@ -444,7 +476,7 @@
                             <div class="col-sm-8">
                                 <select id="RemoteUWKEB" name="RemoteUWKEB" class="form-control" onchange="changeERPFile(this)">
                                     <option value="">Select</option>
-                                    <option value="CoreyDaise">Corey Daise</option>
+                                   <%-- <option value="CoreyDaise">Corey Daise</option>
                                     <option value="LucyBeltran">Lucy Beltran</option>
                                     <option value="LynnHott">Lynn Hott</option>
                                     <option value="RobinOstrom">Robin Ostrom</option>
@@ -457,7 +489,7 @@
                                     <option value="KEB">KEB</option>
                                     <option value="Pacer">Pacer</option>
                                     <option value="Magna 5">Magna 5</option>
-                                    <option value="Attorney">Attorney</option>
+                                    <option value="Attorney">Attorney</option>--%>
 
 
 

@@ -435,6 +435,7 @@ div[class*="container"] {
     max-width: 1290px; 
     margin: 6px auto 4px auto !important;
 }
+
  </style>
 
         <script src="../Scripts/Functions/VendorRegistrationMaster.js" type="text/javascript"></script>
@@ -468,6 +469,13 @@ div[class*="container"] {
              var vendorId = vendorIdFromURL ? parseInt(vendorIdFromURL, 10) : 0;
 
              loadRateConfiguration(vendorId);
+             if (parseInt(vendorId, 10) > 0) {
+                 $('#li_dochistory_tab').show();
+                 loadDocumentHistory(parseInt(vendorId, 10));
+             } else {
+                 $('#li_dochistory_tab').hide();
+                 $('#vendorreg_dochistory_tbody').html('<tr><td colspan="4" class="text-center text-muted">No document history available.</td></tr>');
+             }
          }
          function acTick() { var s = Math.max(0, Math.ceil((Date.parse(acExpiry) - Date.now()) / 1000)); $('#acCountdown').text(String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0')); if (!s) { clearInterval(acTimer); $('#acProtected').hide(); $('#acSecurityPanel').show(); $('#acSecurityMessage').text('Your Vendor Registration Master access has expired. Please verify again.').addClass('text-danger'); } }
          $(document).ready(function () {
@@ -555,6 +563,12 @@ div[class*="container"] {
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link" id="custom-tabs-one-profile-tab_deal" data-toggle="pill" href="#custom-tabs-one-profile_deal" role="tab" aria-controls="custom-tabs-one-profile_deal" aria-selected="false"><i class="fa fa-project-diagram"></i><b>Rate Configuration</b></a>
+                                                </li>
+
+                                                <li class="nav-item" id="li_dochistory_tab" style="display: none;">
+                                                    <a class="nav-link" id="custom-tabs-one-dochistory-tab" data-toggle="pill" href="#custom-tabs-one-dochistory" role="tab" aria-controls="custom-tabs-one-dochistory" aria-selected="false">
+                                                        <i class="fa fa-history"></i><b>Document History</b>
+                                                    </a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -814,7 +828,28 @@ div[class*="container"] {
                                                         <tbody></tbody>
                                                     </table>
                                                 </div>
+
+                                                <div class="tab-pane fade" id="custom-tabs-one-dochistory" role="tabpanel" aria-labelledby="custom-tabs-one-dochistory-tab">
+                                                    <div class="table-responsive">
+                                                        <table id="vendorreg_dochistorytable" class="table table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Vendor Document Type</th>
+                                                                    <th>Date</th>
+                                                                    <th>Document Name</th>
+                                                                    <th>Download</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="vendorreg_dochistory_tbody">
+                                                                <tr>
+                                                                    <td colspan="4" class="text-center text-muted">No document history available.</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
+                                                                        
                                         </div>
                                     </div>
                                 </div>
@@ -822,8 +857,11 @@ div[class*="container"] {
                         </div>
                     </div>
                 </div>
+                            
             </div>
+
         </div>
+            
     </div>
     <!-- Modal Popup for Add New Rate -->
     <div class="modal fade" id="vendorreg_addnewrate">
@@ -904,4 +942,6 @@ div[class*="container"] {
             </div>
         </div>
     </div>
+
+    
 </asp:Content>

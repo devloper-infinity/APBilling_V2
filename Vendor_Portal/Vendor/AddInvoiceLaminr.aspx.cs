@@ -182,7 +182,7 @@ namespace Vendor_Portal.Vendor
             returnvalue = new bllInvoice().Insert_Infinity_InvoiceDetails_Canopy(htParam);
             if (returnvalue > 0)
             {
-               mc_Laminr.sendEmailAddNewInvoice_Laminr(returnvalue,"Laminr"); // Intimation Email 
+              mc_Laminr.sendEmailAddNewInvoice_Laminr(returnvalue,"Laminr"); // Intimation Email 
             }
             return returnvalue;
         }
@@ -615,6 +615,30 @@ namespace Vendor_Portal.Vendor
             {
                 return false;
             }
+        }
+
+
+        [WebMethod]
+        public static List<object> GetCompanyWiseVendor()
+        {
+            List<object> vendorList = new List<object>();
+
+            bllInvoice inv = new bllInvoice();
+            DataTable dt = inv.GetCompanyWiseVendor("IPS");
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    vendorList.Add(new
+                    {
+                        VendorRegistrationID = dr["VendorRegistrationID"],
+                        VendorName = dr["VendorName"]
+                    });
+                }
+            }
+
+            return vendorList;
         }
     }
 }

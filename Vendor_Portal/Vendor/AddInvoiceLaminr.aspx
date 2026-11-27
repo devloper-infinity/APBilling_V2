@@ -197,6 +197,7 @@
 
         $(document).ready(function () {
             addinvoiceLaminr_BindYear();
+            GetCompanyWiseVendor();
         });
 
 
@@ -320,7 +321,40 @@
                 downloadLink.href = "Excel/CE_ERPFormat.xlsx";
             }
         }
+
+
+        //Load Vendor For Dropdown
+        function GetCompanyWiseVendor() {
+            $.ajax({
+                type: "POST",
+                url: "AddInvoiceLaminr.aspx/GetCompanyWiseVendor",
+                data: '{}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    var vendors = response.d;
+                    var dropdowns = ['#RemoteUWLaminr'];
+                    $.each(dropdowns, function (i, selector) {
+                        var dropdown = $(selector);
+
+                        dropdown.empty();
+                        dropdown.append('<option value="">Select Vendor</option>');
+
+                        $.each(vendors, function (index, item) {
+                            dropdown.append($('<option></option>')
+                                .val(item.VendorRegistrationID)
+                                .text(item.VendorName));
+                        });
+                    });
+                   
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error fetching vendors: " + error);
+                }
+            });
+        }
     </script>
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </asp:Content>
@@ -439,14 +473,14 @@
                             <div class="col-sm-8">
                                 <select id="RemoteUWLaminr" name="RemoteUWLaminr" class="form-control" onchange="changeERPFile(this)">
                                     <option value="">Select</option>
-                                    <option value="Compliance">Compliance</option>
+                                    <%--<option value="Compliance">Compliance</option>
                                     <option value="Laminr">Laminr</option>
                                     <option value="LauraMac">Laura Mac</option>
                                     <option value="LoanLogics">Loan Logics</option>
                                     <option value="Stewart_CD">Stewart_CD BPO</option>
                                     <option value="Stewart_AVM">Stewart_AVM</option>
                                     <option value="Magna 5">Magna 5</option>
-                                    <option value="BOX">BOX</option>
+                                    <option value="BOX">BOX</option>--%>
                                     
                                 </select>
                             </div>

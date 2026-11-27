@@ -1453,9 +1453,7 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@ProjectId", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["ProjectId"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Delay", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Delay"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 5000, System.Data.ParameterDirection.Input, htParam["Remark"]);
-
             SQLHelper.AddParamToSQLCmd(cmd, "@SeletedVendorName", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["SeletedVendorName"]);
-
             SQLHelper.AddParamToSQLCmd(cmd, "@VendorType", System.Data.SqlDbType.NVarChar, 200, System.Data.ParameterDirection.Input, htParam["VendorType"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ToCompany", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["ToCompany"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@EmailAddress", System.Data.SqlDbType.NVarChar, 500, System.Data.ParameterDirection.Input, htParam["EmailAddress"]);
@@ -1481,10 +1479,8 @@ namespace Vendor_Portal.App_Code.DAL
             SQLHelper.AddParamToSQLCmd(cmd, "@IsApproved", System.Data.SqlDbType.Bit, 0, System.Data.ParameterDirection.Input, htParam["IsApproved"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@Remark", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Remark"]);
             SQLHelper.AddParamToSQLCmd(cmd, "@ApprovedBy", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, htParam["ApprovedBy"]);
-            SQLHelper.AddParamToSQLCmd(cmd, "@Status", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Status"]);
-            
+            SQLHelper.AddParamToSQLCmd(cmd, "@Status", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["Status"]);         
             SQLHelper.AddParamToSQLCmd(cmd, "@PaybleToVendor", System.Data.SqlDbType.NVarChar, 4000, System.Data.ParameterDirection.Input, htParam["PaybleToVendor"]);
-
             SQLHelper.AddParamToSQLCmd(cmd, "@ReturnValue", System.Data.SqlDbType.BigInt, 0, System.Data.ParameterDirection.ReturnValue, null);
             SQLHelper.ExecuteNonQueryCmd(cmd);
             int ReturnValue = Convert.ToInt32(cmd.Parameters["@ReturnValue"].Value);
@@ -1492,5 +1488,20 @@ namespace Vendor_Portal.App_Code.DAL
             return ReturnValue;
         }
 
+        public System.Data.DataTable GetVendorsDocumentHistory(int VendorId)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetVendorsDocumentHistory_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@VendorId", System.Data.SqlDbType.Int, 0, System.Data.ParameterDirection.Input, VendorId);
+            System.Data.DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
+
+        public static DataTable GetCompanyWiseVendor(string Company)
+        {
+            SqlCommand cmd = SQLHelper.GetCommand(System.Data.CommandType.StoredProcedure, "usp_GetCompanyWiseVendor_YTU");
+            SQLHelper.AddParamToSQLCmd(cmd, "@Company", System.Data.SqlDbType.NVarChar, 50, System.Data.ParameterDirection.Input, Company);
+            DataTable dt = SQLHelper.ExecuteDataTableCmd(cmd);
+            return dt;
+        }
     }
 }

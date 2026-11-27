@@ -31,8 +31,7 @@ function addinvoiceLaminr_BindYear() {
 }
 function RemoteUWLaminr_submit() {
     
-    var RemoteUW = document.getElementById("RemoteUWLaminr").value;
-
+    var RemoteUW = $("#RemoteUWLaminr").val() ? $("#RemoteUWLaminr option:selected").text() : "";
     var month = document.getElementById("addinvoiceLaminr_month").value;
     var year = document.getElementById("addinvoiceLaminr_year").value;
     var invoicedate = document.getElementById("RemoteUWLaminr_invoicedate").value;
@@ -47,7 +46,7 @@ function RemoteUWLaminr_submit() {
     var invoicepdf = document.getElementById("RemoteUWLaminrInvoice").value;
 
     var ddlinvoicetype = document.getElementById("RemoteUWLaminr");
-    var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].value;
+    var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].text;
     function showCustomAlert(message) {
         Swal.fire({
             html: '<h6 class="font-weight-bold text-dark m-0">' + message + '</h6>',

@@ -449,15 +449,12 @@ namespace Vendor_Portal.Vendor
                   ? Convert.ToString(dt.Rows[0]["VendorType"])
                   : Convert.ToString(dt.Rows[0]["VendorType"]);
 
-             
-
-             
-
+    
                 Subject = $"{ToCompany} - New Vendor Registered-{VendorName}-{VendorType}";
                 htmlBody.Append("<br />Dear Sir/Madam,<br />");
                 htmlBody.Append("<br /><font color=brown face=Verdana size=2 ><b>New Vendor Registered in system with below details.</b></font><br />");
 
-                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=16><center><b>" + ProjectName + "-Details </b></center></td></tr>");
+                htmlBody.Append("<br /><table border=\"1\" bordercolor='Black' style='border:solid 1px black;border-collapse:collapse;padding:3px; font-size:14px;'><tr style='background-color:#244b73; color:White;'><td colspan=13><center><b>" + ProjectName + "-Details </b></center></td></tr>");
                 htmlBody.Append("<tr style='background-color:#244b73; color:White;'>" +
                     "<td><center><b>Vendor Type</b></center></td>" +
                     "<td><center><b>Vendor Name</b></center></td>" +
@@ -467,12 +464,9 @@ namespace Vendor_Portal.Vendor
                     "<td><center><b>Email ID</b></center></td>" +
                     "<td><center><b>Website URL</b></center></td>" +
                     "<td><center><b>Address</b></center></td>" +
-                    "<td><center><b>Pay To Vendor Name</b></center></td>" +
-                    "<td><center><b>Account Number</b></center></td>" +
+                    "<td><center><b>Pay To Vendor Name</b></center></td>" +                  
                     "<td><center><b>Remark</b></center></td>" +
                     "<td><center><b>Domain</b></center></td>" +
-                    "<td><center><b>Payment Method</b></center></td>" +
-                    "<td><center><b>Routing No</b></center></td>" +
                     "<td><center><b>Tax SSN EIN</b></center></td>" +
                     "<td><center><b>Tax ID</b></center></td>" +
                    
@@ -490,11 +484,8 @@ namespace Vendor_Portal.Vendor
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["WebsiteURL"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["Address"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["PayToVendorName"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["AccountNumber"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["Remark"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["Domain"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["PaymentMethod"]) + "</b></center></td>" +
-                        "<td><center><b>" + Convert.ToString(dt.Rows[i]["RoutingNo"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxSSNEIN"]) + "</b></center></td>" +
                         "<td><center><b>" + Convert.ToString(dt.Rows[i]["TaxID"]) + "</b></center></td>" +
                         "</tr>");
@@ -571,5 +562,29 @@ namespace Vendor_Portal.Vendor
         }
 
 
+
+        [WebMethod(EnableSession = true)]
+        public static string GetVendorsDocumentHistory(int VendorId)
+        {
+            CostMasterOtpSecurity.RequireCsrf(); CostMasterOtpSecurity.RequireAuthorization("VENDORREGISTRATION_MASTER");
+            DataTable dt1 = new bllInvoice().GetVendorsDocumentHistory(VendorId);
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            if (dt1 != null)
+            {
+                foreach (DataRow dr in dt1.Rows)
+                {
+                    row = new Dictionary<string, object>();
+                    foreach (DataColumn col in dt1.Columns)
+                    {
+                        row.Add(col.ColumnName, dr[col]);
+                    }
+                    rows.Add(row);
+                }
+            }
+            JavaScriptSerializer ser = new JavaScriptSerializer();
+            ser.MaxJsonLength = int.MaxValue;
+            return ser.Serialize(rows);
+        }
     }
 }

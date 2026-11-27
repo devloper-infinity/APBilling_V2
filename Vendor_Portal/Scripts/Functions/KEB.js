@@ -29,7 +29,7 @@ function RemoteUWKEB_submit() {
     var invoicenumber = document.getElementById("RemoteUWKEB_invoiceaNo_canopy").value;
     var invoicepdf = document.getElementById("RemoteUWKEBInvoice").value;
     var ddlinvoicetype = document.getElementById("RemoteUWKEB");
-    var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].value;
+    var invoicetype = ddlinvoicetype.options[ddlinvoicetype.selectedIndex].text;
     function showCustomAlert(message) {
         Swal.fire({
             html: '<h6 class="font-weight-bold text-dark m-0">' + message + '</h6>',
