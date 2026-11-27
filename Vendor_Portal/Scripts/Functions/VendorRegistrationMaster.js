@@ -367,13 +367,13 @@ function btnsubmitInsertVendorRegistration() {
     var existingPaymentDocPath = $('#lnk_paymentdoc_download').attr('data-original-path') || "";
     var existingW9DocPath = $('#lnk_w9doc_download').attr('data-original-path') || "";
 
-    if (!w9DocFile && !existingW9DocPath) {
+    if (!paymentDocFile && !existingPaymentDocPath) {
         Swal.fire({
             icon: 'warning',
             title: 'Required Field',
-            text: 'Please upload W-9 Form.'
+            text: 'Please upload PaymentDocument.'
         }).then(() => {
-            $('#vendorreg_W9Form').focus();
+            $('#vendorreg_PaymentDocument').focus();
         });
         return false;
     }

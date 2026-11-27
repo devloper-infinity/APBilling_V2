@@ -449,7 +449,7 @@
                             <label class="col-sm-4 col-form-label"><b>Year: <span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <select id="addinvoiceLaminr_year" name="addinvoiceLaminr_year" class="form-control">
-                                    <option value="">Select</option>
+                                    <option value="">Select Vendor</option>
                                 </select>
                             </div>
                         </div>

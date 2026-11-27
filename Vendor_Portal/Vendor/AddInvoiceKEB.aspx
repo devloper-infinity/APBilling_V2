@@ -475,7 +475,7 @@
                             <label class="col-sm-4 col-form-label"><b>Vendor: <span class="text-danger">*</span></b></label>
                             <div class="col-sm-8">
                                 <select id="RemoteUWKEB" name="RemoteUWKEB" class="form-control" onchange="changeERPFile(this)">
-                                    <option value="">Select</option>
+                                    <option value="">Select Vendor</option>
                                    <%-- <option value="CoreyDaise">Corey Daise</option>
                                     <option value="LucyBeltran">Lucy Beltran</option>
                                     <option value="LynnHott">Lynn Hott</option>

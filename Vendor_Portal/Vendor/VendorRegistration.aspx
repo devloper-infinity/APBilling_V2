@@ -696,7 +696,7 @@ div[class*="container"] {
       <td><b>Tax ID: <span style="color: red;">*</span></b></td>
       <td>
           <input type="text" id="vendorreg_TaxID" name="vendorreg_TaxID" class="form-control" style="width: 250px;" /></td>
-      <td><b>W-9 Form: <span style="color: red;">*</span></b></td>
+      <td><b>W-9 Form:</b></td>
 <td>
     <div class="d-flex align-items-center gap-3">
         <input type="file" id="vendorreg_W9Form" name="vendorreg_W9Form" class="form-control" style="width: 250px;" />

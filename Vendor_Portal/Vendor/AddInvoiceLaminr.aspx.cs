@@ -624,7 +624,7 @@ namespace Vendor_Portal.Vendor
             List<object> vendorList = new List<object>();
 
             bllInvoice inv = new bllInvoice();
-            DataTable dt = inv.GetCompanyWiseVendor("IPS");
+            DataTable dt = inv.GetCompanyWiseVendor("Canopy");
 
             if (dt != null && dt.Rows.Count > 0)
             {
