@@ -580,10 +580,7 @@ namespace Vendor_Portal.Vendor
             New Vendor Registration
         </div>
 
-        <div style='font-size:13px; color:#777777;
-                    padding-top:7px;'>
-            Vendor registration notification
-        </div>
+       
 
         <hr style='border:0; border-top:1px solid #e5e9ef;
                    margin-top:18px;'>
@@ -651,8 +648,7 @@ namespace Vendor_Portal.Vendor
         <th align='left' style='border:1px solid #d9e0e7;'>Pay To Vendor</th>
         <th align='left' style='border:1px solid #d9e0e7;'>Remark</th>
         <th align='left' style='border:1px solid #d9e0e7;'>Domain</th>
-        <th align='left' style='border:1px solid #d9e0e7;'>Tax SSN / EIN</th>
-        <th align='left' style='border:1px solid #d9e0e7;'>Tax ID</th>
+      
 
     </tr>
     ");
@@ -680,8 +676,7 @@ namespace Vendor_Portal.Vendor
             "PayToVendorName",
             "Remark",
             "Domain",
-            "TaxSSNEIN",
-            "TaxID"
+          
         };
 
                     foreach (string column in columns)
@@ -741,14 +736,11 @@ namespace Vendor_Portal.Vendor
                font-size:13px; color:#333333;
                line-height:1.7;'>
 
-        The vendor details have been successfully added
-        to the system.
+       
 
         <br/><br/>
 
-        Kindly review the above information and contact
-        the concerned team if any corrections or additional
-        information are required.
+      
 
         <br/><br/>
 
