@@ -404,6 +404,10 @@ function btnsubmitInsertVendorRegistration() {
             w9FormDocument: w9DocBase64 || existingW9DocPath || ""
         };
 
+
+        $('#load1').show();
+
+
         $.ajax({
             type: "POST",
             url: "VendorRegistration.aspx/InsertVendorRegistration",
@@ -415,6 +419,7 @@ function btnsubmitInsertVendorRegistration() {
 
                 if (newVendorID > 0) {
                     savedVendorID = newVendorID;
+                    $('#load1').hide();
                     $('input[id$="hdfVendorID"]').val(newVendorID);
 
                     var successMessage = (parseInt(vendorIdFromURL) > 0)
@@ -473,6 +478,7 @@ function btnsubmitInsertVendorRegistration() {
                 }
             },
             error: function (xhr, status, error) {
+                $('#load1').hide();
                 Swal.fire({
                     title: 'AJAX Error!',
                     text: "An error occurred while saving data: " + error,
