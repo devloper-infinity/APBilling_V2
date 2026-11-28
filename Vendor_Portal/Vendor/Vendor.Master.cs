@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -9,102 +12,149 @@ namespace Vendor_Portal.Vendor
 {
     public partial class Vendor : System.Web.UI.MasterPage
     {
+
+        string conStr = ConfigurationManager.ConnectionStrings["MainCon"].ConnectionString;
+        DataTable dtMenus = new DataTable();
         protected void Page_Load(object sender, EventArgs e)
         {
-            int LoginID = int.Parse(HttpContext.Current.User.Identity.Name.ToString());
+            //int LoginID = int.Parse(HttpContext.Current.User.Identity.Name.ToString());
 
-            //Master
+            ////Master
 
-            if (LoginID == 5 || LoginID == 235 || LoginID == 8128 )
+            //if (LoginID == 5 || LoginID == 235 || LoginID == 8128 )
+            //{
+            //    li_MasterSection.Visible = true;
+            //    li_UpdateClientInvoice.Visible = true;
+            //    li_UpdatePaidDate.Visible = true;
+            //    li_UpdatePaidDateOther.Visible = true;
+            //    li_CanopyMGTReport.Visible = true;
+            //    li_IPSMGTReport.Visible = true;
+            //    li2.Visible = true;
+            //    li3.Visible = true;
+            //    li1.Visible = true;
+            //    Menu_Billing.Visible = true;
+            //    Menu_SalesInvoice.Visible = true;
+            //}
+
+            //else if (LoginID == 12 || LoginID == 9961)
+            //{
+            //    li_MasterSection.Visible = true;
+            //    li_UpdateClientInvoice.Visible = true;
+            //    li_UpdatePaidDate.Visible = true;
+            //    li_UpdatePaidDateOther.Visible = true;
+            //    li_CanopyMGTReport.Visible = true;
+            //    li_IPSMGTReport.Visible = true;
+            //    li2.Visible = true;
+            //    li3.Visible = true;
+            //    li1.Visible = true;
+            //    Menu_Billing.Visible = true;
+            //    Menu_SalesInvoice.Visible = false;
+            //}
+            //else if (LoginID == 209)//MDK
+            //{
+            //    li_MasterSection.Visible = true;
+            //    li_UpdateClientInvoice.Visible = false;
+            //    li_UpdatePaidDate.Visible = false;
+            //    li_UpdatePaidDateOther.Visible = false;
+            //    li_CanopyMGTReport.Visible = false;
+            //    li_IPSMGTReport.Visible = false;
+            //    li2.Visible = false;
+            //    li3.Visible = false;
+            //    li1.Visible = false;
+            //    Menu_Billing.Visible = false;
+            //    Menu_SalesInvoice.Visible = true;
+            //}
+
+            //else if (LoginID== 6959) //DGJ
+            //{
+            //    li_MasterSection.Visible = false;
+            //    li_UpdateClientInvoice.Visible = false;
+            //    li_UpdatePaidDate.Visible = false;
+            //    li_UpdatePaidDateOther.Visible = false;
+            //    li_CanopyMGTReport.Visible = false;
+            //    li_IPSMGTReport.Visible = false;
+            //    li1.Visible = true;
+            //    li2.Visible = true;
+            //    li3.Visible = true;
+            //    Menu_Billing.Visible = true;
+            //    Menu_SalesInvoice.Visible = false;
+
+            //}
+
+            //else if (LoginID == 9858 || LoginID == 9852)  //IT
+            //{
+            //    li_MasterSection.Visible = false;
+            //    li_UpdateClientInvoice.Visible = false;
+            //    li_UpdatePaidDate.Visible = false;
+            //    li_UpdatePaidDateOther.Visible = false;
+            //    li_CanopyMGTReport.Visible = false;
+            //    li_IPSMGTReport.Visible = false;
+            //    li1.Visible = true;
+            //    li2.Visible = true;
+            //    li3.Visible = false;
+            //    Menu_Billing.Visible = false;
+            //    Menu_SalesInvoice.Visible = false;
+            //}
+
+            //else
+            //{
+            //    li_MasterSection.Visible = false;
+            //    li_UpdateClientInvoice.Visible = false;
+            //    li_UpdatePaidDate.Visible = false;
+            //    li_UpdatePaidDateOther.Visible = false;
+            //    li_CanopyMGTReport.Visible = false;
+            //    li_IPSMGTReport.Visible = false;
+            //    li1.Visible = true;
+            //    li2.Visible = false;
+            //    li3.Visible = false;
+            //    Menu_Billing.Visible = false;
+            //    Menu_SalesInvoice.Visible = false;
+            //}
+
+            if (!IsPostBack)
             {
-                li_MasterSection.Visible = true;
-                li_UpdateClientInvoice.Visible = true;
-                li_UpdatePaidDate.Visible = true;
-                li_UpdatePaidDateOther.Visible = true;
-                li_CanopyMGTReport.Visible = true;
-                li_IPSMGTReport.Visible = true;
-                li2.Visible = true;
-                li3.Visible = true;
-                li1.Visible = true;
-                Menu_Billing.Visible = true;
-                Menu_SalesInvoice.Visible = true;
-            }
-
-            else if (LoginID == 12 || LoginID == 9961)
-            {
-                li_MasterSection.Visible = true;
-                li_UpdateClientInvoice.Visible = true;
-                li_UpdatePaidDate.Visible = true;
-                li_UpdatePaidDateOther.Visible = true;
-                li_CanopyMGTReport.Visible = true;
-                li_IPSMGTReport.Visible = true;
-                li2.Visible = true;
-                li3.Visible = true;
-                li1.Visible = true;
-                Menu_Billing.Visible = true;
-                Menu_SalesInvoice.Visible = false;
-            }
-            else if (LoginID == 209)//MDK
-            {
-                li_MasterSection.Visible = true;
-                li_UpdateClientInvoice.Visible = false;
-                li_UpdatePaidDate.Visible = false;
-                li_UpdatePaidDateOther.Visible = false;
-                li_CanopyMGTReport.Visible = false;
-                li_IPSMGTReport.Visible = false;
-                li2.Visible = false;
-                li3.Visible = false;
-                li1.Visible = false;
-                Menu_Billing.Visible = false;
-                Menu_SalesInvoice.Visible = true;
-            }
-
-            else if (LoginID== 6959) //DGJ
-            {
-                li_MasterSection.Visible = false;
-                li_UpdateClientInvoice.Visible = false;
-                li_UpdatePaidDate.Visible = false;
-                li_UpdatePaidDateOther.Visible = false;
-                li_CanopyMGTReport.Visible = false;
-                li_IPSMGTReport.Visible = false;
-                li1.Visible = true;
-                li2.Visible = true;
-                li3.Visible = true;
-                Menu_Billing.Visible = true;
-                Menu_SalesInvoice.Visible = false;
-
-            }
-
-            else if (LoginID == 9858 || LoginID == 9852)  //IT
-            {
-                li_MasterSection.Visible = false;
-                li_UpdateClientInvoice.Visible = false;
-                li_UpdatePaidDate.Visible = false;
-                li_UpdatePaidDateOther.Visible = false;
-                li_CanopyMGTReport.Visible = false;
-                li_IPSMGTReport.Visible = false;
-                li1.Visible = true;
-                li2.Visible = true;
-                li3.Visible = false;
-                Menu_Billing.Visible = false;
-                Menu_SalesInvoice.Visible = false;
-            }
-
-            else
-            {
-                li_MasterSection.Visible = false;
-                li_UpdateClientInvoice.Visible = false;
-                li_UpdatePaidDate.Visible = false;
-                li_UpdatePaidDateOther.Visible = false;
-                li_CanopyMGTReport.Visible = false;
-                li_IPSMGTReport.Visible = false;
-                li1.Visible = true;
-                li2.Visible = false;
-                li3.Visible = false;
-                Menu_Billing.Visible = false;
-                Menu_SalesInvoice.Visible = false;
-            }
-                        
+                BindMenus();
             }
         }
+
+
+        private void BindMenus()
+        {
+            if (!int.TryParse(HttpContext.Current.User?.Identity?.Name, out int loginId))
+                return;
+
+            DataTable dt = new DataTable();
+
+            using (SqlConnection con = new SqlConnection(conStr))
+            using (SqlCommand cmd = new SqlCommand("usp_GetUserAllowedMenus", con))
+            {
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@EmployeeID", loginId);
+
+                using (SqlDataAdapter da = new SqlDataAdapter(cmd))
+                {
+                    da.Fill(dt);
+                }
+            }
+
+            rptParentMenu.DataSource = dt.AsEnumerable()
+                .GroupBy(r => new
+                {
+                    MenuMasterID = r.Field<int>("MenuMasterID"),
+                    MasterName = r.Field<string>("MasterName")
+                })
+                .Select(g => new
+                {
+                    g.Key.MasterName,
+                    ChildMenus = g.Select(r => new
+                    {
+                        PageName = r.Field<string>("PageName"),
+                        PageURL = r.Field<string>("PageURL")
+                    }).ToList()
+                })
+                .ToList();
+
+            rptParentMenu.DataBind();
+        }
+    }
 }
